@@ -1,0 +1,8 @@
+.table-products {
+    display: grid;
+    /*margin-left: 22px;
+    margin-right: 22px;*/
+    margin-top: 30px;
+    gap: 12px;
+    font-size: 1.5rem;
+}

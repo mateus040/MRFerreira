@@ -1,0 +1,30 @@
+.brands {
+    background: #fff;
+}
+
+.brands .brands-content {
+    overflow: hidden;
+    display: flex;
+    gap: 10rem;
+}
+
+.brands .brands-content .brands-container {
+    display: flex;
+    gap: 10rem;
+    animation: brands 10s linear infinite;
+}
+
+@keyframes brands{
+    0%{
+        transform: translateX(0%);
+    }
+
+    0%{
+        transform: translateX(-100%);
+    }
+}
+
+.brands .brands-content .brands-container img {
+    height: 7rem;
+    width: 10rem;
+}

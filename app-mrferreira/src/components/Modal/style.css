@@ -1,0 +1,135 @@
+.product-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    max-height: 90%;
+    overflow-y: auto;
+    width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.product-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 400px;
+    margin-right: 6.5rem;
+    align-items: center;
+}
+
+.product-image img {
+    height: 75vh;
+}
+
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+}
+
+.product-info h3 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+}
+
+.product-info p {
+    font-size: 1.5rem;
+    /*margin-left: .3rem;*/
+}
+
+.product-info h2 {
+    margin-top: 3rem;
+}
+
+.product-info span {
+    font-weight: bold;
+}
+
+.product-info .contact .link-whatsapp {
+    margin-top: 1rem;
+    padding: 1rem;
+    width: 80%;
+    font-size: 1.6rem;
+    background: #25d366;
+    color: #fff;
+    font-style: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .3rem;
+    cursor: pointer;
+}
+
+.product-info .contact .icon-whatsapp {
+    margin-right: 3rem;
+    font-size: 3rem;
+}
+
+.close-btn {
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+@media (max-width: 915px) {
+    .modal-content {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-image {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        max-width: 90%;
+        height: 100%;
+    }
+
+    .product-info {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-info h2 {
+        font-size: 2.3rem;
+    }
+
+    .product-info .contact .link-whatsapp {
+        width: 100%;
+    }
+}
