@@ -28,20 +28,21 @@ const Main = () => {
             <Products />
           </section>
 
-          <section className="features">
+          
+          <section className="review">
+            <ViewCompanys />
+          </section>
+
+          {/*<section className="features">
             <Features />
           </section>
 
           <section className="categories">
             <Categories />
-          </section>
+  </section>*/}
 
           <section className="about">
             <About />
-          </section>
-
-          <section className="review">
-            <ViewCompanys />
           </section>
 
           <section className="contact">
