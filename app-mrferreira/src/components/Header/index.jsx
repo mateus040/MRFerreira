@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import './style.css';
 import FormLogin from "./FormLogin";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
+
+    const { token } = useAuth();
 
     useEffect(() => {
         let loginForm = document.querySelector('.login-form');
@@ -39,6 +42,7 @@ const Header = () => {
                 <a href="#company">Empresas</a>
                 <a href="#about">Sobre</a>
                 <a href="#contact">Contato</a>
+                {token && <a href="/home/admin">Admin</a>}
             </nav>
 
             <div className="icons">
