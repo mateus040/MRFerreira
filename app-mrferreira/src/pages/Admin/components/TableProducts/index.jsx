@@ -75,10 +75,10 @@ const TableProducts = ({ navigateToEditProduct, onDeleteProduct }) => {
                                     )}
                                 </td>
                                 <td className="btn-edit" onClick={() => navigateToEditProduct(product)}>
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <i className="fa-solid fa-pen-to-square"></i>
                                     </td>
                                 <td className="btn-delete" onClick={() => onDeleteProduct(product.id)}>
-                                    <i class="fa-solid fa-trash"></i>
+                                    <i className="fa-solid fa-trash"></i>
                                 </td>
                             </tr>
                         ))}

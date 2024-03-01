@@ -4,6 +4,7 @@ import Inputmask from "react-input-mask";
 import Sidebar from "../../../components/Sidebar";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const EditProvider = () => {
   const { token } = useAuth();

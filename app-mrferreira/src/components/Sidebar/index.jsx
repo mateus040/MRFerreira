@@ -49,20 +49,20 @@ const Sidebar = () => {
                     <img src="/images/logos/logo-transparente.png" className="logo-image"></img>
                     <div className="logo-name">MR Ferreira</div>
                 </div>
-                <i class="fa-solid fa-bars" id="btn-icon"></i>
+                <i classNam="fa-solid fa-bars" id="btn-icon"></i>
             </div>
             <ul className="nav-list">
                 <li>
                     <a href="/home/admin">
-                        <i class="fa-solid fa-house"></i>
-                        <span className="links-name">dashboard</span>
+                        <i className="fa-solid fa-house"></i>
+                        <span className="links-name">início</span>
                     </a>
-                    <span className="tooltip">dashboard</span>
+                    <span className="tooltip">início</span>
                 </li>
 
                 <li>
                     <a href="/produtos">
-                        <i class="fa-solid fa-box"></i>
+                        <i className="fa-solid fa-box"></i>
                         <span className="links-name">produtos</span>
                     </a>
                     <span className="tooltip">produtos</span>
@@ -70,7 +70,7 @@ const Sidebar = () => {
 
                 <li>
                     <a href="/fornecedores">
-                        <i class="fa-solid fa-truck"></i>
+                        <i className="fa-solid fa-truck"></i>
                         <span className="links-name">fornecedores</span>
                     </a>
                     <span className="tooltip">fornecedores</span>
@@ -85,7 +85,7 @@ const Sidebar = () => {
                         </div>
                     </div>
                     <button onClick={handleLogout}>
-                        <i class="fa-solid fa-right-from-bracket" id="log-out"></i>
+                        <i className="fa-solid fa-right-from-bracket" id="log-out"></i>
                     </button>
                 </div>
             </div>

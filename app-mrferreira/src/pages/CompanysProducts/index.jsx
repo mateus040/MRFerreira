@@ -58,7 +58,7 @@ export default function CompanysProducts() {
         {/*<div className="heading">the <span>empresa1</span></div>*/}
 
         <div className="search-bar">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i className="fa-solid fa-magnifying-glass"></i>
           <input
             type='text'
             id='search'
