@@ -100,8 +100,8 @@ class ProductsController extends Controller
             if ($request->photo) {
                 $storage = Storage::disk('public');
 
-                if ($storage->exists($products->photo))
-                    $storage->delete($products->image);
+                if ($storage->exists($products->photo));
+                    ($storage->delete($products->photo));
 
                 $imageName = Str::random(32) . "." . $request->photo->getClientOriginalExtension();
                 $products->photo = $imageName;
@@ -115,7 +115,6 @@ class ProductsController extends Controller
                 'message' => "Product successfully updated."
             ], 200);
         } catch (\Exception $e) {
-            // Return Json Response
             return response()->json([
                 'message' => "Something went really wrong!"
             ], 500);

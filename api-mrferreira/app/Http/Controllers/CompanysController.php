@@ -83,10 +83,9 @@ class CompanysController extends Controller
     {
         try {
             $companys = Companys::find($id);
-
             if (!$companys) {
                 return response()->json([
-                    'message' => 'Company Not Found.'
+                    'message' => 'Company not found.'
                 ], 404);
             }
 
@@ -106,8 +105,8 @@ class CompanysController extends Controller
             if ($request->logo) {
                 $storage = Storage::disk('public');
 
-                if ($storage->exists($companys->logo))
-                    $storage->delete($companys->image);
+                if ($storage->exists($companys->logo));
+                ($storage->delete($companys->logo));
 
                 $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
                 $companys->logo = $imageName;
@@ -118,11 +117,11 @@ class CompanysController extends Controller
             $companys->save();
 
             return response()->json([
-                'message' => 'Company successfully updated.'
+                'message' => "Company successfully updated."
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Something went really wrong!'
+                'message' => "Something went really wrong!"
             ], 500);
         }
     }

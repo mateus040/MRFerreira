@@ -86,7 +86,7 @@ const PageProvider = () => {
                 },
             });
             console.error("Erro ao enviar solicitação: ", err)
-            console.error("Erro ao cadastrar o produto: " + err.response.data.message);
+            console.error("Erro ao cadastrar a empresa: " + err.response.data.message);
             //alert("Erro no servidor: " + err.response.data.message);
         }
     }
@@ -102,21 +102,21 @@ const PageProvider = () => {
             const updatedCompanys = companys.filter(company => company.id !== companyId);
             setCompanys(updatedCompanys);
 
-            toast.success("Fornecedor deletado com sucesso!", {
+            toast.success("Dados deletados com sucesso!", {
                 theme: "colored",
                 style: {
                     fontSize: '1.6rem',
                 },
             });
         } catch (err) {
-            toast.error("Erro ao deletar o fornecedor: " + err.response.data.message, {
+            toast.error("Erro ao deletar a empresa: " + err.response.data.message, {
                 theme: "colored",
                 style: {
                     fontSize: '1.6rem',
                 },
             });
             console.error("Erro ao enviar solicitação: ", err)
-            console.error("Erro ao deletar o fornecedor: " + err.response.data.message);
+            console.error("Erro ao deletar a empresa: " + err.response.data.message);
             //alert("Erro no servidor: " + err.response.data.message);
         }
     };
