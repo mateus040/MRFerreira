@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 
-export default function Modal({ product, onClose }) {
+export default function Modal({ product, companyName, onClose }) {
   if (!product) return null;
 
   const whatsappMessage = `Olá, tudo bem? Tenho interesse no produto *${product.name}*. Poderia me fornecer mais informações?`;
@@ -19,6 +19,10 @@ export default function Modal({ product, onClose }) {
             <div className="product-info">
               <h3>{product.name}</h3>
               <p>{product.description}</p>
+              <p style={{ marginTop: "5px" }}>
+                Empresa:{" "}
+                <span style={{ fontWeight: "bold" }}>{companyName}</span>
+              </p>
 
               <h2>Espeficicações:</h2>
               <p>
