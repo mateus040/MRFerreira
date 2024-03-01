@@ -53,11 +53,16 @@ export default function CompanysProducts() {
 
   const filteredProducts = products.filter((product) => {
     const productNameLower = product.name.toLowerCase();
+    const productDescriptionLower = product.description.toLowerCase();
     const searchTerms = searchTerm
       .split(" ")
       .map((term) => term.trim().toLowerCase());
 
-    return searchTerms.every((term) => productNameLower.includes(term));
+    return searchTerms.every(
+      (term) =>
+        productNameLower.includes(term) ||
+        productDescriptionLower.includes(term)
+    );
   });
 
   const openModal = (product) => {
@@ -111,7 +116,17 @@ export default function CompanysProducts() {
           ))}
         </div>
 
-        <Modal product={selectedProduct} companyName={selectedProduct ? companies.find((company) => company.id === selectedProduct.id_company)?.name : ""} onClose={closeModal} />
+        <Modal
+          product={selectedProduct}
+          companyName={
+            selectedProduct
+              ? companies.find(
+                  (company) => company.id === selectedProduct.id_company
+                )?.name
+              : ""
+          }
+          onClose={closeModal}
+        />
       </section>
 
       <div className="icon-whats anim">
