@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "./style.css";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Products = () => {
@@ -55,10 +56,10 @@ const Products = () => {
                 <img src={`http://127.0.0.1:8000/storage/${product.photo}`} />
               )}
               <h3>{product.name}</h3>
-              <p>{companies.find((company) => company.id === product.id_company)?.name}</p>
-              <a href="" className="btn">
-                Detalhes
-              </a>
+              <p className="company-name">{companies.find((company) => company.id === product.id_company)?.name}</p>
+              <Link to={`/empresa/${product.id_company}`} className="btn btn-details">
+                Ver no catálogo
+              </Link>
             </div>
           </SwiperSlide>
         ))}
