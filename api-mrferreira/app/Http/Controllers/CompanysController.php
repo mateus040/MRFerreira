@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Companys;
 use App\Http\Requests\CompanysStoreRequest;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class CompanysController extends Controller
@@ -32,7 +33,7 @@ class CompanysController extends Controller
 
         try {
 
-            $logoPath = $request->file('logo')->store('logos', 'public');  
+            $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
 
             Companys::create([
                 'name' => $request->name,
@@ -47,8 +48,10 @@ class CompanysController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone ?? null,
                 'cellphone' => $request->cellphone ?? null,
-                'logo' => $logoPath,
+                'logo' => $imageName,
             ]);
+
+            Storage::disk('public')->put($imageName, file_get_contents($request->logo));
 
             // Return Json Response
             return response()->json([
@@ -87,15 +90,6 @@ class CompanysController extends Controller
                 ], 404);
             }
 
-            if ($request->hasFile('logo')) {
-                if ($companys->logo) {
-                    Storage::disk('public')->delete($companys->logo);
-                }
-
-                $logoPath = $request->file('logo')->store('logos', 'public');
-                $companys->logo = $logoPath;
-            }
-
             $companys->name = $request->name;
             $companys->cnpj = $request->cnpj;
             $companys->road = $request->road;
@@ -108,6 +102,18 @@ class CompanysController extends Controller
             $companys->email = $request->email;
             $companys->phone = $request->phone;
             $companys->cellphone = $request->cellphone;
+
+            if ($request->logo) {
+                $storage = Storage::disk('public');
+
+                if ($storage->exists($companys->logo))
+                    $storage->delete($companys->image);
+
+                $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
+                $companys->logo = $imageName;
+
+                $storage->put($imageName, file_get_contents($request->logo));
+            }
 
             $companys->save();
 
@@ -130,6 +136,13 @@ class CompanysController extends Controller
                 'message' => 'Company Not Found.'
             ], 404);
         }
+
+        // Public storage
+        $storage = Storage::disk('public');
+
+        // Iamge delete
+        if ($storage->exists($companys->logo))
+            $storage->delete($companys->logo);
 
         $companys->delete();
 
