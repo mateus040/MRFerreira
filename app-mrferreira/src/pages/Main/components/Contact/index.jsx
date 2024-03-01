@@ -64,7 +64,7 @@ const Contact = () => {
     <div className="contact anim" id="contact">
       <div className="text-page">
         <h1 className="heading">Entre em contato conosco</h1>
-        <p>Nos envie um e-mail para saber mais informações</p>
+        <p>Nos envie um e-mail para saber mais sobre nossos produtos</p>
       </div>
       <div className="content-container">
         <div className="box-container">
