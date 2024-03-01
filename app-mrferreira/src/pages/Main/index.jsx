@@ -10,8 +10,12 @@ import Contact from "./components/Contact";
 import ViewCompanys from "./components/Companys";
 import Sobre from "./components/Sobre";
 import MainLayout from "../../components/Layout/Main";
+import { Link } from "react-router-dom";
 
 const Main = () => {
+
+  const whatsappMessage = `Olá, tudo bem? Quero saber mais sobre a empresa!`;
+
   return (
     <div className="app">
       <div className="components">
@@ -56,12 +60,14 @@ const Main = () => {
       </div>
 
       <div className="icon-whats anim">
-        <a
-          href="https://api.whatsapp.com/send?phone=5514991896619"
+        <Link
+          to={`https://api.whatsapp.com/send?phone=5514991896619&text=${encodeURIComponent(
+            whatsappMessage
+          )}`}
           target="_blank"
         >
           <i className="fa-brands fa-whatsapp"></i>
-        </a>
+        </Link>
       </div>
     </div>
   );

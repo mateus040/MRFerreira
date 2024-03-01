@@ -5,8 +5,11 @@ import Header from '../../components/Header';
 import { useParams } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import Contact from '../Main/components/Contact';
+import { Link } from "react-router-dom";
 
 export default function CompanysProducts() {
+
+  const whatsappMessage = `Olá, tudo bem? Quero saber mais sobre a empresa!`;
 
   const { companyId } = useParams();
 
@@ -87,6 +90,17 @@ export default function CompanysProducts() {
 
         <Modal product={selectedProduct} onClose={closeModal} />
       </section>
+
+      <div className="icon-whats anim">
+        <Link
+          to={`https://api.whatsapp.com/send?phone=5514991896619&text=${encodeURIComponent(
+            whatsappMessage
+          )}`}
+          target="_blank"
+        >
+          <i className="fa-brands fa-whatsapp"></i>
+        </Link>
+      </div>
     </div>
   )
 }

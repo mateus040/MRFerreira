@@ -49,7 +49,7 @@ const Sidebar = () => {
                     <img src="/images/logos/logo-transparente.png" className="logo-image"></img>
                     <div className="logo-name">MR Ferreira</div>
                 </div>
-                <i classNam="fa-solid fa-bars" id="btn-icon"></i>
+                <i className="fa-solid fa-bars" id="btn-icon"></i>
             </div>
             <ul className="nav-list">
                 <li>

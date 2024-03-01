@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 export default function Modal({ product, onClose }) {
   if (!product) return null;
 
+  const whatsappMessage = `Olá, tudo bem? Tenho interesse no produto *${product.name}*. Poderia me fornecer mais informações?`;
+
   return (
     <div className="modal">
       <div className="product-modal">
@@ -35,7 +37,9 @@ export default function Modal({ product, onClose }) {
               <div className="contact">
                 <h2>Tem interesse no produto?</h2>
                 <Link
-                  to="https://api.whatsapp.com/send?phone=5514991896619"
+                  to={`https://api.whatsapp.com/send?phone=5514991896619&text=${encodeURIComponent(
+                    whatsappMessage
+                  )}`}
                   target="_blank"
                   className="link-whatsapp"
                 >
