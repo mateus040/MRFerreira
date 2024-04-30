@@ -1,6 +1,12 @@
 export default function Home() {
   return (
-    <div className="grid grid-cols-12 gap-28 py-20 pb-32 px-8 lg:px-20 bg-black">
+    <div className="">
+      <img
+        src="/images/fundo.png"
+        className="min-w-full aspect-video object-cover fundo-home"
+      />
+
+      {/*<div className="grid grid-cols-12 gap-28 py-20 pb-32 px-8 lg:px-20 bg-black">
       <div className="col-span-12 md:col-span-6">
         <h3 className="uppercase text-2xl lg:text-3xl font-bold text-white">
           O conforto que você merece!
@@ -19,6 +25,7 @@ export default function Home() {
       <div className="col-span-12 md:col-span-6">
         <img src="/images/log.svg" className="w-full object-contain" />
       </div>
+  </div>*/}
     </div>
   );
 }

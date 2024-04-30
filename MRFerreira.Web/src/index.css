@@ -6,3 +6,13 @@
     box-sizing: border-box !important;
     font-family: 'Poppins', sans-serif;
 }
+
+.fundo-home {
+    height: 55rem;
+}
+
+@media (max-width: 1920px) {
+    .fundo-home {
+        height: 36rem;
+    }
+}
