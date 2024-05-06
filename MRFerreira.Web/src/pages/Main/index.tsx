@@ -1,4 +1,5 @@
 import MainLayout from "../../components/Layouts/main";
+import Empresas from "./components/empresas";
 import Home from "./components/home";
 import Produtos from "./components/produtos";
 
@@ -8,6 +9,7 @@ export default function Main() {
       <div>
         <Home />
         <Produtos />
+        <Empresas />
       </div>
     </MainLayout>
   );
