@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa6";
 import { useState } from "react";
 
@@ -12,15 +11,12 @@ export default function Header() {
   return (
     <div className="fixed top-0 left-0 w-full z-50">
       <div className="flex justify-between items-center px-8 lg:px-20 py-5 mx-auto bg-white shadow-lg">
-        <div>
+        <a href="#home">
           <p className="text-xl font-semibold">MR Ferreira</p>
-          <p
-            className="font-semibold mx-4"
-            style={{ fontSize: "12px" }}
-          >
+          <p className="font-semibold mx-4" style={{ fontSize: "12px" }}>
             Representações
           </p>
-        </div>
+        </a>
         <div
           className={`nav-links duration-500 lg:static absolute bg-white lg:min-h-fit min-h-[60vh] left-0 ${
             menuState === "menu" ? "top-full" : "top-[-500%]"
@@ -28,44 +24,29 @@ export default function Header() {
         >
           <ul className="flex lg:flex-row flex-col lg:items-center gap-8">
             <li className="mx-4 lg:mx-0">
-              <Link
-                to="/"
-                className="hover:text-gray-500 font-semibold"
-              >
+              <a href="#home" className="hover:text-gray-500 font-semibold">
+                Início
+              </a>
+            </li>
+            <li className="mx-4 lg:mx-0">
+              <a href="#produtos" className="hover:text-gray-500 font-semibold">
                 Produtos
-              </Link>
+              </a>
             </li>
             <li className="mx-4 lg:mx-0">
-              <Link
-                to="/"
-                className="hover:text-gray-500 font-semibold"
-              >
-                Features
-              </Link>
-            </li>
-            <li className="mx-4 lg:mx-0">
-              <Link
-                to="/"
-                className="hover:text-gray-500 font-semibold"
-              >
+              <a href="#empresas" className="hover:text-gray-500 font-semibold">
                 Empresas
-              </Link>
+              </a>
             </li>
             <li className="mx-4 lg:mx-0">
-              <Link
-                to="/"
-                className="hover:text-gray-500 font-semibold"
-              >
+              <a href="#sobre" className="hover:text-gray-500 font-semibold">
                 Sobre
-              </Link>
+              </a>
             </li>
             <li className="mx-4 lg:mx-0">
-              <Link
-                to="/"
-                className="hover:text-gray-500 font-semibold"
-              >
+              <a href="#contato" className="hover:text-gray-500 font-semibold">
                 Contato
-              </Link>
+              </a>
             </li>
           </ul>
         </div>

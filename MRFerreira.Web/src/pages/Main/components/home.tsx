@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <>
+    <div id="home">
       <div className="relative">
         <img
           src="/images/fundo.png"
@@ -22,6 +22,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
