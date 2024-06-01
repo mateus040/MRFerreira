@@ -2,6 +2,7 @@ import { BiHome } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaCartFlatbed } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 interface Props {
   isSidebarOpen: boolean;
@@ -28,9 +29,9 @@ export default function SidebarAdmin({ isSidebarOpen }: Props) {
         <ul className="flex-1 p-4 lg:p-2">
           <li className="flex items-center justify-center py-3 lg:py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-black hover:text-white mb-2">
             <BiHome size={25} className="lg:-mt-1" />
-            <span className="hidden lg:flex overflow-hidden transition-all w-52 ml-3">
+            <Link to="/" className="hidden lg:flex overflow-hidden transition-all w-52 ml-3">
               Home
-            </span>
+            </Link>
           </li>
           <li className="flex items-center justify-center py-3 lg:py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-black hover:text-white mb-2">
             <FaCartFlatbed size={25} className="lg:-mt-1" />

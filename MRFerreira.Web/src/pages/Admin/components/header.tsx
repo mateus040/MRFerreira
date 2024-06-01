@@ -11,7 +11,7 @@ export default function HeaderAdmin({ toggleSidebar }: Props) {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
 
   const handleClick = () => {
-    setOpenDropdown(!openDropdown);
+    setOpenDropdown(state => !state);
   };
 
   return (

@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen(state => !state);
   };
 
   return (
