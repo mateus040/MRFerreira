@@ -3,8 +3,12 @@ import { FaBars, FaRegUser } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from "react-router-dom";
 
-export default function HeaderAdmin() {
-  const [openDropdown, setOpenDropdown] = useState(false);
+interface Props {
+  toggleSidebar: () => void;
+}
+
+export default function HeaderAdmin({ toggleSidebar }: Props) {
+  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
 
   const handleClick = () => {
     setOpenDropdown(!openDropdown);
@@ -12,8 +16,8 @@ export default function HeaderAdmin() {
 
   return (
     <div className="bg-white px-5 py-3">
-      <div className="flex items-center justify-between lg:justify-end">
-        <div className="flex lg:hidden cursor-pointer mx-3">
+      <div className="flex items-center justify-between">
+        <div className="cursor-pointer mx-3" onClick={toggleSidebar}>
           <FaBars size={20} />
         </div>
 
@@ -26,7 +30,7 @@ export default function HeaderAdmin() {
             aria-haspopup="true"
             onClick={handleClick}
           >
-            <div className="p-1.5 rounded-full ring-1 ring-black ring-opacity-20">
+            <div className="p-1.5 rounded-full ring-1 ring-black ring-opacity-15">
               <FaRegUser size={25} />
             </div>
 

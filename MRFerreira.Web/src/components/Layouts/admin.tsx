@@ -1,3 +1,4 @@
+import { useState } from "react";
 import HeaderAdmin from "../../pages/Admin/components/header";
 import SidebarAdmin from "../../pages/Admin/components/sidebar";
 
@@ -6,13 +7,19 @@ interface Props {
 }
 
 export default function AdminLayout({ children }: Props) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="flex">
       <div>
-        <SidebarAdmin />
+        <SidebarAdmin isSidebarOpen={isSidebarOpen} />
       </div>
       <div className="w-full">
-        <HeaderAdmin />
+        <HeaderAdmin toggleSidebar={toggleSidebar} />
         {children}
       </div>
     </div>
