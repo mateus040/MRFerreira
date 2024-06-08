@@ -2,10 +2,10 @@ import { FaBars } from "react-icons/fa6";
 import { useState } from "react";
 
 export default function Header() {
-  const [menuState, setMenuState] = useState<string>("menu");
+  const [menuResponsive, setMenuResponsive] = useState<boolean>(false);
 
-  const onToggleMenu = () => {
-    setMenuState((prevState) => (prevState === "menu" ? "close" : "menu"));
+  const handleClick = () => {
+    setMenuResponsive((state) => !state);
   };
 
   return (
@@ -19,7 +19,7 @@ export default function Header() {
         </a>
         <div
           className={`nav-links duration-500 lg:static absolute bg-white lg:min-h-fit min-h-[60vh] left-0 ${
-            menuState === "menu" ? "top-full" : "top-[-500%]"
+            menuResponsive ? "top-full" : "top-[-500%]"
           } lg:w-auto w-full flex items-center px-5 shadow-lg lg:shadow-none`}
         >
           <ul className="flex lg:flex-row flex-col lg:items-center gap-8">
@@ -55,7 +55,7 @@ export default function Header() {
           <div className="hover:bg-white hover:text-black p-3 rounded transition-all">
             <FaBars
               className="text-xl cursor-pointer menu"
-              onClick={onToggleMenu}
+              onClick={handleClick}
             />
           </div>
         </div>
