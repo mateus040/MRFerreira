@@ -48,7 +48,7 @@ export default function HeaderAdmin({ toggleSidebar }: Props) {
           >
             <div className="py-1" role="none">
               <Link
-                to="#"
+                to="/admin/fornecedores"
                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabIndex={-1}
@@ -57,7 +57,7 @@ export default function HeaderAdmin({ toggleSidebar }: Props) {
                 Fornecedores
               </Link>
               <Link
-                to="#"
+                to="/admin/produtos"
                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabIndex={-1}

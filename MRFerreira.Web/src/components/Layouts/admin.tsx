@@ -10,17 +10,17 @@ export default function AdminLayout({ children }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(state => !state);
+    setIsSidebarOpen((state) => !state);
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <div>
         <SidebarAdmin isSidebarOpen={isSidebarOpen} />
       </div>
-      <div className="w-full">
+      <div className="flex flex-col flex-1 w-full">
         <HeaderAdmin toggleSidebar={toggleSidebar} />
-        {children}
+        <div className="px-8 py-6 overflow-auto">{children}</div>
       </div>
     </div>
   );
