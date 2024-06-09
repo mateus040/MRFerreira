@@ -39,7 +39,7 @@ export default function HeaderAdmin({ toggleSidebar }: Props) {
 
           <div
             className={`${
-              openDropdown ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              openDropdown ? "opacity-100 scale-100" : "opacity-0 scale-95 hidden"
             } absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition transform duration-300 ease-out`}
             role="menu"
             aria-orientation="vertical"

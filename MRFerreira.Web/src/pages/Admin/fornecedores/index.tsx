@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import AdminLayout from "../../../components/Layouts/admin";
 import BreadCrumb, { Page } from "../../../components/breadCrumb";
 
@@ -15,8 +16,14 @@ export default function Fornecedores() {
 
   return (
     <AdminLayout>
-      <div className="mb-3">
+      <div className="flex items-center justify-between mb-3">
         <BreadCrumb history={breadCrumbHistory} />
+        <Link
+          to="/admin/fornecedores/adicionar"
+          className="rounded-full px-8 py-2 bg-slate-900 text-white hover:bg-slate-800 transition-all"
+        >
+          Adicionar
+        </Link>
       </div>
 
       <div className="overflow-auto rounded-lg shadow hidden md:block">
@@ -185,7 +192,7 @@ export default function Fornecedores() {
           <div className="text-sm font-medium text-black">Peso Sup.: 120KG</div>
           <div className="text-sm font-medium text-black">Foto: imagem</div>
         </div>
-<div className="bg-white space-y-3 p-4 rounded-lg shadow">
+        <div className="bg-white space-y-3 p-4 rounded-lg shadow">
           <div className="flex items-center space-x-2 text-sm">
             <div className="text-gray-500">Cadeira estofada</div>
             <div>
