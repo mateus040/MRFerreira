@@ -27,15 +27,15 @@ interface ProviderField {
 export default function CreateProvider() {
   const breadCrumbHistory: Page[] = [
     {
-      link: "/admin",
+      link: "/",
       name: "Início",
     },
     {
-      link: "/admin/fornecedores",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
     {
-      link: "/admin/fornecedores/adicionar",
+      link: "/fornecedores/adicionar",
       name: "Adicionar fornecedores",
     },
   ];
@@ -88,7 +88,7 @@ export default function CreateProvider() {
         {
           loading: "Cadastrando fornecedor...",
           success: () => {
-            navigate("/admin/fornecedores");
+            navigate("/fornecedores");
             return "Fornecedor criado com sucesso!";
           },
           error: (error) => {

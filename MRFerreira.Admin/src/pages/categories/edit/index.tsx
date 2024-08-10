@@ -18,15 +18,15 @@ export default function EditCaategory() {
 
   const breadCrumbHistory: Page[] = [
     {
-      link: "/admin",
+      link: "/",
       name: "Início",
     },
     {
-      link: "/admin/categorias",
+      link: "/categorias",
       name: "Categorias",
     },
     {
-      link: `/admin/catgorias/editar/${categoryId}`,
+      link: `/catgorias/editar/${categoryId}`,
       name: `Editar categoria`,
     },
   ];
@@ -105,7 +105,7 @@ export default function EditCaategory() {
       {
         loading: "Editando categoria...",
         success: () => {
-          navigate("/admin/categorias");
+          navigate("/categorias");
           return "Categoria editada com sucesso!";
         },
         error: (error) => {

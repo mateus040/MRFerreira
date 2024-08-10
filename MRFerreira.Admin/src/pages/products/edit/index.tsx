@@ -33,9 +33,9 @@ export default function EditProduct() {
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   const breadCrumbHistory: Page[] = [
-    { link: "/admin", name: "Início" },
-    { link: "/admin/produtos", name: "Produtos" },
-    { link: `/admin/fornecedores/editar/${productId}`, name: "Editar produto" },
+    { link: "/", name: "Início" },
+    { link: "/produtos", name: "Produtos" },
+    { link: `/produtos/editar/${productId}`, name: "Editar produto" },
   ];
 
   const {
@@ -140,7 +140,7 @@ export default function EditProduct() {
         {
           loading: "Editando produto...",
           success: () => {
-            navigate("/admin/produtos");
+            navigate("/produtos");
             return "Produto editado com sucesso!";
           },
           error: (error) => {

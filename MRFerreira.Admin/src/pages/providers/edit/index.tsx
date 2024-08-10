@@ -42,15 +42,15 @@ export default function EditProvider() {
 
   const breadCrumbHistory: Page[] = [
     {
-      link: "/admin",
+      link: "/",
       name: "Início",
     },
     {
-      link: "/admin/fornecedores",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
     {
-      link: `/admin/fornecedores/editar/${providerId}`,
+      link: `/fornecedores/editar/${providerId}`,
       name: `Editar fornecedor`,
     },
   ];
@@ -126,7 +126,7 @@ export default function EditProvider() {
         {
           loading: "Editando fornecedor...",
           success: () => {
-            navigate("/admin/fornecedores");
+            navigate("/fornecedores");
             return "Fornecedor editado com sucesso!";
           },
           error: (error) => {

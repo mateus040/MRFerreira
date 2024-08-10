@@ -16,11 +16,11 @@ interface CategoryFiled {
 export default function Categories() {
   const breadCrumbHistory: Page[] = [
     {
-      link: "/admin",
+      link: "/",
       name: "Início",
     },
     {
-      link: "/admin/categorias",
+      link: "/categorias",
       name: "Categorias",
     },
   ];
@@ -39,7 +39,7 @@ export default function Categories() {
   });
 
   const navigateToEditPage = (category: CategoriaModel) => {
-    navigate(`/admin/categorias/editar/${category.id}`);
+    navigate(`/categorias/editar/${category.id}`);
   };
 
   const fetchCategories = async () => {

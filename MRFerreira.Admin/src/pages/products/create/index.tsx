@@ -26,15 +26,15 @@ interface ProductField {
 export default function CreateProducts() {
   const breadCrumbHistory: Page[] = [
     {
-      link: "/admin",
+      link: "/",
       name: "Início",
     },
     {
-      link: "/admin/produtos",
+      link: "/produtos",
       name: "Produtos",
     },
     {
-      link: "/admin/produtos/adicionar",
+      link: "/produtos/adicionar",
       name: "Adicionar produtos",
     },
   ];
@@ -119,7 +119,7 @@ export default function CreateProducts() {
         {
           loading: "Cadastrando produto...",
           success: () => {
-            navigate("/admin/produtos");
+            navigate("/produtos");
             return "Produto criado com sucesso!";
           },
           error: (error) => {
