@@ -13,10 +13,10 @@ import Loading from "../../../components/loadings/loading";
 interface ProductField {
   nome: string;
   descricao: string;
-  comprimento: number;
-  altura: number;
-  profundidade: number;
-  peso: number;
+  comprimento: string | null;
+  altura: string | null;
+  profundidade: string | null;
+  peso: string | null;
   linha: string;
   materiais: string;
   foto: File | string;
@@ -112,10 +112,10 @@ export default function EditProduct() {
     formData.append("_method", "PUT");
     formData.append("nome", data.nome);
     formData.append("descricao", data.descricao);
-    formData.append("comprimento", data.comprimento.toString());
-    formData.append("altura", data.altura.toString());
-    formData.append("profundidade", data.profundidade.toString());
-    formData.append("peso", data.peso.toString());
+    formData.append("comprimento", data.comprimento || "");
+    formData.append("altura", data.altura || "");
+    formData.append("profundidade", data.profundidade || "");
+    formData.append("peso", data.peso || "");
     formData.append("linha", data.linha);
     formData.append("materiais", data.materiais);
     formData.append("id_provider", data.id_provider);
@@ -276,7 +276,7 @@ export default function EditProduct() {
             <div className="col-span-12 lg:col-span-4">
               <label className="block mb-2 font-medium">Comprimento</label>
               <input
-                type="number"
+                type="text"
                 id="comprimento"
                 placeholder="Informe o comprimento"
                 className="w-full p-2 rounded-lg border border-gray-300"
@@ -286,7 +286,7 @@ export default function EditProduct() {
             <div className="col-span-12 lg:col-span-4">
               <label className="block mb-2 font-medium">Altura</label>
               <input
-                type="number"
+                type="text"
                 id="altura"
                 placeholder="Informe a altura"
                 className="w-full p-2 rounded-lg border border-gray-300"
@@ -296,7 +296,7 @@ export default function EditProduct() {
             <div className="col-span-12 lg:col-span-4">
               <label className="block mb-2 font-medium">Profundidade</label>
               <input
-                type="number"
+                type="text"
                 id="profundidade"
                 placeholder="Informe a profundidade"
                 className="w-full p-2 rounded-lg border border-gray-300"
@@ -306,7 +306,7 @@ export default function EditProduct() {
             <div className="col-span-12 lg:col-span-4">
               <label className="block mb-2 font-medium">Peso</label>
               <input
-                type="number"
+                type="text"
                 id="peso"
                 placeholder="Informe o peso"
                 className="w-full p-2 rounded-lg border border-gray-300"

@@ -12,10 +12,10 @@ import MainLayout from "../../../components/layout";
 interface ProductField {
   nome: string;
   descricao: string;
-  comprimento: number;
-  altura: number;
-  profundidade: number;
-  peso: number;
+  comprimento: string | null;
+  altura: string | null;
+  profundidade: string | null;
+  peso: string | null;
   linha: string;
   materiais: string;
   foto: FileList;
@@ -92,10 +92,10 @@ export default function CreateProducts() {
     const formData = new FormData();
     formData.append("nome", data.nome);
     formData.append("descricao", data.descricao);
-    formData.append("comprimento", data.comprimento.toString());
-    formData.append("altura", data.altura.toString());
-    formData.append("profundidade", data.profundidade.toString());
-    formData.append("peso", data.peso.toString());
+    formData.append("comprimento", data.comprimento || "");
+    formData.append("altura", data.altura || "");
+    formData.append("profundidade", data.profundidade || "");
+    formData.append("peso", data.peso || "");
     formData.append("linha", data.linha);
     formData.append("materiais", data.materiais);
     if (data.foto.length > 0) {
@@ -257,9 +257,9 @@ export default function CreateProducts() {
           <div className="col-span-12 lg:col-span-4">
             <label className="block mb-2 font-medium">Comprimento (cm)</label>
             <input
-              type="number"
+              type="text"
               id="comprimento"
-              {...register("comprimento", { valueAsNumber: true })}
+              {...register("comprimento")}
               placeholder="Informe o comprimento"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
@@ -267,9 +267,9 @@ export default function CreateProducts() {
           <div className="col-span-12 lg:col-span-4">
             <label className="block mb-2 font-medium">Altura (cm)</label>
             <input
-              type="number"
+              type="text"
               id="altura"
-              {...register("altura", { valueAsNumber: true })}
+              {...register("altura")}
               placeholder="Informe a altura"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
@@ -277,9 +277,9 @@ export default function CreateProducts() {
           <div className="col-span-12 lg:col-span-4">
             <label className="block mb-2 font-medium">Profundidade (cm)</label>
             <input
-              type="number"
+              type="text"
               id="profundidade"
-              {...register("profundidade", { valueAsNumber: true })}
+              {...register("profundidade")}
               placeholder="Informe a profundidade"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
@@ -287,9 +287,9 @@ export default function CreateProducts() {
           <div className="col-span-12 lg:col-span-4">
             <label className="block mb-2 font-medium">Peso (kg)</label>
             <input
-              type="number"
+              type="text"
               id="peso"
-              {...register("peso", { valueAsNumber: true })}
+              {...register("peso")}
               placeholder="Informe o peso"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
