@@ -10,8 +10,11 @@ import { SectionProviders } from "./components/providers";
 import { SectionAbout } from "./components/about";
 import { SectionContact } from "./components/contact";
 import MainLayout from "../../components/layouts/main";
+import { useSearchParams } from "react-router-dom";
 
 export default function Main() {
+  const [searchParams, _] = useSearchParams();
+  const section = searchParams.get("section");
 
   // const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
   // const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
@@ -27,7 +30,7 @@ export default function Main() {
 
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/products",
+        "https://mrferreira-api.vercel.app/api/api/products"
       );
       const productsData: ProdutoModel[] = response.data.results;
 
@@ -65,7 +68,7 @@ export default function Main() {
 
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers",
+        "https://mrferreira-api.vercel.app/api/api/providers"
       );
       const providersData: FornecedorModel[] = response.data.results;
 
@@ -97,6 +100,17 @@ export default function Main() {
       // setLoadingProviders(false);
     }
   };
+
+  useEffect(() => {
+    if (section) {
+      setTimeout(() => {
+        const element = document.getElementById(section);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 10);
+    }
+  }, [section]);
 
   useEffect(() => {
     fetchProducts();
