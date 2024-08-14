@@ -46,10 +46,17 @@ export default function CreateProducts() {
   const [providers, setProviders] = useState<FornecedorModel[]>([]);
   const [categories, setCategories] = useState<CategoriaModel[]>([]);
 
+  const [comprimentoUnit, setComprimentoUnit] = useState<string>("");
+  const [alturaUnit, setAlturaUnit] = useState<string>("");
+  const [profundidadeUnit, setProfundidadeUnit] = useState<string>("");
+  const [pesoUnit, setPesoUnit] = useState<string>("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<ProductField>();
 
   const fetchProviders = async () => {
@@ -141,6 +148,49 @@ export default function CreateProducts() {
       });
   };
 
+  const comprimentoValue = watch("comprimento");
+  const alturaValue = watch("altura");
+  const profundidadeValue = watch("profundidade");
+  const pesoValue = watch("peso");
+
+  const handleComprimentoSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setComprimentoUnit(selectedValue);
+    setValue(
+      "comprimento",
+      `${comprimentoValue?.split(" ")[0]} ${selectedValue}`
+    );
+  };
+
+  const handleAlturaSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setAlturaUnit(selectedValue);
+    setValue("altura", `${alturaValue?.split(" ")[0]} ${selectedValue}`);
+  };
+
+  const handleProfundidadeSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setProfundidadeUnit(selectedValue);
+    setValue(
+      "profundidade",
+      `${profundidadeValue?.split(" ")[0]} ${selectedValue}`
+    );
+  };
+
+  const handlePesoSelectChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setPesoUnit(selectedValue);
+    setValue("peso", `${pesoValue?.split(" ")[0]} ${selectedValue}`);
+  };
+
   useEffect(() => {
     fetchProviders();
     fetchCategories();
@@ -153,8 +203,8 @@ export default function CreateProducts() {
       </div>
 
       <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
-          <div className="col-span-12 lg:col-span-8">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-6">
+          <div className="col-span-12 xl:col-span-8">
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
@@ -169,7 +219,7 @@ export default function CreateProducts() {
               <p className="text-red-500 text-sm">{errors.nome.message}</p>
             )}
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Fornecedor*</label>
             <select
               id="id_provider"
@@ -193,7 +243,7 @@ export default function CreateProducts() {
               </p>
             )}
           </div>
-          <div className="col-span-12 lg:col-span-8">
+          <div className="col-span-12 xl:col-span-8">
             <label className="block mb-2 font-medium">Descrição*</label>
             <input
               type="text"
@@ -210,7 +260,7 @@ export default function CreateProducts() {
               <p className="text-red-500 text-sm">{errors.descricao.message}</p>
             )}
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Categoria*</label>
             <select
               id="id_category"
@@ -244,7 +294,7 @@ export default function CreateProducts() {
               className="w-full p-2 rounded-lg border border-gray-300"
             />
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Linha</label>
             <input
               type="text"
@@ -254,47 +304,98 @@ export default function CreateProducts() {
               className="w-full p-2 rounded-lg border border-gray-300"
             />
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Comprimento (cm)</label>
-            <input
-              type="text"
-              id="comprimento"
-              {...register("comprimento")}
-              placeholder="Informe o comprimento"
-              className="w-full p-2 rounded-lg border border-gray-300"
-            />
+            <div className="flex">
+              <input
+                type="text"
+                id="comprimento"
+                {...register("comprimento")}
+                placeholder="Informe o comprimento"
+                className="flex-1 p-2 rounded-l-lg border border-gray-300"
+              />
+              <select
+                onChange={handleComprimentoSelectChange}
+                className="p-2 rounded-r-lg border border-gray-300"
+                value={comprimentoUnit}
+              >
+                <option value="">Selecione</option>
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="dm">dm</option>
+                <option value="m">m</option>
+              </select>
+            </div>
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Altura (cm)</label>
-            <input
-              type="text"
-              id="altura"
-              {...register("altura")}
-              placeholder="Informe a altura"
-              className="w-full p-2 rounded-lg border border-gray-300"
-            />
+            <div className="flex">
+              <input
+                type="text"
+                id="altura"
+                {...register("altura")}
+                placeholder="Informe a altura"
+                className="w-full p-2 rounded-lg border border-gray-300"
+              />
+              <select
+                onChange={handleAlturaSelectChange}
+                className="p-2 rounded-r-lg border border-gray-300"
+                value={alturaUnit}
+              >
+                <option value="">Selecione</option>
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="dm">dm</option>
+                <option value="m">m</option>
+              </select>
+            </div>
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Profundidade (cm)</label>
-            <input
-              type="text"
-              id="profundidade"
-              {...register("profundidade")}
-              placeholder="Informe a profundidade"
-              className="w-full p-2 rounded-lg border border-gray-300"
-            />
+            <div className="flex">
+              <input
+                type="text"
+                id="profundidade"
+                {...register("profundidade")}
+                placeholder="Informe a profundidade"
+                className="w-full p-2 rounded-lg border border-gray-300"
+              />
+              <select
+                onChange={handleProfundidadeSelectChange}
+                className="p-2 rounded-r-lg border border-gray-300"
+                value={profundidadeUnit}
+              >
+                <option value="">Selecione</option>
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="dm">dm</option>
+                <option value="m">m</option>
+              </select>
+            </div>
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Peso (kg)</label>
-            <input
-              type="text"
-              id="peso"
-              {...register("peso")}
-              placeholder="Informe o peso"
-              className="w-full p-2 rounded-lg border border-gray-300"
-            />
+            <div className="flex">
+              <input
+                type="text"
+                id="peso"
+                {...register("peso")}
+                placeholder="Informe o peso"
+                className="w-full p-2 rounded-lg border border-gray-300"
+              />
+              <select
+                onChange={handlePesoSelectChange}
+                className="p-2 rounded-r-lg border border-gray-300"
+                value={pesoUnit}
+              >
+                <option value="">Selecione</option>
+                <option value="mg">mg</option>
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+              </select>
+            </div>
           </div>
-          <div className="col-span-12 lg:col-span-4">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Foto*</label>
             <input
               type="file"
