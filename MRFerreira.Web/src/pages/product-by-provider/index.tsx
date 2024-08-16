@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
@@ -11,27 +11,32 @@ import MainLayout from "../../components/layouts/main";
 
 export default function ProductsByProvider() {
   const { providerId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<ProdutoModel[]>([]);
   const [providers, setProviders] = useState<FornecedorModel[]>([]);
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
-  const processedProducts = products.map((product) => {
-    const productNameURL = formatNameForURL(product.nome);
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-    return {
-      ...product,
-      productNameURL,
-    };
-  });
+  const processedProducts = products
+    .filter((product) => product.nome.toLowerCase().includes(searchQuery))
+    .map((product) => {
+      const productNameURL = formatNameForURL(product.nome);
+
+      return {
+        ...product,
+        productNameURL,
+      };
+    });
 
   const fetchProductsByProvider = async () => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        `https://mrferreira-api.vercel.app/api/api/providers/${providerId}/products`,
+        `https://mrferreira-api.vercel.app/api/api/providers/${providerId}/products`
       );
       const productsData: ProdutoModel[] = response.data.results;
 
@@ -67,7 +72,7 @@ export default function ProductsByProvider() {
   const fetchProviders = async () => {
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers",
+        "https://mrferreira-api.vercel.app/api/api/providers"
       );
       const providersData: FornecedorModel[] = response.data.results;
 
@@ -81,6 +86,11 @@ export default function ProductsByProvider() {
     fetchProductsByProvider();
     fetchProviders();
   }, []);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const search = event.target.value;
+    setSearchParams({ search });
+  };
 
   return (
     <MainLayout>
@@ -97,6 +107,8 @@ export default function ProductsByProvider() {
             name="search"
             className="w-full px-4 py-2 rounded-lg"
             placeholder="Pesquisar produto"
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </form>
 
@@ -140,7 +152,7 @@ export default function ProductsByProvider() {
             </div>
           )}
 
-          {!loading && products.length === 0 && (
+          {!loading && processedProducts.length === 0 && (
             <div className="flex items-center justify-center text-gray-500 text-xl">
               Nenhum produto encontrado.
             </div>

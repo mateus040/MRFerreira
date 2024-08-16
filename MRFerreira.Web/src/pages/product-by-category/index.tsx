@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import { formatNameForURL } from "../../utils/formatNameForURL";
@@ -12,6 +12,8 @@ import MainLayout from "../../components/layouts/main";
 export default function ProductsByCategory() {
   const { categoryId } = useParams();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProdutoModel[]>([]);
@@ -19,21 +21,24 @@ export default function ProductsByCategory() {
 
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
-  const processedProducts = products.map((product) => {
-    const productNameURL = formatNameForURL(product.nome);
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-    return {
-      ...product,
-      productNameURL,
-    };
-  });
+  const processedProducts = products
+    .filter((product) => product.nome.toLowerCase().includes(searchQuery))
+    .map((product) => {
+      const productNameURL = formatNameForURL(product.nome);
+      return {
+        ...product,
+        productNameURL,
+      };
+    });
 
   const fetchProductsByCategory = async () => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        `https://mrferreira-api.vercel.app/api/api/category/${categoryId}`,
+        `https://mrferreira-api.vercel.app/api/api/category/${categoryId}`
       );
       const productsData: ProdutoModel[] = response.data.results;
 
@@ -69,7 +74,7 @@ export default function ProductsByCategory() {
   const fetchProviders = async () => {
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers",
+        "https://mrferreira-api.vercel.app/api/api/providers"
       );
       const providersData: FornecedorModel[] = response.data.results;
 
@@ -77,6 +82,11 @@ export default function ProductsByCategory() {
     } catch (err) {
       console.error("Erro ao buscar fornecedores:", err);
     }
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const search = event.target.value;
+    setSearchParams({ search });
   };
 
   useEffect(() => {
@@ -99,6 +109,8 @@ export default function ProductsByCategory() {
             name="search"
             className="w-full px-4 py-2 rounded-lg"
             placeholder="Pesquisar produto"
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </form>
 
