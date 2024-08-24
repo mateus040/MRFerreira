@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router-dom";
 import FornecedorModel from "../../../interface/models/FornecedorModel";
-import { formatNameForURL } from "../../../utils/formatNameForURL";
+import formatNameForURL from "../../../utils/formatNameForURL";
 
 interface Props {
   providers: FornecedorModel[];
@@ -12,15 +12,6 @@ interface Props {
 }
 
 export const SectionProviders = ({ providers, logos }: Props) => {
-  const processedProviders = providers.map((provider) => {
-    const providerNameURL = formatNameForURL(provider.nome);
-
-    return {
-      ...provider,
-      providerNameURL,
-    };
-  });
-
   return (
     <div className="px-8 lg:px-20 py-12 container mx-auto" id="empresas">
       <div className="flex flex-col items-center justify-center">
@@ -50,7 +41,7 @@ export const SectionProviders = ({ providers, logos }: Props) => {
             },
           }}
         >
-          {processedProviders.map((provider) => (
+          {providers.map((provider) => (
             <SwiperSlide>
               <div className="product-slider bg-white px-20 py-16 rounded-lg ">
                 <div className="flex flex-col items-center justify-center">
@@ -67,7 +58,7 @@ export const SectionProviders = ({ providers, logos }: Props) => {
                     {provider.nome}
                   </p>
                   <Link
-                    to={`/fornecedor/${provider.providerNameURL}`}
+                    to={`/fornecedor/${formatNameForURL(provider.nome)}`}
                     className="flex items-center justify-center w-[230px] mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                   >
                     Ver catálogo
@@ -80,4 +71,4 @@ export const SectionProviders = ({ providers, logos }: Props) => {
       </div>
     </div>
   );
-}
+};

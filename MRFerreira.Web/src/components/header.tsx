@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CategoriaModel from "../interface/models/CategoriaModel";
-import { formatNameForURL } from "../utils/formatNameForURL";
+import formatNameForURL from "../utils/formatNameForURL";
 
 export const Header = () => {
   const navigate = useNavigate();

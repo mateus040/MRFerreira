@@ -1,12 +1,9 @@
-export const formatNameForURL = (name: string) => {
-  const normalize = (text: string) => {
-    return text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-  };
-
-  return normalize(name)
+const formatNameForURL = (name: string) => {
+  return name
+    .toLowerCase()
     .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-");
 };
+
+export default formatNameForURL;

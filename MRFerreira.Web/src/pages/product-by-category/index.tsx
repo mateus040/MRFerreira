@@ -1,13 +1,13 @@
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
-import { formatNameForURL } from "../../utils/formatNameForURL";
 import axios from "axios";
 import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "../../components/loading";
 import FornecedorModel from "../../interface/models/FornecedorModel";
 import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
+import formatNameForURL from "../../utils/formatNameForURL";
 
 export default function ProductsByCategory() {
   const { categoryId } = useParams();

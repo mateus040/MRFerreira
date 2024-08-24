@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
 import { getDownloadURL, ref } from "firebase/storage";
-import FornecedorModel from "../../interface/models/FornecedorModel";
 import Loading from "../../components/loading";
-import { formatNameForURL } from "../../utils/formatNameForURL";
 import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
 
@@ -15,21 +13,9 @@ export default function ProductsByProvider() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<ProdutoModel[]>([]);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-
-  const processedProducts = products
-    .filter((product) => product.nome.toLowerCase().includes(searchQuery))
-    .map((product) => {
-      const productNameURL = formatNameForURL(product.nome);
-
-      return {
-        ...product,
-        productNameURL,
-      };
-    });
 
   const fetchProductsByProvider = async () => {
     setLoading(true);
@@ -69,22 +55,8 @@ export default function ProductsByProvider() {
     }
   };
 
-  const fetchProviders = async () => {
-    try {
-      const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers"
-      );
-      const providersData: FornecedorModel[] = response.data.results;
-
-      setProviders(providersData);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    }
-  };
-
   useEffect(() => {
     fetchProductsByProvider();
-    fetchProviders();
   }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +89,7 @@ export default function ProductsByProvider() {
 
           {!loading && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {processedProducts.map((product) => (
+              {products.map((product) => (
                 <div className="col-span-4" key={product.id}>
                   <div className="bg-white px-12 py-16 rounded-lg">
                     <div className="flex flex-col items-center justify-center">
@@ -133,14 +105,10 @@ export default function ProductsByProvider() {
                         {product.nome}
                       </p>
                       <p className="mt-3 text-md text-center">
-                        {
-                          providers.find(
-                            (provider) => provider.id === product.id_provider
-                          )?.nome
-                        }
+                        {product.provider.nome}
                       </p>
                       <Link
-                        to={`/fornecedor/${providerId}/${product.productNameURL}`}
+                        to={`/fornecedor/${providerId}/${product.nome}`}
                         className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                       >
                         Detalhes
@@ -152,7 +120,7 @@ export default function ProductsByProvider() {
             </div>
           )}
 
-          {!loading && processedProducts.length === 0 && (
+          {!loading && products.length === 0 && (
             <div className="flex items-center justify-center text-gray-500 text-xl">
               Nenhum produto encontrado.
             </div>
