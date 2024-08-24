@@ -30,7 +30,7 @@ export default function Main() {
 
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/products"
+        "http://127.0.0.1:8000/api/products"
       );
       const productsData: ProdutoModel[] = response.data.results;
 
@@ -124,10 +124,8 @@ export default function Main() {
 
         <SectionProducts
           products={products}
-          providers={providers}
           fotos={fotos}
           // loadingProducts={loadingProducts}
-          // loadingProviders={loadingProviders}
         />
 
         <SectionProviders

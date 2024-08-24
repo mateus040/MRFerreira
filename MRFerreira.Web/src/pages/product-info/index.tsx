@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "../../components/loading";
-import CategoriaModel from "../../interface/models/CategoriaModel";
 import { FaWhatsapp } from "react-icons/fa6";
 import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
@@ -16,31 +15,16 @@ export default function ProductInfo() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [productInfo, setProductInfo] = useState<ProdutoModel>();
-  const [categories, setCategories] = useState<CategoriaModel[]>([]);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/categories",
-      );
-
-      const categoriesData: CategoriaModel[] = response.data.results;
-
-      setCategories(categoriesData);
-    } catch (err) {
-      console.error("Erro ao buscar categorias:", err);
-    }
-  };
 
   const fetchProductInfo = async () => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        `https://mrferreira-api.vercel.app/api/api/products/${productId}`,
+        `http://127.0.0.1:8000/api/products/${productId}`
       );
-      const productData: ProdutoModel = response.data.product;
+      const productData: ProdutoModel = response.data.results;
 
       setProductInfo(productData);
 
@@ -73,7 +57,6 @@ export default function ProductInfo() {
 
   useEffect(() => {
     fetchProductInfo();
-    fetchCategories();
   }, []);
 
   const whatsappMessage = productInfo
@@ -98,11 +81,7 @@ export default function ProductInfo() {
               <div className="col-span-6">
                 <p className="text-sm mb-5 font-medium text-zinc-700 tracking-wider">
                   Home/
-                  {
-                    categories.find(
-                      (provider) => provider.id === productInfo?.id_category
-                    )?.nome
-                  }
+                  {productInfo.category.nome}
                   {/* Cadeiras */}
                 </p>
                 <p className="text-4xl font-bold uppercase mb-1">

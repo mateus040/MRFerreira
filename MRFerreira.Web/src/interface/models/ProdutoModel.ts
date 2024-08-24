@@ -1,3 +1,6 @@
+import CategoriaModel from "./CategoriaModel";
+import FornecedorModel from "./FornecedorModel";
+
 export default interface ProdutoModel {
   id: string;
   nome: string;
@@ -11,4 +14,6 @@ export default interface ProdutoModel {
   foto: string;
   id_provider: string;
   id_category: string;
+  provider: FornecedorModel;
+  category: CategoriaModel;
 }

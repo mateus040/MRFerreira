@@ -3,34 +3,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import ProdutoModel from "../../../interface/models/ProdutoModel";
-import FornecedorModel from "../../../interface/models/FornecedorModel";
-import { formatNameForURL } from "../../../utils/formatNameForURL";
 
 interface Props {
   products: ProdutoModel[];
-  providers: FornecedorModel[];
   fotos: { [key: string]: string };
   // loadingProducts: boolean;
-  // loadingProviders: boolean;
 }
 
-export const SectionProducts = ({ products, providers, fotos }: Props) => {
-  // Processando os produtos para incluir os dados do fornecedor e URLs formatadas
-  const processedProducts = products.slice(0, 5).map((product) => {
-    const provider = providers.find(
-      (provider) => provider.id === product.id_provider
-    );
-    const providerNameURL = provider ? formatNameForURL(provider.nome) : "";
-    const productNameURL = formatNameForURL(product.nome);
-
-    return {
-      ...product,
-      providerName: provider?.nome,
-      providerNameURL,
-      productNameURL,
-    };
-  });
-
+export const SectionProducts = ({ products, fotos }: Props) => {
   return (
     <div className="px-8 lg:px-20 py-12 container mx-auto" id="produtos">
       <div className="flex flex-col items-center justify-center">
@@ -64,7 +44,7 @@ export const SectionProducts = ({ products, providers, fotos }: Props) => {
             },
           }}
         >
-          {processedProducts.map((product) => (
+          {products.slice(0, 5).map((product) => (
             <SwiperSlide key={product.id}>
               <div className="product-slider bg-white px-20 py-16 rounded-lg">
                 <div className="flex flex-col items-center justify-center">
@@ -81,10 +61,10 @@ export const SectionProducts = ({ products, providers, fotos }: Props) => {
                     {product.nome}
                   </p>
                   <p className="mt-3 text-md text-center">
-                    {product.providerName}
+                    {product.provider.nome}
                   </p>
                   <Link
-                    to={`/fornecedor/${product.providerNameURL}/${product.productNameURL}`}
+                    to={`/fornecedor/${product.id_provider}/${product.id}`}
                     className="flex items-center justify-center w-[230px] mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                   >
                     Detalhes
