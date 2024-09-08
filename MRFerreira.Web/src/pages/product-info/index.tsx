@@ -22,7 +22,7 @@ export default function ProductInfo() {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/products/${productId}`
+        `https://mrferreira-api.vercel.app/api/api/products/${productId}`
       );
       const productData: ProdutoModel = response.data.results;
 

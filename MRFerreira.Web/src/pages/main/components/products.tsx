@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import ProdutoModel from "../../../interface/models/ProdutoModel";
+import formatNameForURL from "../../../utils/formatNameForURL";
 
 interface Props {
   products: ProdutoModel[];
@@ -64,7 +65,9 @@ export const SectionProducts = ({ products, fotos }: Props) => {
                     {product.provider.nome}
                   </p>
                   <Link
-                    to={`/fornecedor/${product.id_provider}/${product.id}`}
+                    to={`/fornecedor/${product.id_provider}/${
+                      product.id
+                    }?produto=${formatNameForURL(product.nome)}`}
                     className="flex items-center justify-center w-[230px] mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                   >
                     Detalhes
