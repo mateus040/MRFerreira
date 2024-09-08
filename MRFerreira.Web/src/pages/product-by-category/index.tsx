@@ -14,6 +14,7 @@ export default function ProductsByCategory() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProdutoModel[]>([]);
+  const [categoryName, setCategoryName] = useState<string>("");
 
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
@@ -29,6 +30,7 @@ export default function ProductsByCategory() {
       const productsData: ProdutoModel[] = response.data.results;
 
       setProducts(productsData);
+      setCategoryName(productsData[0].category.nome);
 
       const logosTemp: { [key: string]: string } = {};
       productsData.forEach((product) => {
@@ -57,60 +59,70 @@ export default function ProductsByCategory() {
   return (
     <MainLayout>
       <div className="px-8 lg:px-12 py-12 container mx-auto">
-        <p className="mt-10 text-2xl sm:text-3xl font-semibold text-center">
-          Categoria {categoryId}
-        </p>
-        <p className="text-md mt-3 text-gray-600 text-center">
-          Veja todos os produtos dessa categoria
-        </p>
-        <form className="mt-8">
-          <input
-            type="text"
-            name="search"
-            className="w-full px-4 py-2 rounded-lg"
-            placeholder="Pesquisar produto"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-        </form>
-
-        <div className="mt-8">
+        <div className="mt-10">
           {loading && <Loading centered />}
 
           {!loading && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {products.map((product) => (
-                <div className="col-span-4" key={product.id}>
-                  <div className="col-span-4" key={product.id}>
-                    <div className="bg-white px-12 py-16 rounded-lg">
-                      <div className="flex flex-col items-center justify-center">
-                        <div className="hover:scale-105 transtion-transform cursor-pointer">
-                          {fotos[product.foto] && (
-                            <img
-                              src={fotos[product.foto]}
-                              className="h-52 object-contain"
-                            />
-                          )}
+            <>
+              <p className="text-2xl sm:text-3xl font-semibold text-center">
+                Categoria {categoryName}
+              </p>
+              <p className="text-md mt-3 text-gray-600 text-center">
+                Veja todos os produtos dessa categoria
+              </p>
+              <form className="mt-8">
+                <input
+                  type="text"
+                  name="search"
+                  className="w-full px-4 py-2 rounded-lg"
+                  placeholder="Pesquisar produto"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </form>
+
+              <div className="mt-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                  {products.map((product) => (
+                    <div className="col-span-4" key={product.id}>
+                      <div className="col-span-4" key={product.id}>
+                        <div className="bg-white px-12 py-16 rounded-lg">
+                          <div className="flex flex-col items-center justify-center">
+                            <div className="hover:scale-105 transtion-transform cursor-pointer">
+                              {fotos[product.foto] && (
+                                <img
+                                  src={fotos[product.foto]}
+                                  className="h-52 object-contain"
+                                />
+                              )}
+                            </div>
+                            <p className="mt-8 text-xl font-semibold text-center">
+                              {product.nome}
+                            </p>
+                            <p className="mt-3 text-md text-center">
+                              {product.provider.nome}
+                            </p>
+                            <Link
+                              to={`/produtos/${
+                                product.id
+                              }?produto=${formatNameForURL(product.nome)}`}
+                              className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
+                            >
+                              Detalhes
+                            </Link>
+                          </div>
                         </div>
-                        <p className="mt-8 text-xl font-semibold text-center">
-                          {product.nome}
-                        </p>
-                        <p className="mt-3 text-md text-center">
-                          {product.provider.nome}
-                        </p>
-                        <Link
-                          to={`/produtos/${
-                            product.id
-                          }?produto=${formatNameForURL(product.nome)}`}
-                          className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
-                        >
-                          Detalhes
-                        </Link>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </>
+          )}
+
+          {!loading && products.length === 0 && (
+            <div className="flex items-center justify-center text-gray-500 text-xl">
+              Nenhum produto encontrado.
             </div>
           )}
         </div>
