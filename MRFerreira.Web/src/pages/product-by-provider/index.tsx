@@ -2,9 +2,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
-import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "../../components/loading";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
 
@@ -32,24 +30,12 @@ export default function ProductsByProvider() {
       setProducts(productsData);
       setProviderName(productsData[0].provider.nome);
 
-      // Get all unique logo paths
-      const logoPaths = productsData
-        .map((product) => product.foto)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      productsData.forEach((product) => {
+        if (product.foto_url) {
+          logosTemp[product.foto] = product.foto_url;
+        }
+      });
 
       setFotos(logosTemp);
     } catch (err) {
