@@ -19,7 +19,7 @@ export default function AppRouter() {
         />
 
         <Route
-          path="/fornecedor/:providerId/:productId"
+          path="/produtos/:productId"
           element={<ProductInfo />}
         />
 
