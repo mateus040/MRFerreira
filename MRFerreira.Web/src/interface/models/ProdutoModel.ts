@@ -16,4 +16,5 @@ export default interface ProdutoModel {
   id_category: string;
   provider: FornecedorModel;
   category: CategoriaModel;
+  foto_url: string;
 }

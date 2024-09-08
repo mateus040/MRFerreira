@@ -13,4 +13,5 @@ export default interface FornecedorModel {
   telefone: string;
   celular: string;
   logo: string;
+  logo_url: string;
 }

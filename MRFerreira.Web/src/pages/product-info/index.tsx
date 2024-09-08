@@ -27,26 +27,8 @@ export default function ProductInfo() {
       const productData: ProdutoModel = response.data.results;
 
       setProductInfo(productData);
+      setImageUrl(productData.foto_url);
 
-      const imagePath = productData.foto;
-
-      if (imagePath) {
-        const imageUrls: { [key: string]: string } = {};
-
-        await Promise.all(
-          [imagePath].map(async (path) => {
-            try {
-              const imageRef = ref(firebaseStorage, path);
-              const imageUrl = await getDownloadURL(imageRef);
-              imageUrls[path] = imageUrl;
-            } catch (error) {
-              console.error(`Erro ao buscar imagem ${path}:`, error);
-            }
-          })
-        );
-
-        setImageUrl(imageUrls[imagePath]);
-      }
     } catch (error) {
       console.error("Erro ao buscar informações do produto", error);
       toast.error("Erro ao buscar informações do produto.");

@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import FornecedorModel from "../../interface/models/FornecedorModel";
 import axios from "axios";
-import { getDownloadURL, ref } from "firebase/storage";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import { Home } from "./components/home";
 import { SectionProducts } from "./components/products";
 import { SectionProviders } from "./components/providers";
@@ -26,8 +24,6 @@ export default function Main() {
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
   const fetchProducts = async () => {
-    // setLoadingProducts(true);
-
     try {
       const response = await axios.get(
         "https://mrferreira-api.vercel.app/api/api/products"
@@ -36,36 +32,21 @@ export default function Main() {
 
       setProducts(productsData);
 
-      // Get all unique logo paths
-      const logoPaths = productsData
-        .map((product) => product.foto)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
+      // Gerar o objeto logosTemp a partir dos dados dos produtos
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      productsData.forEach((product) => {
+        if (product.foto_url) {
+          logosTemp[product.foto] = product.foto_url;
+        }
+      });
 
       setFotos(logosTemp);
     } catch (err) {
       console.error("Erro ao buscar produtos:", err);
-    } finally {
-      // setLoadingProducts(false);
     }
   };
 
   const fetchProviders = async () => {
-    // setLoadingProviders(true);
-
     try {
       const response = await axios.get(
         "https://mrferreira-api.vercel.app/api/api/providers"
@@ -74,30 +55,17 @@ export default function Main() {
 
       setProviders(providersData);
 
-      // Get all unique logo paths
-      const logoPaths = providersData
-        .map((provider) => provider.logo)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
+      // Gerar o objeto logosTemp a partir dos dados dos fornecedores
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      providersData.forEach((provider) => {
+        if (provider.logo_url) {
+          logosTemp[provider.logo] = provider.logo_url;
+        }
+      });
 
       setLogos(logosTemp);
     } catch (err) {
       console.error("Erro ao buscar fornecedores:", err);
-    } finally {
-      // setLoadingProviders(false);
     }
   };
 
