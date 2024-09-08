@@ -98,12 +98,12 @@ export const Header = () => {
               )}
             </li>
             <li className="mx-4 lg:mx-0">
-              <button
-                onClick={() => navigate("/?section=empresas")}
+              <Link
+                to="/empresas"
                 className="hover:text-gray-500 font-semibold"
               >
                 Empresas
-              </button>
+              </Link>
             </li>
             <li className="mx-4 lg:mx-0">
               <button

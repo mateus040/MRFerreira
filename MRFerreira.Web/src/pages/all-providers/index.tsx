@@ -1,44 +1,44 @@
-import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import ProdutoModel from "../../interface/models/ProdutoModel";
+import MainLayout from "../../components/layouts/main";
+import Loading from "../../components/loading";
+import { useEffect, useState } from "react";
+import FornecedorModel from "../../interface/models/FornecedorModel";
 import axios from "axios";
 import formatNameForURL from "../../utils/formatNameForURL";
-import Loading from "../../components/loading";
-import MainLayout from "../../components/layouts/main";
 
-export default function AllProducts() {
+export default function AllProviders() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [products, setProducts] = useState<ProdutoModel[]>([]);
+  const [providers, setProviders] = useState<FornecedorModel[]>([]);
 
-  const [fotos, setFotos] = useState<{ [key: string]: string }>({});
+  const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-  const fetchProducts = async () => {
+  const fetchProviders = async () => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/products"
+        "https://mrferreira-api.vercel.app/api/api/providers"
       );
-      const productsData: ProdutoModel[] = response.data.results;
+      const providersData: FornecedorModel[] = response.data.results;
 
-      setProducts(productsData);
+      setProviders(providersData);
 
-      // Gerar o objeto logosTemp a partir dos dados dos produtos
+      // Gerar o objeto logosTemp a partir dos dados dos fornecedores
       const logosTemp: { [key: string]: string } = {};
-      productsData.forEach((product) => {
-        if (product.foto_url) {
-          logosTemp[product.foto] = product.foto_url;
+      providersData.forEach((provider) => {
+        if (provider.logo_url) {
+          logosTemp[provider.logo] = provider.logo_url;
         }
       });
 
-      setFotos(logosTemp);
+      setLogos(logosTemp);
     } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
+      console.error("Erro ao buscar fornecedores:", err);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function AllProducts() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchProviders();
   }, []);
 
   return (
@@ -62,17 +62,17 @@ export default function AllProducts() {
           {!loading && (
             <>
               <p className="text-2xl sm:text-3xl font-semibold text-center">
-                Todos os produtos
+                Todos as empresas
               </p>
               <p className="text-md mt-3 text-gray-600 text-center">
-                Conheça todos os nossos produtos
+                Conheça todos as nossas empresas parceiras
               </p>
               <form className="mt-8">
                 <input
                   type="text"
                   name="search"
                   className="w-full px-4 py-2 rounded-lg"
-                  placeholder="Pesquisar produto"
+                  placeholder="Pesquisar fornecedor"
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
@@ -80,32 +80,29 @@ export default function AllProducts() {
 
               <div className="mt-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  {products.map((product) => (
-                    <div className="col-span-4" key={product.id}>
-                      <div className="col-span-4" key={product.id}>
+                  {providers.map((provider) => (
+                    <div className="col-span-4" key={provider.id}>
+                      <div className="col-span-4" key={provider.id}>
                         <div className="bg-white px-12 py-16 rounded-lg">
                           <div className="flex flex-col items-center justify-center">
                             <div className="hover:scale-105 transtion-transform cursor-pointer">
-                              {fotos[product.foto] && (
+                              {logos[provider.logo] && (
                                 <img
-                                  src={fotos[product.foto]}
+                                  src={logos[provider.logo]}
                                   className="h-52 object-contain"
                                 />
                               )}
                             </div>
                             <p className="mt-8 text-xl font-semibold text-center">
-                              {product.nome}
-                            </p>
-                            <p className="mt-3 text-md text-center">
-                              {product.provider.nome}
+                              {provider.nome}
                             </p>
                             <Link
-                              to={`/produtos/${
-                                product.id
-                              }?produto=${formatNameForURL(product.nome)}`}
+                              to={`/fornecedor/${
+                                provider.id
+                              }?fornecedor=${formatNameForURL(provider.nome)}`}
                               className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                             >
-                              Detalhes
+                              Ver catálogo
                             </Link>
                           </div>
                         </div>
@@ -117,9 +114,9 @@ export default function AllProducts() {
             </>
           )}
 
-          {!loading && products.length === 0 && (
+          {!loading && providers.length === 0 && (
             <div className="flex items-center justify-center text-gray-500 text-xl">
-              Nenhum produto encontrado.
+              Nenhuma empresa encontrada.
             </div>
           )}
         </div>
