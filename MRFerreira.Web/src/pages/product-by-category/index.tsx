@@ -2,10 +2,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
-import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "../../components/loading";
-import FornecedorModel from "../../interface/models/FornecedorModel";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
 
@@ -17,21 +14,10 @@ export default function ProductsByCategory() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProdutoModel[]>([]);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
 
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
-
-  const processedProducts = products
-    .filter((product) => product.nome.toLowerCase().includes(searchQuery))
-    .map((product) => {
-      const productNameURL = formatNameForURL(product.nome);
-      return {
-        ...product,
-        productNameURL,
-      };
-    });
 
   const fetchProductsByCategory = async () => {
     setLoading(true);
@@ -44,43 +30,18 @@ export default function ProductsByCategory() {
 
       setProducts(productsData);
 
-      // Get all unique logo paths
-      const logoPaths = productsData
-        .map((product) => product.foto)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      productsData.forEach((product) => {
+        if (product.foto_url) {
+          logosTemp[product.foto] = product.foto_url;
+        }
+      });
 
       setFotos(logosTemp);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchProviders = async () => {
-    try {
-      const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers"
-      );
-      const providersData: FornecedorModel[] = response.data.results;
-
-      setProviders(providersData);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
     }
   };
 
@@ -91,7 +52,6 @@ export default function ProductsByCategory() {
 
   useEffect(() => {
     fetchProductsByCategory();
-    fetchProviders();
   }, []);
 
   return (
@@ -119,7 +79,7 @@ export default function ProductsByCategory() {
 
           {!loading && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {processedProducts.map((product) => (
+              {products.map((product) => (
                 <div className="col-span-4" key={product.id}>
                   <div className="col-span-4" key={product.id}>
                     <div className="bg-white px-12 py-16 rounded-lg">
@@ -136,18 +96,12 @@ export default function ProductsByCategory() {
                           {product.nome}
                         </p>
                         <p className="mt-3 text-md text-center">
-                          {
-                            providers.find(
-                              (provider) => provider.id === product.id_provider
-                            )?.nome
-                          }
+                          {product.provider.nome}
                         </p>
                         <Link
-                          to={`/fornecedor/${
-                            providers.find(
-                              (provider) => provider.id === product.id_provider
-                            )?.id
-                          }/${product.productNameURL}?idProduct=${product.id}`}
+                          to={`/produtos/${
+                            product.id
+                          }?produto=${formatNameForURL(product.nome)}`}
                           className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
                         >
                           Detalhes

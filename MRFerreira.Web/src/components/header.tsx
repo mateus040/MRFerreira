@@ -13,15 +13,6 @@ export const Header = () => {
 
   const [categories, setCategories] = useState<CategoriaModel[]>([]);
 
-  const processedCategories = categories.map((category) => {
-    const categoryNameURL = formatNameForURL(category.nome);
-
-    return {
-      ...category,
-      categoryNameURL,
-    };
-  });
-
   const handleClick = () => {
     setMenuResponsive((state) => !state);
   };
@@ -51,7 +42,10 @@ export const Header = () => {
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg">
       <div className="flex justify-between items-center px-8 lg:px-12 py-5 container mx-auto">
-        <a onClick={() => navigate("/?section=home")} className="cursor-pointer">
+        <a
+          onClick={() => navigate("/?section=home")}
+          className="cursor-pointer"
+        >
           <p className="text-xl font-semibold">MR Ferreira</p>
           <p className="font-semibold mx-4" style={{ fontSize: "12px" }}>
             Representações
@@ -89,8 +83,10 @@ export const Header = () => {
               </span>
               {openDropdown && (
                 <ul className="absolute mt-3 w-48 bg-white border-gray-300 rounded-lg shadow-lg">
-                  {processedCategories.map((category) => (
-                    <Link to={`/categoria/${category.categoryNameURL}`}>
+                  {categories.map((category) => (
+                    <Link
+                      to={`/categoria/${category.id}?categoria=${formatNameForURL(category.nome)}`}
+                    >
                       <li className="p-2.5 hover:bg-gray-100 cursor-pointer">
                         {category.nome}
                       </li>
