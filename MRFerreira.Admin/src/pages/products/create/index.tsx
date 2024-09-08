@@ -202,7 +202,10 @@ export default function CreateProducts() {
         <BreadCrumb history={breadCrumbHistory} />
       </div>
 
-      <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+      <p className="font-medium text-slate-600 mt-8">
+        Campos com (*) são obrigatórios
+      </p>
+      <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-6">
           <div className="col-span-12 xl:col-span-8">
             <label className="block mb-2 font-medium">Nome*</label>
@@ -312,11 +315,11 @@ export default function CreateProducts() {
                 id="comprimento"
                 {...register("comprimento")}
                 placeholder="Informe o comprimento"
-                className="flex-1 p-2 rounded-l-lg border border-gray-300"
+                className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
                 onChange={handleComprimentoSelectChange}
-                className="p-2 rounded-r-lg border border-gray-300"
+                className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
                 value={comprimentoUnit}
               >
                 <option value="">Selecione</option>
@@ -335,11 +338,11 @@ export default function CreateProducts() {
                 id="altura"
                 {...register("altura")}
                 placeholder="Informe a altura"
-                className="w-full p-2 rounded-lg border border-gray-300"
+                className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
                 onChange={handleAlturaSelectChange}
-                className="p-2 rounded-r-lg border border-gray-300"
+                className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
                 value={alturaUnit}
               >
                 <option value="">Selecione</option>
@@ -358,11 +361,11 @@ export default function CreateProducts() {
                 id="profundidade"
                 {...register("profundidade")}
                 placeholder="Informe a profundidade"
-                className="w-full p-2 rounded-lg border border-gray-300"
+                className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
                 onChange={handleProfundidadeSelectChange}
-                className="p-2 rounded-r-lg border border-gray-300"
+                className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
                 value={profundidadeUnit}
               >
                 <option value="">Selecione</option>
@@ -381,11 +384,11 @@ export default function CreateProducts() {
                 id="peso"
                 {...register("peso")}
                 placeholder="Informe o peso"
-                className="w-full p-2 rounded-lg border border-gray-300"
+                className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
                 onChange={handlePesoSelectChange}
-                className="p-2 rounded-r-lg border border-gray-300"
+                className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
                 value={pesoUnit}
               >
                 <option value="">Selecione</option>

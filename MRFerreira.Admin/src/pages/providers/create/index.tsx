@@ -131,7 +131,9 @@ export default function CreateProvider() {
         <BreadCrumb history={breadCrumbHistory} />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmitChange)} className="mt-8">
+      <p className="font-medium text-slate-600 mt-8">Campos com (*) são obrigatórios</p>
+
+      <form onSubmit={handleSubmit(onSubmitChange)} className="mt-3">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
           <div className="col-span-12 lg:col-span-8">
             <label className="block mb-2 font-medium">Nome*</label>
