@@ -3,10 +3,8 @@ import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getDownloadURL, ref } from "firebase/storage";
 import Loading from "../../components/loading";
 import { FaWhatsapp } from "react-icons/fa6";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layouts/main";
 import { SectionContact } from "../main/components/contact";
 
