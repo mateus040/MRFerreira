@@ -5,6 +5,7 @@ import ProductInfo from "../pages/product-info";
 import ProductsByCategory from "../pages/product-by-category";
 import NotFound from "../pages/not-found";
 import ScrollToTop from "../components/scroll-top";
+import AllProducts from "../pages/all-products";
 
 export default function AppRouter() {
   return (
@@ -18,14 +19,11 @@ export default function AppRouter() {
           element={<ProductsByProvider />}
         />
 
-        <Route
-          path="/produtos/:productId"
-          element={<ProductInfo />}
-        />
+        <Route path="/produtos/:productId" element={<ProductInfo />} />
 
         <Route path="/categoria/:categoryId" element={<ProductsByCategory />} />
 
-        {/* TODO: implementar rota que tras todos os produtos */}
+        <Route path="/produtos" element={<AllProducts />} />
 
         {/* NotFound */}
         <Route path="*" element={<NotFound />} />

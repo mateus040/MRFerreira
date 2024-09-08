@@ -67,12 +67,12 @@ export const Header = () => {
               </button>
             </li>
             <li className="mx-4 lg:mx-0">
-              <button
+              <Link
+                to="/produtos"
                 className="hover:text-gray-500 font-semibold"
-                onClick={() => navigate("/?section=produtos")}
               >
                 Produtos
-              </button>
+              </Link>
             </li>
             <li className="mx-4 lg:mx-0 cursor-pointer">
               <span
@@ -85,7 +85,9 @@ export const Header = () => {
                 <ul className="absolute mt-3 w-48 bg-white border-gray-300 rounded-lg shadow-lg">
                   {categories.map((category) => (
                     <Link
-                      to={`/categoria/${category.id}?categoria=${formatNameForURL(category.nome)}`}
+                      to={`/categoria/${
+                        category.id
+                      }?categoria=${formatNameForURL(category.nome)}`}
                     >
                       <li className="p-2.5 hover:bg-gray-100 cursor-pointer">
                         {category.nome}
