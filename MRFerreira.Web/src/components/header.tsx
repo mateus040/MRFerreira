@@ -53,9 +53,9 @@ export const Header = () => {
           {/* <img src="/images/logo-transparente.png" alt="logo" className="h-20 w-20" /> */}
         </a>
         <div
-          className={`nav-links duration-500 lg:static absolute bg-white lg:min-h-fit min-h-[60vh] left-0 ${
-            menuResponsive ? "top-full" : "top-[-500%]"
-          } lg:w-auto w-full flex items-center px-5 shadow-lg lg:shadow-none`}
+          className={`nav-links duration-500 lg:static absolute lg:min-h-fit min-h-[40vh] left-0 -mt-1 ${
+            menuResponsive ? "top-full" : "top-[-600%]"
+          } lg:w-auto w-full flex items-center px-5 shadow-xl xl:shadow-none font-semibold bg-white`}
         >
           <ul className="flex lg:flex-row flex-col lg:items-center gap-8">
             <li className="mx-4 lg:mx-0">
