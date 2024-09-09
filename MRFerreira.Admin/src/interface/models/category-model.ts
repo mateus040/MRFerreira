@@ -1,4 +1,4 @@
-export default interface CategoriaModel {
+export default interface CategoryModel {
   id: string;
   nome: string;
 }

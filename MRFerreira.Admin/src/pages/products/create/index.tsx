@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../context/auth-context";
-import FornecedorModel from "../../../interface/models/company-model";
-import CategoriaModel from "../../../interface/models/category-model";
+import ProviderModel from "../../../interface/models/provider-model";
+import CategoryModel from "../../../interface/models/category-model";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MainLayout from "../../../components/layout";
@@ -43,8 +43,8 @@ export default function CreateProducts() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
-  const [categories, setCategories] = useState<CategoriaModel[]>([]);
+  const [providers, setProviders] = useState<ProviderModel[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
 
   const [comprimentoUnit, setComprimentoUnit] = useState<string>("");
   const [alturaUnit, setAlturaUnit] = useState<string>("");
@@ -69,7 +69,7 @@ export default function CreateProducts() {
           },
         }
       );
-      const providersData: FornecedorModel[] = response.data.results;
+      const providersData: ProviderModel[] = response.data.results;
       setProviders(providersData);
     } catch (err) {
       console.error("Erro ao buscar fornecedores:", err);
@@ -86,7 +86,7 @@ export default function CreateProducts() {
           },
         }
       );
-      const categoriesData: CategoriaModel[] = response.data.results;
+      const categoriesData: CategoryModel[] = response.data.results;
       setCategories(categoriesData);
     } catch (err) {
       console.error("Erro ao buscar categorias:", err);

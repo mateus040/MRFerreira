@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import FornecedorModel from "../../interface/models/company-model";
+import ProviderModel from "../../interface/models/provider-model";
 import { useAuth } from "../../context/auth-context";
 import { getDownloadURL, ref } from "firebase/storage";
 import { firebaseStorage } from "../../components/firebase/firebaseConfig";
@@ -29,10 +29,10 @@ export default function Providers() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
+  const [providers, setProviders] = useState<ProviderModel[]>([]);
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
-  const navigateToEditPage = (provider: FornecedorModel) => {
+  const navigateToEditPage = (provider: ProviderModel) => {
     navigate(`/empresas/editar/${provider.id}`);
   };
 
@@ -48,7 +48,7 @@ export default function Providers() {
           },
         }
       );
-      const providersData: FornecedorModel[] = response.data.results;
+      const providersData: ProviderModel[] = response.data.results;
 
       setProviders(providersData);
 

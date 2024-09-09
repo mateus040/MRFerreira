@@ -3,9 +3,9 @@ import MainLayout from "../../components/layout";
 import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import { useEffect, useState } from "react";
-import ProdutoModel from "../../interface/models/product-model";
-import FornecedorModel from "../../interface/models/company-model";
-import CategoriaModel from "../../interface/models/category-model";
+import ProductModel from "../../interface/models/product-model";
+import ProviderModel from "../../interface/models/provider-model";
+import CategoryModel from "../../interface/models/category-model";
 import axios from "axios";
 import { getDownloadURL, ref } from "firebase/storage";
 import toast from "react-hot-toast";
@@ -32,13 +32,13 @@ export default function Products() {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
 
-  const [products, setProducts] = useState<ProdutoModel[]>([]);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
-  const [categories, setCategories] = useState<CategoriaModel[]>([]);
+  const [products, setProducts] = useState<ProductModel[]>([]);
+  const [providers, setProviders] = useState<ProviderModel[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
 
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
-  const navigateToEditPage = (product: ProdutoModel) => {
+  const navigateToEditPage = (product: ProductModel) => {
     navigate(`/produtos/editar/${product.id}`);
   };
 
@@ -54,7 +54,7 @@ export default function Products() {
           },
         }
       );
-      const productsData: ProdutoModel[] = response.data.results;
+      const productsData: ProductModel[] = response.data.results;
 
       setProducts(productsData);
 
@@ -95,7 +95,7 @@ export default function Products() {
           },
         }
       );
-      const providersData: FornecedorModel[] = response.data.results;
+      const providersData: ProviderModel[] = response.data.results;
 
       setProviders(providersData);
     } catch (err) {
@@ -113,7 +113,7 @@ export default function Products() {
           },
         }
       );
-      const categoriesData: CategoriaModel[] = response.data.results;
+      const categoriesData: CategoryModel[] = response.data.results;
 
       setCategories(categoriesData);
     } catch (err) {

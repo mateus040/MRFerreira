@@ -1,4 +1,4 @@
-export default interface FornecedorModel {
+export default interface ProviderModel {
   id: string;
   nome: string;
   cnpj: string;

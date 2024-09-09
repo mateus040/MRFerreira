@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import CategoriaModel from "../../interface/models/category-model";
+import CategoryModel from "../../interface/models/category-model";
 import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import MainLayout from "../../components/layout";
@@ -33,12 +33,12 @@ export default function Categories() {
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [categories, setCategories] = useState<CategoriaModel[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [categoryField, setCategoryField] = useState<CategoryFiled>({
     nome: "",
   });
 
-  const navigateToEditPage = (category: CategoriaModel) => {
+  const navigateToEditPage = (category: CategoryModel) => {
     navigate(`/categorias/editar/${category.id}`);
   };
 
@@ -55,7 +55,7 @@ export default function Categories() {
         }
       );
 
-      const categoriesData: CategoriaModel[] = response.data.results;
+      const categoriesData: CategoryModel[] = response.data.results;
 
       setCategories(categoriesData);
     } catch (err) {

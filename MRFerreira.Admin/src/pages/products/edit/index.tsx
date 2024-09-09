@@ -5,8 +5,8 @@ import toast from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
-import FornecedorModel from "../../../interface/models/company-model";
-import CategoriaModel from "../../../interface/models/category-model";
+import ProviderModel from "../../../interface/models/provider-model";
+import CategoryModel from "../../../interface/models/category-model";
 import MainLayout from "../../../components/layout";
 import Loading from "../../../components/loadings/loading";
 
@@ -46,8 +46,8 @@ export default function EditProduct() {
     watch,
   } = useForm<ProductField>();
 
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
-  const [categories, setCategories] = useState<CategoriaModel[]>([]);
+  const [providers, setProviders] = useState<ProviderModel[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
 
   const [comprimentoUnit, setComprimentoUnit] = useState<string>("");
   const [alturaUnit, setAlturaUnit] = useState<string>("");
