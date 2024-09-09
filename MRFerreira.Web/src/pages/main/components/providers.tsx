@@ -48,7 +48,7 @@ export const SectionProviders = ({ providers, logos }: Props) => {
           }}
         >
           {providers.map((provider) => (
-            <SwiperSlide>
+            <SwiperSlide key={provider.id}>
               <div className="product-slider bg-white px-20 py-16 rounded-lg ">
                 <div className="flex flex-col items-center justify-center">
                   <div className="hover:scale-105 transition-transform cursor-pointer">

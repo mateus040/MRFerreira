@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CategoriaModel from "../interface/models/CategoriaModel";
 import formatNameForURL from "../utils/formatNameForURL";
+import { FaTimes } from "react-icons/fa";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export const Header = () => {
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg">
-      <div className="flex justify-between items-center px-8 lg:px-12 py-5 container mx-auto">
+      <div className="flex justify-between items-center px-5 py-5 container mx-auto">
         <a
           onClick={() => navigate("/?section=home")}
           className="cursor-pointer"
@@ -55,9 +56,9 @@ export const Header = () => {
         <div
           className={`nav-links duration-500 lg:static absolute lg:min-h-fit min-h-[40vh] left-0 -mt-1 ${
             menuResponsive ? "top-full" : "top-[-600%]"
-          } lg:w-auto w-full flex items-center px-5 shadow-xl xl:shadow-none font-semibold bg-white`}
+          } lg:w-auto w-full flex items-center px-5 shadow-xl lg:shadow-none font-semibold bg-white`}
         >
-          <ul className="flex lg:flex-row flex-col lg:items-center gap-8">
+          <ul className="flex lg:flex-row flex-col lg:items-center gap-8 container mx-auto mt-6 lg:mt-1 mb-6 lg:mb-0">
             <li className="mx-4 lg:mx-0">
               <button
                 onClick={() => navigate("/?section=home")}
@@ -126,10 +127,17 @@ export const Header = () => {
 
         <div className="flex lg:hidden items-center gap-6">
           <div className="hover:bg-white hover:text-black p-3 rounded transition-all">
-            <FaBars
-              className="text-xl cursor-pointer menu"
-              onClick={handleClick}
-            />
+            {menuResponsive ? (
+              <FaTimes
+                className="text-xl cursor-pointer menu"
+                onClick={handleClick}
+              />
+            ) : (
+              <FaBars
+                className="text-xl cursor-pointer menu"
+                onClick={handleClick}
+              />
+            )}
           </div>
         </div>
       </div>
