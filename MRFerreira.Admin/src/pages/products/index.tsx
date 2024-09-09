@@ -4,14 +4,10 @@ import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import { useEffect, useState } from "react";
 import ProductModel from "../../interface/models/product-model";
-import ProviderModel from "../../interface/models/provider-model";
-import CategoryModel from "../../interface/models/category-model";
 import axios from "axios";
-import { getDownloadURL, ref } from "firebase/storage";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 
 export default function Products() {
   const breadCrumbHistory: Page[] = [
@@ -33,8 +29,6 @@ export default function Products() {
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProductModel[]>([]);
-  const [providers, setProviders] = useState<ProviderModel[]>([]);
-  const [categories, setCategories] = useState<CategoryModel[]>([]);
 
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
@@ -58,66 +52,18 @@ export default function Products() {
 
       setProducts(productsData);
 
-      // Get all unique logo paths
-      const logoPaths = productsData
-        .map((product) => product.foto)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      productsData.forEach((product) => {
+        if (product.foto_url) {
+          logosTemp[product.foto] = product.foto_url;
+        }
+      });
 
       setLogos(logosTemp);
     } catch (err) {
       console.error("Erro ao buscar produtos:", err);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchProviders = async () => {
-    try {
-      const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/providers",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const providersData: ProviderModel[] = response.data.results;
-
-      setProviders(providersData);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
-        "https://mrferreira-api.vercel.app/api/api/categories",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const categoriesData: CategoryModel[] = response.data.results;
-
-      setCategories(categoriesData);
-    } catch (err) {
-      console.error("Erro ao buscar categorias:", err);
     }
   };
 
@@ -166,8 +112,6 @@ export default function Products() {
 
   useEffect(() => {
     fetchProducts();
-    fetchProviders();
-    fetchCategories();
   }, []);
 
   return (
@@ -238,18 +182,10 @@ export default function Products() {
                       {product.descricao}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {
-                        categories.find(
-                          (category) => category.id === product.id_category
-                        )?.nome
-                      }
+                      {product.category.nome}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {
-                        providers.find(
-                          (provider) => provider.id === product.id_provider
-                        )?.nome
-                      }
+                      {product.provider.nome}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {product.linha}
@@ -314,24 +250,11 @@ export default function Products() {
                 </div>
                 <div className="text-sm">
                   Categoria:{" "}
-                  <span className="text-gray-700">
-                    {" "}
-                    {
-                      categories.find(
-                        (category) => category.id === product.id_category
-                      )?.nome
-                    }
-                  </span>
+                  <span className="text-gray-700">{product.category.nome}</span>
                 </div>
                 <div className="text-sm">
                   Fornecedor:{" "}
-                  <span className="text-gray-700">
-                    {
-                      providers.find(
-                        (provider) => provider.id === product.id_provider
-                      )?.nome
-                    }
-                  </span>
+                  <span className="text-gray-700">{product.provider.nome}</span>
                 </div>
                 <div className="text-sm">
                   Linha: <span className="text-gray-700">{product.linha}</span>

@@ -5,8 +5,6 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import ProviderModel from "../../interface/models/provider-model";
 import { useAuth } from "../../context/auth-context";
-import { getDownloadURL, ref } from "firebase/storage";
-import { firebaseStorage } from "../../components/firebase/firebaseConfig";
 import MainLayout from "../../components/layout";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import Loading from "../../components/loadings/loading";
@@ -52,24 +50,12 @@ export default function Providers() {
 
       setProviders(providersData);
 
-      // Get all unique logo paths
-      const logoPaths = providersData
-        .map((provider) => provider.logo)
-        .filter((logoPath) => logoPath !== null) as string[];
-
-      // Fetch URLs for all logos
       const logosTemp: { [key: string]: string } = {};
-      await Promise.all(
-        logoPaths.map(async (logoPath) => {
-          try {
-            const logoRef = ref(firebaseStorage, logoPath);
-            const logoUrl = await getDownloadURL(logoRef);
-            logosTemp[logoPath] = logoUrl;
-          } catch (error) {
-            console.error(`Error fetching logo for path ${logoPath}:`, error);
-          }
-        })
-      );
+      providersData.forEach((provider) => {
+        if (provider.logo_url) {
+          logosTemp[provider.logo] = provider.logo_url;
+        }
+      });
 
       setLogos(logosTemp);
     } catch (err) {
