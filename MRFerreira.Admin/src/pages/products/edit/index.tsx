@@ -64,7 +64,7 @@ export default function EditProduct() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const product = response.data.product;
+      const product = response.data.results;
       setValue("nome", product.nome);
       setValue("descricao", product.descricao);
       setValue("comprimento", product.comprimento);
