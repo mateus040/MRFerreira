@@ -46,11 +46,11 @@ export default function EditProvider() {
       name: "Início",
     },
     {
-      link: "/fornecedores",
+      link: "/empresas",
       name: "Fornecedores",
     },
     {
-      link: `/fornecedores/editar/${providerId}`,
+      link: `/empresas/editar/${providerId}`,
       name: `Editar fornecedor`,
     },
   ];
@@ -126,7 +126,7 @@ export default function EditProvider() {
         {
           loading: "Editando fornecedor...",
           success: () => {
-            navigate("/fornecedores");
+            navigate("/empresas");
             return "Fornecedor editado com sucesso!";
           },
           error: (error) => {

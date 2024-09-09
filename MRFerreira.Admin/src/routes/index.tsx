@@ -40,19 +40,19 @@ export default function AppRouter() {
 
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
 
-          {/* Rotas fornecedor */}
+          {/* Rotas empresas parceiras */}
           <Route
-            path="/fornecedores"
+            path="/empresas"
             element={<PrivateRoute element={<Providers />} />}
           />
 
           <Route
-            path="/fornecedores/adicionar"
+            path="/empresas/adicionar"
             element={<PrivateRoute element={<CreateProvider />} />}
           />
 
           <Route
-            path="/fornecedores/editar/:providerId"
+            path="/empresas/editar/:providerId"
             element={<PrivateRoute element={<EditProvider />} />}
           />
 

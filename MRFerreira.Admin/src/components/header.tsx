@@ -48,13 +48,22 @@ export const Header = ({ toggleSidebar }: Props) => {
           >
             <div className="py-1" role="none">
               <Link
-                to="/fornecedores"
+                to="/"
                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabIndex={-1}
                 id="menu-item-0"
               >
-                Fornecedores
+                Início
+              </Link>
+              <Link
+                to="/empresas"
+                className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                role="menuitem"
+                tabIndex={-1}
+                id="menu-item-1"
+              >
+                Empresas
               </Link>
               <Link
                 to="/produtos"
@@ -73,15 +82,6 @@ export const Header = ({ toggleSidebar }: Props) => {
                 id="menu-item-1"
               >
                 Categorias
-              </Link>
-              <Link
-                to="/"
-                className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                role="menuitem"
-                tabIndex={-1}
-                id="menu-item-1"
-              >
-                Voltar para o início
               </Link>
             </div>
           </div>
