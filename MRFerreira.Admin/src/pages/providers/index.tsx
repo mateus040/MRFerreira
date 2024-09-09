@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import FornecedorModel from "../../interface/models/FornecedorModel";
+import FornecedorModel from "../../interface/models/company-model";
 import { useAuth } from "../../context/auth-context";
 import { getDownloadURL, ref } from "firebase/storage";
 import { firebaseStorage } from "../../components/firebase/firebaseConfig";

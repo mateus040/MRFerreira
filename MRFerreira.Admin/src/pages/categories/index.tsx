@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import CategoriaModel from "../../interface/models/CategoriaModel";
+import CategoriaModel from "../../interface/models/category-model";
 import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import MainLayout from "../../components/layout";

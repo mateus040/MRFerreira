@@ -5,8 +5,8 @@ import toast from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
-import FornecedorModel from "../../../interface/models/FornecedorModel";
-import CategoriaModel from "../../../interface/models/CategoriaModel";
+import FornecedorModel from "../../../interface/models/company-model";
+import CategoriaModel from "../../../interface/models/category-model";
 import MainLayout from "../../../components/layout";
 import Loading from "../../../components/loadings/loading";
 
