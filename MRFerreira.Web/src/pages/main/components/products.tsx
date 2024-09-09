@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import AOS from "aos";
 
 import "swiper/css";
 import ProdutoModel from "../../../interface/models/ProdutoModel";
 import formatNameForURL from "../../../utils/formatNameForURL";
+import { useEffect } from "react";
 
 interface Props {
   products: ProdutoModel[];
@@ -12,8 +14,12 @@ interface Props {
 }
 
 export const SectionProducts = ({ products, fotos }: Props) => {
+  useEffect(() => {
+    AOS.init({ duration: 1200 });
+  }, []);
+
   return (
-    <div className="px-8 lg:px-20 py-12 container mx-auto" id="produtos">
+    <div className="px-8 lg:px-20 py-12 container mx-auto" id="produtos" data-aos="fade-right">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-2xl sm:text-3xl font-semibold text-center">
           Conheça alguns de nossos produtos

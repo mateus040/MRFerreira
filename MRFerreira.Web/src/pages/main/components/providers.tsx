@@ -1,9 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
+import AOS from "aos";
 
 import "swiper/css";
 import { Link } from "react-router-dom";
 import FornecedorModel from "../../../interface/models/FornecedorModel";
 import formatNameForURL from "../../../utils/formatNameForURL";
+import { useEffect } from "react";
 
 interface Props {
   providers: FornecedorModel[];
@@ -12,8 +14,12 @@ interface Props {
 }
 
 export const SectionProviders = ({ providers, logos }: Props) => {
+  useEffect(() => {
+    AOS.init({ duration: 1200 });
+  }, []);
+
   return (
-    <div className="px-8 lg:px-20 py-12 container mx-auto" id="empresas">
+    <div className="px-8 lg:px-20 py-12 container mx-auto" id="empresas" data-aos="fade-left">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-2xl sm:text-3xl font-semibold text-center">
           Veja nossas empresas parceiras
