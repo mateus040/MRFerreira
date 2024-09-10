@@ -5,6 +5,8 @@ import axios from "axios";
 import formatNameForURL from "../../utils/formatNameForURL";
 import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
+import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler from "../../services/api-error-handle";
 
 export default function AllProducts() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,31 +19,28 @@ export default function AllProducts() {
 
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (): Promise<void> => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<ProdutoModel>>(
         "https://mrferreira-api.vercel.app/api/api/products"
-      );
-      const productsData: ProdutoModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const productsData = data.results;
+        setProducts(productsData);
 
-      setProducts(productsData);
+        const logosTemp: { [key: string]: string } = {};
+        productsData.forEach((product) => {
+          if (product.foto_url) {
+            logosTemp[product.foto] = product.foto_url;
+          }
+        });
 
-      // Gerar o objeto logosTemp a partir dos dados dos produtos
-      const logosTemp: { [key: string]: string } = {};
-      productsData.forEach((product) => {
-        if (product.foto_url) {
-          logosTemp[product.foto] = product.foto_url;
-        }
-      });
-
-      setFotos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
-    } finally {
-      setLoading(false);
-    }
+        setFotos(logosTemp);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

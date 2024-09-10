@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
 import Loading from "../../components/loading";
 import { FaWhatsapp } from "react-icons/fa6";
 import MainLayout from "../../components/layouts/main";
 import { SectionContact } from "../main/components/contact";
+import ServiceResult from "../../interface/service-result";
+import apiErrorHandler from "../../services/api-error-handle";
 
 export default function ProductInfo() {
   const { productId } = useParams();
@@ -18,21 +19,16 @@ export default function ProductInfo() {
   const fetchProductInfo = async () => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ServiceResult<ProdutoModel>>(
         `https://mrferreira-api.vercel.app/api/api/products/${productId}`
-      );
-      const productData: ProdutoModel = response.data.results;
-
-      setProductInfo(productData);
-      setImageUrl(productData.foto_url);
-
-    } catch (error) {
-      console.error("Erro ao buscar informações do produto", error);
-      toast.error("Erro ao buscar informações do produto.");
-    } finally {
-      setLoading(false);
-    }
+      )
+      .then(({ data }) => {
+        setProductInfo(data.results as ProdutoModel);
+        setImageUrl(data.results?.foto_url || null);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {

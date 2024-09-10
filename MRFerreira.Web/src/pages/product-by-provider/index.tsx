@@ -5,6 +5,8 @@ import axios from "axios";
 import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
+import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler from "../../services/api-error-handle";
 
 export default function ProductsByProvider() {
   const { providerId } = useParams();
@@ -21,28 +23,26 @@ export default function ProductsByProvider() {
   const fetchProductsByProvider = async () => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<ProdutoModel>>(
         `https://mrferreira-api.vercel.app/api/api/providers/${providerId}/products`
-      );
-      const productsData: ProdutoModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const productsData = data.results;
+        setProducts(productsData);
+        setProviderName(productsData[0].provider.nome);
 
-      setProducts(productsData);
-      setProviderName(productsData[0].provider.nome);
+        const logosTemp: { [key: string]: string } = {};
+        productsData.forEach((product) => {
+          if (product.foto_url) {
+            logosTemp[product.foto] = product.foto_url;
+          }
+        });
 
-      const logosTemp: { [key: string]: string } = {};
-      productsData.forEach((product) => {
-        if (product.foto_url) {
-          logosTemp[product.foto] = product.foto_url;
-        }
-      });
-
-      setFotos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
-    } finally {
-      setLoading(false);
-    }
+        setFotos(logosTemp);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {

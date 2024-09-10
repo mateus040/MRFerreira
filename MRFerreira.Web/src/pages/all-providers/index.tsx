@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import FornecedorModel from "../../interface/models/FornecedorModel";
 import axios from "axios";
 import formatNameForURL from "../../utils/formatNameForURL";
+import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler from "../../services/api-error-handle";
 
 export default function AllProviders() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,31 +19,28 @@ export default function AllProviders() {
 
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
-  const fetchProviders = async () => {
+  const fetchProviders = async (): Promise<void> => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<FornecedorModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers"
-      );
-      const providersData: FornecedorModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const providersData = data.results;
+        setProviders(providersData);
 
-      setProviders(providersData);
+        const logosTemp: { [key: string]: string } = {};
+        providersData.forEach((provider) => {
+          if (provider.logo_url) {
+            logosTemp[provider.logo] = provider.logo_url;
+          }
+        });
 
-      // Gerar o objeto logosTemp a partir dos dados dos fornecedores
-      const logosTemp: { [key: string]: string } = {};
-      providersData.forEach((provider) => {
-        if (provider.logo_url) {
-          logosTemp[provider.logo] = provider.logo_url;
-        }
-      });
-
-      setLogos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    } finally {
-      setLoading(false);
-    }
+        setLogos(logosTemp);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

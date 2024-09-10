@@ -9,13 +9,15 @@ import { SectionAbout } from "./components/about";
 import { SectionContact } from "./components/contact";
 import MainLayout from "../../components/layouts/main";
 import { useSearchParams } from "react-router-dom";
+import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler from "../../services/api-error-handle";
 
 export default function Main() {
   const [searchParams, _] = useSearchParams();
   const section = searchParams.get("section");
 
-  // const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
-  // const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
+  const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProdutoModel[]>([]);
   const [providers, setProviders] = useState<FornecedorModel[]>([]);
@@ -23,50 +25,53 @@ export default function Main() {
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
+  const fetchProducts = async (): Promise<void> => {
+    setLoadingProducts(true);
+
+    axios
+      .get<ListServiceResult<ProdutoModel>>(
         "https://mrferreira-api.vercel.app/api/api/products"
-      );
-      const productsData: ProdutoModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const productsData = data.results;
+        setProducts(productsData);
 
-      setProducts(productsData);
+        // Gerar o objeto logosTemp a partir dos dados dos produtos
+        const logosTemp: { [key: string]: string } = {};
+        productsData.forEach((product) => {
+          if (product.foto_url) {
+            logosTemp[product.foto] = product.foto_url;
+          }
+        });
 
-      // Gerar o objeto logosTemp a partir dos dados dos produtos
-      const logosTemp: { [key: string]: string } = {};
-      productsData.forEach((product) => {
-        if (product.foto_url) {
-          logosTemp[product.foto] = product.foto_url;
-        }
-      });
-
-      setFotos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
-    }
+        setFotos(logosTemp);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoadingProducts(false));
   };
 
-  const fetchProviders = async () => {
-    try {
-      const response = await axios.get(
+  const fetchProviders = async (): Promise<void> => {
+    setLoadingProviders(true);
+
+    axios
+      .get<ListServiceResult<FornecedorModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers"
-      );
-      const providersData: FornecedorModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const providersData = data.results;
+        setProviders(providersData);
 
-      setProviders(providersData);
+        const logosTemp: { [key: string]: string } = {};
+        providersData.forEach((provider) => {
+          if (provider.logo_url) {
+            logosTemp[provider.logo] = provider.logo_url;
+          }
+        });
 
-      // Gerar o objeto logosTemp a partir dos dados dos fornecedores
-      const logosTemp: { [key: string]: string } = {};
-      providersData.forEach((provider) => {
-        if (provider.logo_url) {
-          logosTemp[provider.logo] = provider.logo_url;
-        }
-      });
-
-      setLogos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    }
+        setLogos(logosTemp);
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoadingProviders(false));
   };
 
   useEffect(() => {

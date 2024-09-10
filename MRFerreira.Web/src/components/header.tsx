@@ -5,6 +5,8 @@ import axios from "axios";
 import CategoriaModel from "../interface/models/CategoriaModel";
 import formatNameForURL from "../utils/formatNameForURL";
 import { FaTimes } from "react-icons/fa";
+import ListServiceResult from "../interface/list-service-result";
+import apiErrorHandler from "../services/api-error-handle";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -22,18 +24,15 @@ export const Header = () => {
     setOpenDropdown((state) => !state);
   };
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
+  const fetchCategories = async (): Promise<void> => {
+    axios
+      .get<ListServiceResult<CategoriaModel>>(
         "https://mrferreira-api.vercel.app/api/api/categories"
-      );
-
-      const categoriesData: CategoriaModel[] = response.data.results;
-
-      setCategories(categoriesData);
-    } catch (err) {
-      console.error("Erro ao buscar categorias:", err);
-    }
+      )
+      .then(({ data }) => {
+        setCategories(data.results);
+      })
+      .catch(apiErrorHandler);
   };
 
   useEffect(() => {
