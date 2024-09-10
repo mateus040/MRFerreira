@@ -9,6 +9,8 @@ import ProviderModel from "../../../interface/models/provider-model";
 import CategoryModel from "../../../interface/models/category-model";
 import MainLayout from "../../../components/layout";
 import ListServiceResult from "../../../interface/list-service-result";
+import ServiceResult from "../../../interface/service-result";
+import ProductModel from "../../../interface/models/product-model";
 
 interface ProductField {
   nome: string;
@@ -60,17 +62,17 @@ export default function EditProduct() {
     setLoadingProducts(true);
 
     axios
-      .get(`https://mrferreira-api.vercel.app/api/api/products/${productId}`, {
+      .get<ServiceResult<ProductModel>>(`https://mrferreira-api.vercel.app/api/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data }) => {
-        const product = data.results;
+        const product = data.results as ProductModel;
         setValue("nome", product.nome);
         setValue("descricao", product.descricao);
-        setValue("comprimento", product.comprimento);
-        setValue("altura", product.altura);
-        setValue("profundidade", product.profundidade);
-        setValue("peso", product.peso);
+        setValue("comprimento", product.comprimento.toString());
+        setValue("altura", product.altura.toString());
+        setValue("profundidade", product.profundidade.toString());
+        setValue("peso", product.peso.toString());
         setValue("linha", product.linha);
         setValue("materiais", product.materiais);
         setValue("id_provider", product.id_provider);
@@ -148,7 +150,7 @@ export default function EditProduct() {
 
     toast
       .promise(
-        axios.post(
+        axios.post<ServiceResult>(
           `https://mrferreira-api.vercel.app/api/api/products/update/${productId}`,
           formData,
           {

@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -9,8 +9,13 @@ import BreadCrumb, { Page } from "../../components/bread-crumb";
 import MainLayout from "../../components/layout";
 import Loading from "../../components/loadings/loading";
 import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler, {
+  getApiErrorMessage,
+} from "../../services/api-error-handler";
+import { SubmitHandler, useForm } from "react-hook-form";
+import ServiceResult from "../../interface/service-result";
 
-interface CategoryFiled {
+interface CategoryField {
   nome: string;
 }
 
@@ -35,9 +40,13 @@ export default function Categories() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [categories, setCategories] = useState<CategoryModel[]>([]);
-  const [categoryField, setCategoryField] = useState<CategoryFiled>({
-    nome: "",
-  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CategoryField>();
 
   const navigateToEditPage = (category: CategoryModel) => {
     navigate(`/categorias/editar/${category.id}`);
@@ -58,119 +67,64 @@ export default function Categories() {
       .then(({ data }) => {
         setCategories(data.results);
       })
-      .catch((error) => {
-        toast.error("Erro ao buscar categorias:", error);
-      })
+      .catch(apiErrorHandler)
       .finally(() => setLoadingCategories(false));
   };
 
   const deleteCategories = async (categoryId: string) => {
     setLoadingDelete(true);
 
-    toast.promise(
-      new Promise((resolve, reject) => {
-        axios
-          .delete(
-            `https://mrferreira-api.vercel.app/api/api/categories/delete/${categoryId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response: AxiosResponse) => {
-            resolve(response.data);
-          })
-          .catch((error) => {
-            reject(error);
-          })
-          .finally(() => {
-            setLoadingDelete(false);
-          });
-      }),
-      {
-        loading: "Excluindo categoria...",
-        success: () => {
-          const updatedCategories = categories.filter(
-            (category) => category.id !== categoryId
-          );
-          setCategories(updatedCategories);
-          fetchCategories();
-          return "Categoria excluída com sucesso!";
-        },
-        error: (error) => {
-          if (axios.isAxiosError(error)) {
-            return (
-              "Erro de solicitação: " + (error.response?.data || error.message)
-            );
-          } else if (error instanceof Error) {
-            return "Erro desconhecido: " + error.message;
-          } else {
-            return "Erro inesperado: " + error;
+    toast
+      .promise(
+        axios.delete<ServiceResult>(
+          `https://mrferreira-api.vercel.app/api/api/categories/delete/${categoryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        },
-      }
-    );
+        ),
+        {
+          loading: "Excluindo categoria...",
+          success: () => {
+            const updatedCategories = categories.filter(
+              (category) => category.id !== categoryId
+            );
+            setCategories(updatedCategories);
+            fetchCategories();
+            return "Categoria excluída com sucesso!";
+          },
+          error: (error) => getApiErrorMessage(error),
+        }
+      )
+      .finally(() => setLoadingDelete(false));
   };
 
-  const changeCategoriesFieldHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCategoryField({
-      ...categoryField,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const onSubmitChange = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
+  const onSubmitChange: SubmitHandler<CategoryField> = async (data) => {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("nome", categoryField.nome);
+    formData.append("nome", data.nome);
 
     toast.promise(
-      new Promise((resolve, reject) => {
-        axios
-          .post(
-            "https://mrferreira-api.vercel.app/api/api/categories/add",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response: AxiosResponse) => {
-            resolve(response.data);
-          })
-          .catch((error) => {
-            reject(error);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }),
+      axios.post<ServiceResult>(
+        "https://mrferreira-api.vercel.app/api/api/categories/add",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
       {
         loading: "Cadastrando categoria...",
         success: () => {
           fetchCategories();
-          setCategoryField({ nome: "" });
+          reset();
           return "Categoria criada com sucesso!";
         },
-        error: (error) => {
-          if (axios.isAxiosError(error)) {
-            return (
-              "Erro de solicitação: " + (error.response?.data || error.message)
-            );
-          } else if (error instanceof Error) {
-            return "Erro desconhecido: " + error.message;
-          } else {
-            return "Erro inesperado: " + error;
-          }
-        },
+        error: (error) => getApiErrorMessage(error),
       }
     );
   };
@@ -185,26 +139,25 @@ export default function Categories() {
         <BreadCrumb history={breadCrumbHistory} />
       </div>
 
-      <form className="mt-5">
+      <form className="mt-5" onSubmit={handleSubmit(onSubmitChange)}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
           <div className="col-span-12 lg:col-span-10">
             <input
               type="text"
               id="nome"
-              name="nome"
               placeholder="Informe o nome da categoria"
               className="w-full p-2 rounded-lg border border-gray-300"
-              value={categoryField.nome}
-              onChange={(e) => changeCategoriesFieldHandler(e)}
-              required
+              {...register("nome", { required: "O nome é obrigatório" })}
             />
+            {errors.nome && (
+              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            )}
           </div>
 
           <div className="col-span-12 lg:col-span-2">
             <button
               className="w-full px-8 py-2 flex items-center justify-center h-full bg-slate-900 text-white hover:bg-slate-800 transition-all rounded-full"
               type="submit"
-              onClick={(e) => onSubmitChange(e)}
               disabled={loading}
             >
               Adicionar

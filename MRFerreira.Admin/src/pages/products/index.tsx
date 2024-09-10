@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler, { getApiErrorMessage } from "../../services/api-error-handler";
+import ServiceResult from "../../interface/service-result";
 
 export default function Products() {
   const breadCrumbHistory: Page[] = [
@@ -62,9 +64,7 @@ export default function Products() {
 
         setLogos(logosTemp);
       })
-      .catch((error) => {
-        toast.error("Erro ao buscar produtos:", error);
-      })
+      .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 
@@ -72,7 +72,7 @@ export default function Products() {
     setLoadingDelete(true);
 
     toast
-      .promise(
+      .promise<ServiceResult>(
         axios.delete(
           `https://mrferreira-api.vercel.app/api/api/products/delete/${productId}`,
           {
@@ -92,18 +92,7 @@ export default function Products() {
             fetchProducts();
             return "Produto excluído com sucesso!";
           },
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return (
-                "Erro de solicitação: " +
-                (error.response?.data || error.message)
-              );
-            } else if (error instanceof Error) {
-              return "Erro desconhecido: " + error.message;
-            } else {
-              return "Erro inesperado: " + error;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => {

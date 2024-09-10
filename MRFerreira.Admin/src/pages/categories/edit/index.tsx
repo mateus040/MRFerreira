@@ -6,6 +6,8 @@ import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import MainLayout from "../../../components/layout";
 import { SubmitHandler, useForm } from "react-hook-form";
+import ServiceResult from "../../../interface/service-result";
+import CategoryModel from "../../../interface/models/category-model";
 
 interface CategoryField {
   nome: string;
@@ -45,7 +47,7 @@ export default function EditCaategory() {
     setLoadingCategory(true);
 
     axios
-      .get(
+      .get<ServiceResult<CategoryModel>>(
         `https://mrferreira-api.vercel.app/api/api/categories/${categoryId}`,
         {
           headers: {
@@ -54,7 +56,7 @@ export default function EditCaategory() {
         }
       )
       .then(({ data }) => {
-        const category = data.results;
+        const category = data.results as CategoryModel;
         setValue("nome", category.nome);
       })
       .catch((error) => {
@@ -73,7 +75,7 @@ export default function EditCaategory() {
     toast.promise(
       new Promise((resolve, reject) => {
         axios
-          .post(
+          .post<ServiceResult>(
             `https://mrferreira-api.vercel.app/api/api/categories/update/${categoryId}`,
             formData,
             {

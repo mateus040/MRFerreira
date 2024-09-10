@@ -9,6 +9,7 @@ import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MainLayout from "../../../components/layout";
 import ListServiceResult from "../../../interface/list-service-result";
+import ServiceResult from "../../../interface/service-result";
 
 interface ProductField {
   nome: string;
@@ -125,7 +126,7 @@ export default function CreateProducts() {
 
     toast
       .promise(
-        axios.post(
+        axios.post<ServiceResult>(
           "https://mrferreira-api.vercel.app/api/api/products/add",
           formData,
           {

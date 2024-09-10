@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/auth-context";
 import MainLayout from "../../../components/layout";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import Inputmask from "react-input-mask";
+import ServiceResult from "../../../interface/service-result";
 
 interface ProviderField {
   nome: string;
@@ -75,7 +76,7 @@ export default function CreateProvider() {
 
     toast
       .promise(
-        axios.post(
+        axios.post<ServiceResult>(
           "https://mrferreira-api.vercel.app/api/api/providers/add",
           formData,
           {

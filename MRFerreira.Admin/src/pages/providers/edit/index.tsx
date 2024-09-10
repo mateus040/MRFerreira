@@ -7,6 +7,8 @@ import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import toast from "react-hot-toast";
 import MainLayout from "../../../components/layout";
+import ServiceResult from "../../../interface/service-result";
+import ProviderModel from "../../../interface/models/provider-model";
 
 interface ProviderField {
   nome: string;
@@ -58,7 +60,7 @@ export default function EditProvider() {
     setLoadingProviders(true);
 
     axios
-      .get(
+      .get<ServiceResult<ProviderModel>>(
         `https://mrferreira-api.vercel.app/api/api/providers/${providerId}`,
         {
           headers: {
@@ -67,7 +69,7 @@ export default function EditProvider() {
         }
       )
       .then(({ data }) => {
-        const provider = data.results;
+        const provider = data.results as ProviderModel;
         setValue("nome", provider.nome || "");
         setValue("cnpj", provider.cnpj || "");
         setValue("rua", provider.rua || "");
@@ -111,7 +113,7 @@ export default function EditProvider() {
     }
 
     toast
-      .promise(
+      .promise<ServiceResult>(
         axios.post(
           `https://mrferreira-api.vercel.app/api/api/providers/update/${providerId}`,
           formData,

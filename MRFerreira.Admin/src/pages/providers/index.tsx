@@ -9,6 +9,10 @@ import MainLayout from "../../components/layout";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import Loading from "../../components/loadings/loading";
 import ListServiceResult from "../../interface/list-service-result";
+import apiErrorHandler, {
+  getApiErrorMessage,
+} from "../../services/api-error-handler";
+import ServiceResult from "../../interface/service-result";
 
 export default function Providers() {
   const breadCrumbHistory: Page[] = [
@@ -61,9 +65,7 @@ export default function Providers() {
 
         setLogos(logosTemp);
       })
-      .catch((error) => {
-        toast.error("Erro ao buscar empresas:", error);
-      })
+      .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 
@@ -72,7 +74,7 @@ export default function Providers() {
 
     toast
       .promise(
-        axios.delete(
+        axios.delete<ServiceResult>(
           `https://mrferreira-api.vercel.app/api/api/providers/delete/${providerId}`,
           {
             headers: {
@@ -91,18 +93,7 @@ export default function Providers() {
             fetchProviders();
             return "Fornecedor excluído com sucesso!";
           },
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return (
-                "Erro de solicitação: " +
-                (error.response?.data || error.message)
-              );
-            } else if (error instanceof Error) {
-              return "Erro desconhecido: " + error.message;
-            } else {
-              return "Erro inesperado: " + error;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => {
