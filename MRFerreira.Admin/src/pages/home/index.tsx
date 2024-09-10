@@ -5,6 +5,7 @@ import CardsModel from "../../interface/models/cards-model";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
+import ServiceResult from "../../interface/service-result";
 
 export default function Home() {
   const { token } = useAuth();
@@ -12,25 +13,42 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<CardsModel>();
 
-  const fetchCards = async () => {
+  const fetchCards = async (): Promise<void> => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
-        `https://mrferreira-api.vercel.app/api/api/cards`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setCards(response.data.results);
-    } catch (error) {
-      console.error("Erro ao buscar informações cards:", error);
-      toast.error("Erro ao buscar informações dos cards.");
-    } finally {
-      setLoading(false);
-    }
+    axios
+      .get<ServiceResult<CardsModel>>(`https://mrferreira-api.vercel.app/api/api/cards`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(({ data }) => {
+        setCards(data.results as CardsModel);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar informações cards:", error);
+        toast.error("Erro ao buscar informações dos cards.");
+      })
+      .finally(() => setLoading(false))
   };
+
+  // const fetchCards = async () => {
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await axios.get(
+  //       `https://mrferreira-api.vercel.app/api/api/cards`,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     setCards(response.data.results);
+  //   } catch (error) {
+  //     console.error("Erro ao buscar informações cards:", error);
+  //     toast.error("Erro ao buscar informações dos cards.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     fetchCards();

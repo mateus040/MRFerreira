@@ -8,6 +8,7 @@ import { useAuth } from "../../context/auth-context";
 import MainLayout from "../../components/layout";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import Loading from "../../components/loadings/loading";
+import ListServiceResult from "../../interface/list-service-result";
 
 export default function Providers() {
   const breadCrumbHistory: Page[] = [
@@ -34,35 +35,36 @@ export default function Providers() {
     navigate(`/empresas/editar/${provider.id}`);
   };
 
-  const fetchProviders = async () => {
+  const fetchProviders = async (): Promise<void> => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<ProviderModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const providersData: ProviderModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const providersData = data.results;
 
-      setProviders(providersData);
+        setProviders(providersData);
 
-      const logosTemp: { [key: string]: string } = {};
-      providersData.forEach((provider) => {
-        if (provider.logo_url) {
-          logosTemp[provider.logo] = provider.logo_url;
-        }
-      });
+        const logosTemp: { [key: string]: string } = {};
+        providersData.forEach((provider) => {
+          if (provider.logo_url) {
+            logosTemp[provider.logo] = provider.logo_url;
+          }
+        });
 
-      setLogos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    } finally {
-      setLoading(false);
-    }
+        setLogos(logosTemp);
+      })
+      .catch((error) => {
+        toast.error("Erro ao buscar empresas:", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   const deleteProvider = async (providerId: string) => {

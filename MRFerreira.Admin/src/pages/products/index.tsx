@@ -8,6 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import ListServiceResult from "../../interface/list-service-result";
 
 export default function Products() {
   const breadCrumbHistory: Page[] = [
@@ -36,35 +37,35 @@ export default function Products() {
     navigate(`/produtos/editar/${product.id}`);
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (): Promise<void> => {
     setLoading(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<ProductModel>>(
         "https://mrferreira-api.vercel.app/api/api/products",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const productsData: ProductModel[] = response.data.results;
+      )
+      .then(({ data }) => {
+        const productsData = data.results;
+        setProducts(productsData);
 
-      setProducts(productsData);
+        const logosTemp: { [key: string]: string } = {};
+        productsData.forEach((product) => {
+          if (product.foto_url) {
+            logosTemp[product.foto] = product.foto_url;
+          }
+        });
 
-      const logosTemp: { [key: string]: string } = {};
-      productsData.forEach((product) => {
-        if (product.foto_url) {
-          logosTemp[product.foto] = product.foto_url;
-        }
-      });
-
-      setLogos(logosTemp);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
-    } finally {
-      setLoading(false);
-    }
+        setLogos(logosTemp);
+      })
+      .catch((error) => {
+        toast.error("Erro ao buscar produtos:", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   const deleteProduct = async (productId: string) => {

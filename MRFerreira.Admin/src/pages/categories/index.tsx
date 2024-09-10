@@ -8,6 +8,7 @@ import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import MainLayout from "../../components/layout";
 import Loading from "../../components/loadings/loading";
+import ListServiceResult from "../../interface/list-service-result";
 
 interface CategoryFiled {
   nome: string;
@@ -42,27 +43,25 @@ export default function Categories() {
     navigate(`/categorias/editar/${category.id}`);
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (): Promise<void> => {
     setLoadingCategories(true);
 
-    try {
-      const response = await axios.get(
+    axios
+      .get<ListServiceResult<CategoryModel>>(
         "https://mrferreira-api.vercel.app/api/api/categories",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-      const categoriesData: CategoryModel[] = response.data.results;
-
-      setCategories(categoriesData);
-    } catch (err) {
-      console.error("Erro ao buscar categorias:", err);
-    } finally {
-      setLoadingCategories(false);
-    }
+      )
+      .then(({ data }) => {
+        setCategories(data.results);
+      })
+      .catch((error) => {
+        toast.error("Erro ao buscar categorias:", error);
+      })
+      .finally(() => setLoadingCategories(false));
   };
 
   const deleteCategories = async (categoryId: string) => {

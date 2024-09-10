@@ -8,6 +8,7 @@ import CategoryModel from "../../../interface/models/category-model";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MainLayout from "../../../components/layout";
+import ListServiceResult from "../../../interface/list-service-result";
 
 interface ProductField {
   nome: string;
@@ -43,6 +44,9 @@ export default function CreateProducts() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
+
   const [providers, setProviders] = useState<ProviderModel[]>([]);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
 
@@ -59,38 +63,46 @@ export default function CreateProducts() {
     watch,
   } = useForm<ProductField>();
 
-  const fetchProviders = async () => {
-    try {
-      const response = await axios.get(
+  const fetchProviders = async (): Promise<void> => {
+    setLoadingProviders(true);
+
+    axios
+      .get<ListServiceResult<ProviderModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const providersData: ProviderModel[] = response.data.results;
-      setProviders(providersData);
-    } catch (err) {
-      console.error("Erro ao buscar fornecedores:", err);
-    }
+      )
+      .then(({ data }) => {
+        setProviders(data.results);
+      })
+      .catch((error) => {
+        toast.error("Erro ao buscar empresas: ", error);
+      })
+      .finally(() => setLoadingProviders(false));
   };
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
+  const fetchCategories = async (): Promise<void> => {
+    setLoadingCategories(true);
+
+    axios
+      .get<ListServiceResult<CategoryModel>>(
         "https://mrferreira-api.vercel.app/api/api/categories",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const categoriesData: CategoryModel[] = response.data.results;
-      setCategories(categoriesData);
-    } catch (err) {
-      console.error("Erro ao buscar categorias:", err);
-    }
+      )
+      .then(({ data }) => {
+        setCategories(data.results);
+      })
+      .catch((error) => {
+        toast.error("Erro ao buscar categorias: ", error);
+      })
+      .finally(() => setLoadingCategories(false));
   };
 
   const onSubmit: SubmitHandler<ProductField> = async (data) => {
@@ -223,17 +235,20 @@ export default function CreateProducts() {
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
-            <label className="block mb-2 font-medium">Fornecedor*</label>
+            <label className="block mb-2 font-medium">Empresa*</label>
             <select
               id="id_provider"
               {...register("id_provider", {
-                required: "O fornecedor é obrigatório",
+                required: "A empresa é obrigatória",
               })}
               className={`w-full p-2 rounded-lg border ${
                 errors.id_provider ? "border-red-500" : "border-gray-300"
               }`}
+              disabled={loadingProviders}
             >
-              <option value="">Selecione um fornecedor</option>
+              <option value="">
+                {loadingProviders ? "..." : "Selecione uma empresa"}
+              </option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>
                   {provider.nome}
@@ -273,8 +288,11 @@ export default function CreateProducts() {
               className={`w-full p-2 rounded-lg border ${
                 errors.id_category ? "border-red-500" : "border-gray-300"
               }`}
+              disabled={loadingCategories}
             >
-              <option value="">Selecione uma categoria</option>
+              <option value="">
+                {loadingCategories ? "..." : "Selecione uma categoria"}
+              </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.nome}
