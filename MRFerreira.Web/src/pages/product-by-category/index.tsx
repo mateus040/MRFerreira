@@ -86,7 +86,7 @@ export default function ProductsByCategory() {
                   {products.map((product) => (
                     <div className="col-span-4" key={product.id}>
                       <div className="col-span-4" key={product.id}>
-                        <div className="bg-white px-12 py-16 rounded-lg">
+                        <div className="bg-white px-6 py-8 rounded-lg flex flex-col justify-between">
                           <div className="flex flex-col items-center justify-center">
                             <div className="hover:scale-105 transtion-transform cursor-pointer">
                               {fotos[product.foto] && (
@@ -96,20 +96,22 @@ export default function ProductsByCategory() {
                                 />
                               )}
                             </div>
-                            <p className="mt-8 text-xl font-semibold text-center">
+                            <p className="mt-4 text-xl font-semibold text-center">
                               {product.nome}
                             </p>
                             <p className="mt-3 text-md text-center">
                               {product.provider.nome}
                             </p>
-                            <Link
-                              to={`/produtos/${
-                                product.id
-                              }?produto=${formatNameForURL(product.nome)}`}
-                              className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
-                            >
-                              Detalhes
-                            </Link>
+                            <div className="flex justify-center mt-8">
+                              <Link
+                                to={`/produtos/${
+                                  product.id
+                                }?produto=${formatNameForURL(product.nome)}`}
+                                className="flex items-center justify-center w-[230px] border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
+                              >
+                                Detalhes
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>

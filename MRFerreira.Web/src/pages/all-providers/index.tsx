@@ -82,7 +82,7 @@ export default function AllProviders() {
                   {providers.map((provider) => (
                     <div className="col-span-4" key={provider.id}>
                       <div className="col-span-4" key={provider.id}>
-                        <div className="bg-white px-12 py-16 rounded-lg">
+                        <div className="bg-white px-6 py-8 rounded-lg flex flex-col justify-between">
                           <div className="flex flex-col items-center justify-center">
                             <div className="hover:scale-105 transtion-transform cursor-pointer">
                               {logos[provider.logo] && (
@@ -92,17 +92,21 @@ export default function AllProviders() {
                                 />
                               )}
                             </div>
-                            <p className="mt-8 text-xl font-semibold text-center">
+                            <p className="mt-4 text-xl font-semibold text-center">
                               {provider.nome}
                             </p>
-                            <Link
-                              to={`/fornecedor/${
-                                provider.id
-                              }?fornecedor=${formatNameForURL(provider.nome)}`}
-                              className="mt-5 -mb-5 border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
-                            >
-                              Ver catálogo
-                            </Link>
+                            <div className="flex justify-center mt-8">
+                              <Link
+                                to={`/fornecedor/${
+                                  provider.id
+                                }?fornecedor=${formatNameForURL(
+                                  provider.nome
+                                )}`}
+                                className="flex items-center justify-center w-[230px] border-2 border-black rounded px-8 py-2 hover:bg-black hover:text-white transition-all"
+                              >
+                                Ver catálogo
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>

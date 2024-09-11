@@ -98,13 +98,13 @@ export default function Main() {
         <SectionProducts
           products={products}
           fotos={fotos}
-          // loadingProducts={loadingProducts}
+          loading={loadingProducts}
         />
 
         <SectionProviders
           providers={providers}
           logos={logos}
-          //loading={loadingProviders}
+          loading={loadingProviders}
         />
 
         <SectionAbout />
