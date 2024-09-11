@@ -13,7 +13,7 @@ function validateExpiredToken(tokenExpirationDate: string): boolean {
 
 export const useAuthCheck = (): AuthValidation => {
   const data: AuthValidation = { expired: false, hasToken: false };
-  const authCache: string | null = sessionStorage.getItem("token");
+  const authCache: string | null = sessionStorage.getItem("auth");
 
   if (!authCache) {
     data.hasToken = false;
