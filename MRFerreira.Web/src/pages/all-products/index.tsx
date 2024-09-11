@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ProdutoModel from "../../interface/models/ProdutoModel";
-import axios from "axios";
 import formatNameForURL from "../../utils/formatNameForURL";
 import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handle";
+import apiErrorHandler from "../../services/api-error-handler";
+import api from "../../services/api-client";
 
 export default function AllProducts() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +22,7 @@ export default function AllProducts() {
   const fetchProducts = async (): Promise<void> => {
     setLoading(true);
 
-    axios
+    api
       .get<ListServiceResult<ProdutoModel>>(
         "https://mrferreira-api.vercel.app/api/api/products"
       )

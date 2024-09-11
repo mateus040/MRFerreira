@@ -1,12 +1,12 @@
 import { FaBars } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import CategoriaModel from "../interface/models/CategoriaModel";
 import formatNameForURL from "../utils/formatNameForURL";
 import { FaTimes } from "react-icons/fa";
 import ListServiceResult from "../interface/list-service-result";
-import apiErrorHandler from "../services/api-error-handle";
+import apiErrorHandler from "../services/api-error-handler";
+import api from "../services/api-client";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const Header = () => {
   };
 
   const fetchCategories = async (): Promise<void> => {
-    axios
+    api
       .get<ListServiceResult<CategoriaModel>>(
         "https://mrferreira-api.vercel.app/api/api/categories"
       )

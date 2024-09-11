@@ -1,9 +1,10 @@
-import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
+import api from "../../../services/api-client";
+import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface EmailPostArgs {
   nome: string;
@@ -30,7 +31,7 @@ export const SectionContact = () => {
 
     toast
       .promise(
-        axios.post(
+        api.post(
           "https://mrferreira-api.vercel.app/api/api/send-email",
           formData,
           {
@@ -42,18 +43,7 @@ export const SectionContact = () => {
         {
           loading: "Enviando e-mail...",
           success: "E-mail enviado com sucesso!",
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return (
-                "Erro de solicitação: " +
-                (error.response?.data || error.message)
-              );
-            } else if (error instanceof Error) {
-              return "Erro desconhecido: " + error.message;
-            } else {
-              return "Erro inesperado: " + error;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => {
@@ -158,4 +148,4 @@ export const SectionContact = () => {
       {/*</div>*/}
     </div>
   );
-}
+};

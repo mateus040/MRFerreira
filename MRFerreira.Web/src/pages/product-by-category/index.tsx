@@ -1,12 +1,12 @@
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
-import axios from "axios";
 import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handle";
+import apiErrorHandler from "../../services/api-error-handler";
+import api from "../../services/api-client";
 
 export default function ProductsByCategory() {
   const { categoryId } = useParams();
@@ -25,7 +25,7 @@ export default function ProductsByCategory() {
   const fetchProductsByCategory = async () => {
     setLoading(true);
 
-    axios
+    api
       .get<ListServiceResult<ProdutoModel>>(
         `https://mrferreira-api.vercel.app/api/api/category/${categoryId}`
       )
@@ -54,7 +54,7 @@ export default function ProductsByCategory() {
 
   useEffect(() => {
     fetchProductsByCategory();
-  }, []);
+  }, [categoryId]);
 
   return (
     <MainLayout>

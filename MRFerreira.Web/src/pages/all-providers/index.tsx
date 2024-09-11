@@ -3,10 +3,10 @@ import MainLayout from "../../components/layouts/main";
 import Loading from "../../components/loading";
 import { useEffect, useState } from "react";
 import FornecedorModel from "../../interface/models/FornecedorModel";
-import axios from "axios";
 import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handle";
+import apiErrorHandler from "../../services/api-error-handler";
+import api from "../../services/api-client";
 
 export default function AllProviders() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +22,7 @@ export default function AllProviders() {
   const fetchProviders = async (): Promise<void> => {
     setLoading(true);
 
-    axios
+    api
       .get<ListServiceResult<FornecedorModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers"
       )

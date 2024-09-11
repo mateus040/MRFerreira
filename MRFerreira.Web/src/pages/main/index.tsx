@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
 import FornecedorModel from "../../interface/models/FornecedorModel";
-import axios from "axios";
 import { Home } from "./components/home";
 import { SectionProducts } from "./components/products";
 import { SectionProviders } from "./components/providers";
@@ -10,7 +9,8 @@ import { SectionContact } from "./components/contact";
 import MainLayout from "../../components/layouts/main";
 import { useSearchParams } from "react-router-dom";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handle";
+import apiErrorHandler from "../../services/api-error-handler";
+import api from "../../services/api-client";
 
 export default function Main() {
   const [searchParams, _] = useSearchParams();
@@ -28,7 +28,7 @@ export default function Main() {
   const fetchProducts = async (): Promise<void> => {
     setLoadingProducts(true);
 
-    axios
+    api
       .get<ListServiceResult<ProdutoModel>>(
         "https://mrferreira-api.vercel.app/api/api/products"
       )
@@ -53,7 +53,7 @@ export default function Main() {
   const fetchProviders = async (): Promise<void> => {
     setLoadingProviders(true);
 
-    axios
+    api
       .get<ListServiceResult<FornecedorModel>>(
         "https://mrferreira-api.vercel.app/api/api/providers"
       )

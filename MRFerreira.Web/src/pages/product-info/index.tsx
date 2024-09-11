@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import ProdutoModel from "../../interface/models/ProdutoModel";
-import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../../components/loading";
 import { FaWhatsapp } from "react-icons/fa6";
 import MainLayout from "../../components/layouts/main";
 import { SectionContact } from "../main/components/contact";
 import ServiceResult from "../../interface/service-result";
-import apiErrorHandler from "../../services/api-error-handle";
+import apiErrorHandler from "../../services/api-error-handler";
+import api from "../../services/api-client";
 
 export default function ProductInfo() {
   const { productId } = useParams();
@@ -19,7 +19,7 @@ export default function ProductInfo() {
   const fetchProductInfo = async () => {
     setLoading(true);
 
-    axios
+    api
       .get<ServiceResult<ProdutoModel>>(
         `https://mrferreira-api.vercel.app/api/api/products/${productId}`
       )
