@@ -16,7 +16,7 @@ export const Sidebar = ({ isSidebarOpen }: Props) => {
   const isActive = (path: string) => location.pathname === path;
 
   const logout = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     navigate("/login");
     toast.success("Deslogado com sucesso!");
   };

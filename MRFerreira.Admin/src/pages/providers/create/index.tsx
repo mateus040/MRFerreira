@@ -75,10 +75,11 @@ export default function CreateProvider() {
 
     toast
       .promise(
-        api.post<ServiceResult>(
-          "/providers/add",
-          formData
-        ),
+        api.post<ServiceResult>("/providers/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }),
         {
           loading: "Cadastrando fornecedor...",
           success: () => {

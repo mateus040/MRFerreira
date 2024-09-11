@@ -117,7 +117,11 @@ export default function CreateProducts() {
       .promise(
         api.post<ServiceResult>(
           "/products/add",
-          formData
+          formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
         ),
         {
           loading: "Cadastrando produto...",
