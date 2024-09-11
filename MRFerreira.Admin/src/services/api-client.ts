@@ -12,7 +12,7 @@ const defaultOptions = {
 const api = axios.create(defaultOptions);
 
 api.interceptors.request.use((config) => {
-  const auth: AuthModel = JSON.parse(sessionStorage.getItem("token") ?? "{}");
+  const auth: AuthModel = JSON.parse(sessionStorage.getItem("auth") ?? "{}");
 
   config.headers.Authorization = `Bearer ${auth.token}`;
 

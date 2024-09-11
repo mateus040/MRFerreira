@@ -29,49 +29,13 @@ export default function Login() {
     api
       .postForm("/login", data)
       .then(({ data: { token } }) => {
-        sessionStorage.setItem("token", JSON.stringify(token));
+        sessionStorage.setItem("auth", JSON.stringify({ token }));
         navigate("/");
         toast.success("Bem-vindo!");
       })
       .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
-
-  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   setLoading(true);
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await fetch(
-  //       "/login/",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ email, password }),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       login(data.token);
-  //       navigate("/");
-  //       toast.success("Bem-vindo!");
-  //     } else {
-  //       const errorData = await response.json();
-  //       if (response.status === 401) {
-  //         toast.error("Credenciais inválidas.");
-  //       } else {
-  //         toast.error("Erro ao fazer login: " + errorData.error);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     toast.error("Erro ao fazer login: " + error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
