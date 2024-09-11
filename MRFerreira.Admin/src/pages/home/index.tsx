@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import MainLayout from "../../components/layout";
 import { useAuth } from "../../context/auth-context";
 import CardsModel from "../../interface/models/cards-model";
-import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
 import ServiceResult from "../../interface/service-result";
+import api from "../../services/api-client";
 
 export default function Home() {
   const { token } = useAuth();
@@ -16,8 +16,8 @@ export default function Home() {
   const fetchCards = async (): Promise<void> => {
     setLoading(true);
 
-    axios
-      .get<ServiceResult<CardsModel>>(`https://mrferreira-api.vercel.app/api/api/cards`, {
+    api
+      .get<ServiceResult<CardsModel>>(`/cards`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(({ data }) => {
@@ -35,7 +35,7 @@ export default function Home() {
 
   //   try {
   //     const response = await axios.get(
-  //       `https://mrferreira-api.vercel.app/api/api/cards`,
+  //       `/cards`,
   //       {
   //         headers: { Authorization: `Bearer ${token}` },
   //       }

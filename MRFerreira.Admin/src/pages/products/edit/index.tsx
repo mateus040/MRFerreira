@@ -1,9 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import ProviderModel from "../../../interface/models/provider-model";
 import CategoryModel from "../../../interface/models/category-model";
@@ -11,6 +9,8 @@ import MainLayout from "../../../components/layout";
 import ListServiceResult from "../../../interface/list-service-result";
 import ServiceResult from "../../../interface/service-result";
 import ProductModel from "../../../interface/models/product-model";
+import api from "../../../services/api-client";
+import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface ProductField {
   nome: string;
@@ -28,7 +28,6 @@ interface ProductField {
 
 export default function EditProduct() {
   const { productId } = useParams<{ productId: string }>();
-  const { token } = useAuth();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -61,10 +60,10 @@ export default function EditProduct() {
   const fetchProduct = async (): Promise<void> => {
     setLoadingProducts(true);
 
-    axios
-      .get<ServiceResult<ProductModel>>(`https://mrferreira-api.vercel.app/api/api/products/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api
+      .get<ServiceResult<ProductModel>>(
+        `/products/${productId}`
+      )
       .then(({ data }) => {
         const product = data.results as ProductModel;
         setValue("nome", product.nome);
@@ -89,14 +88,9 @@ export default function EditProduct() {
   const fetchProviders = async (): Promise<void> => {
     setLoadingProviders(true);
 
-    axios
+    api
       .get<ListServiceResult<ProviderModel>>(
-        "https://mrferreira-api.vercel.app/api/api/providers",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "/providers"
       )
       .then(({ data }) => {
         setProviders(data.results);
@@ -110,14 +104,9 @@ export default function EditProduct() {
   const fetchCategories = async (): Promise<void> => {
     setLoadingCategories(true);
 
-    axios
+    api
       .get<ListServiceResult<CategoryModel>>(
-        "https://mrferreira-api.vercel.app/api/api/categories",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "/categories"
       )
       .then(({ data }) => {
         setCategories(data.results);
@@ -150,15 +139,9 @@ export default function EditProduct() {
 
     toast
       .promise(
-        axios.post<ServiceResult>(
-          `https://mrferreira-api.vercel.app/api/api/products/update/${productId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        api.post<ServiceResult>(
+          `/products/update/${productId}`,
+          formData
         ),
         {
           loading: "Editando produto...",
@@ -166,17 +149,7 @@ export default function EditProduct() {
             navigate("/produtos");
             return "Produto editado com sucesso!";
           },
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return `Erro de solicitação: ${
-                error.response?.data || error.message
-              }`;
-            } else if (error instanceof Error) {
-              return `Erro desconhecido: ${error.message}`;
-            } else {
-              return `Erro inesperado: ${error}`;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => setLoading(false));

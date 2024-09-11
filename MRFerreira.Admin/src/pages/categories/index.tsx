@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import CategoryModel from "../../interface/models/category-model";
-import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import MainLayout from "../../components/layout";
 import Loading from "../../components/loadings/loading";
@@ -14,6 +12,7 @@ import apiErrorHandler, {
 } from "../../services/api-error-handler";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ServiceResult from "../../interface/service-result";
+import api from "../../services/api-client";
 
 interface CategoryField {
   nome: string;
@@ -30,8 +29,6 @@ export default function Categories() {
       name: "Categorias",
     },
   ];
-
-  const { token } = useAuth();
 
   const navigate = useNavigate();
 
@@ -55,15 +52,8 @@ export default function Categories() {
   const fetchCategories = async (): Promise<void> => {
     setLoadingCategories(true);
 
-    axios
-      .get<ListServiceResult<CategoryModel>>(
-        "https://mrferreira-api.vercel.app/api/api/categories",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+    api
+      .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
         setCategories(data.results);
       })
@@ -75,28 +65,18 @@ export default function Categories() {
     setLoadingDelete(true);
 
     toast
-      .promise(
-        axios.delete<ServiceResult>(
-          `https://mrferreira-api.vercel.app/api/api/categories/delete/${categoryId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        ),
-        {
-          loading: "Excluindo categoria...",
-          success: () => {
-            const updatedCategories = categories.filter(
-              (category) => category.id !== categoryId
-            );
-            setCategories(updatedCategories);
-            fetchCategories();
-            return "Categoria excluída com sucesso!";
-          },
-          error: (error) => getApiErrorMessage(error),
-        }
-      )
+      .promise(api.delete<ServiceResult>(`/categories/delete/${categoryId}`), {
+        loading: "Excluindo categoria...",
+        success: () => {
+          const updatedCategories = categories.filter(
+            (category) => category.id !== categoryId
+          );
+          setCategories(updatedCategories);
+          fetchCategories();
+          return "Categoria excluída com sucesso!";
+        },
+        error: (error) => getApiErrorMessage(error),
+      })
       .finally(() => setLoadingDelete(false));
   };
 
@@ -106,27 +86,15 @@ export default function Categories() {
     const formData = new FormData();
     formData.append("nome", data.nome);
 
-    toast.promise(
-      axios.post<ServiceResult>(
-        "https://mrferreira-api.vercel.app/api/api/categories/add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ),
-      {
-        loading: "Cadastrando categoria...",
-        success: () => {
-          fetchCategories();
-          reset();
-          return "Categoria criada com sucesso!";
-        },
-        error: (error) => getApiErrorMessage(error),
-      }
-    );
+    toast.promise(api.post<ServiceResult>("/categories/add", formData), {
+      loading: "Cadastrando categoria...",
+      success: () => {
+        fetchCategories();
+        reset();
+        return "Categoria criada com sucesso!";
+      },
+      error: (error) => getApiErrorMessage(error),
+    });
   };
 
   useEffect(() => {

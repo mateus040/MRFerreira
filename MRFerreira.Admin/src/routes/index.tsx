@@ -1,9 +1,8 @@
-import { AuthProvider, useAuth } from "../context/auth-context";
+import { AuthProvider } from "../context/auth-context";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import Login from "../pages/login";
 import Home from "../pages/home";
@@ -16,20 +15,7 @@ import EditProvider from "../pages/providers/edit";
 import Categories from "../pages/categories";
 import EditCategory from "../pages/categories/edit";
 import NotFound from "../pages/not-found";
-
-interface PrivateRouteProps {
-  element: React.ReactElement;
-}
-
-const PrivateRoute = ({ element }: PrivateRouteProps) => {
-  const { token } = useAuth();
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
-
-  return element;
-};
+import PrivateRoute from "./private-routes";
 
 export default function AppRouter() {
   return (
@@ -38,49 +24,88 @@ export default function AppRouter() {
         <Routes>
           <Route path="/login" element={<Login />} />
 
-          <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
 
           {/* Rotas empresas parceiras */}
           <Route
             path="/empresas"
-            element={<PrivateRoute element={<Providers />} />}
+            element={
+              <PrivateRoute>
+                <Providers />
+              </PrivateRoute>
+            }
           />
 
           <Route
             path="/empresas/adicionar"
-            element={<PrivateRoute element={<CreateProvider />} />}
+            element={
+              <PrivateRoute>
+                <CreateProvider />
+              </PrivateRoute>
+            }
           />
 
           <Route
             path="/empresas/editar/:providerId"
-            element={<PrivateRoute element={<EditProvider />} />}
+            element={
+              <PrivateRoute>
+                <EditProvider />
+              </PrivateRoute>
+            }
           />
 
           {/* Rotas produto */}
           <Route
             path="/produtos"
-            element={<PrivateRoute element={<Products />} />}
+            element={
+              <PrivateRoute>
+                <Products />
+              </PrivateRoute>
+            }
           />
 
           <Route
             path="/produtos/adicionar"
-            element={<PrivateRoute element={<CreateProduct />} />}
+            element={
+              <PrivateRoute>
+                <CreateProduct />
+              </PrivateRoute>
+            }
           />
 
           <Route
             path="/produtos/editar/:productId"
-            element={<PrivateRoute element={<EditProduct />} />}
+            element={
+              <PrivateRoute>
+                <EditProduct />
+              </PrivateRoute>
+            }
           />
 
           {/* Rotas categoria */}
           <Route
             path="/categorias"
-            element={<PrivateRoute element={<Categories />} />}
+            element={
+              <PrivateRoute>
+                <Categories />
+              </PrivateRoute>
+            }
           />
 
           <Route
             path="/categorias/editar/:categoryId"
-            element={<PrivateRoute element={<EditCategory />} />}
+            element={
+              <PrivateRoute>
+                <EditCategory />
+              </PrivateRoute>
+            }
           />
 
           {/* Not Found */}

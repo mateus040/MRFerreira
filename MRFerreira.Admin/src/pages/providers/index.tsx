@@ -1,10 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import ProviderModel from "../../interface/models/provider-model";
-import { useAuth } from "../../context/auth-context";
 import MainLayout from "../../components/layout";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import Loading from "../../components/loadings/loading";
@@ -13,6 +11,7 @@ import apiErrorHandler, {
   getApiErrorMessage,
 } from "../../services/api-error-handler";
 import ServiceResult from "../../interface/service-result";
+import api from "../../services/api-client";
 
 export default function Providers() {
   const breadCrumbHistory: Page[] = [
@@ -25,8 +24,6 @@ export default function Providers() {
       name: "Fornecedores",
     },
   ];
-
-  const { token } = useAuth();
 
   const navigate = useNavigate();
 
@@ -42,14 +39,9 @@ export default function Providers() {
   const fetchProviders = async (): Promise<void> => {
     setLoading(true);
 
-    axios
+    api
       .get<ListServiceResult<ProviderModel>>(
-        "https://mrferreira-api.vercel.app/api/api/providers",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "/providers"
       )
       .then(({ data }) => {
         const providersData = data.results;
@@ -74,13 +66,8 @@ export default function Providers() {
 
     toast
       .promise(
-        axios.delete<ServiceResult>(
-          `https://mrferreira-api.vercel.app/api/api/providers/delete/${providerId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        api.delete<ServiceResult>(
+          `/providers/delete/${providerId}`
         ),
 
         {

@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import MainLayout from "../../../components/layout";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ServiceResult from "../../../interface/service-result";
 import CategoryModel from "../../../interface/models/category-model";
+import api from "../../../services/api-client";
+import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface CategoryField {
   nome: string;
@@ -15,7 +15,6 @@ interface CategoryField {
 
 export default function EditCaategory() {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const { token } = useAuth();
   const navigate = useNavigate();
 
   const breadCrumbHistory: Page[] = [
@@ -46,14 +45,9 @@ export default function EditCaategory() {
   const fetchCategory = async (): Promise<void> => {
     setLoadingCategory(true);
 
-    axios
+    api
       .get<ServiceResult<CategoryModel>>(
-        `https://mrferreira-api.vercel.app/api/api/categories/${categoryId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `/categories/${categoryId}`
       )
       .then(({ data }) => {
         const category = data.results as CategoryModel;
@@ -73,44 +67,18 @@ export default function EditCaategory() {
     formData.append("nome", data.nome);
 
     toast.promise(
-      new Promise((resolve, reject) => {
-        axios
-          .post<ServiceResult>(
-            `https://mrferreira-api.vercel.app/api/api/categories/update/${categoryId}`,
-            formData,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response: AxiosResponse) => {
-            resolve(response.data);
-          })
-          .catch((error) => {
-            reject(error);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }),
+      api.post<ServiceResult>(
+        `/categories/update/${categoryId}`,
+        formData
+      ),
+
       {
         loading: "Editando categoria...",
         success: () => {
           navigate("/categorias");
           return "Categoria editada com sucesso!";
         },
-        error: (error) => {
-          if (axios.isAxiosError(error)) {
-            return (
-              "Erro de solicitação: " + (error.response?.data || error.message)
-            );
-          } else if (error instanceof Error) {
-            return "Erro desconhecido: " + error.message;
-          } else {
-            return "Erro inesperado: " + error;
-          }
-        },
+        error: (error) => getApiErrorMessage(error),
       }
     );
   };

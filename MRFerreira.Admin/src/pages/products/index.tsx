@@ -1,16 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../../components/layout";
-import { useAuth } from "../../context/auth-context";
 import BreadCrumb, { Page } from "../../components/bread-crumb";
 import { useEffect, useState } from "react";
 import ProductModel from "../../interface/models/product-model";
-import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler, { getApiErrorMessage } from "../../services/api-error-handler";
+import apiErrorHandler, {
+  getApiErrorMessage,
+} from "../../services/api-error-handler";
 import ServiceResult from "../../interface/service-result";
+import api from "../../services/api-client";
 
 export default function Products() {
   const breadCrumbHistory: Page[] = [
@@ -23,8 +24,6 @@ export default function Products() {
       name: "Produtos",
     },
   ];
-
-  const { token } = useAuth();
 
   const navigate = useNavigate();
 
@@ -42,14 +41,9 @@ export default function Products() {
   const fetchProducts = async (): Promise<void> => {
     setLoading(true);
 
-    axios
+    api
       .get<ListServiceResult<ProductModel>>(
-        "https://mrferreira-api.vercel.app/api/api/products",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        "/products"
       )
       .then(({ data }) => {
         const productsData = data.results;
@@ -73,13 +67,8 @@ export default function Products() {
 
     toast
       .promise<ServiceResult>(
-        axios.delete(
-          `https://mrferreira-api.vercel.app/api/api/products/delete/${productId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        api.delete(
+          `/products/delete/${productId}`
         ),
 
         {

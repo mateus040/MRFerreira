@@ -2,52 +2,76 @@ import { useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth } from "../../context/auth-context";
 import LoadingLogin from "../../components/loadings/loading-login";
+import { SubmitHandler, useForm } from "react-hook-form";
+import api from "../../services/api-client";
+import apiErrorHandler from "../../services/api-error-handler";
+
+interface UserField {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const { login } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserField>();
+
+  const handleLogin: SubmitHandler<UserField> = async (data) => {
     setLoading(true);
-    e.preventDefault();
 
-    try {
-      const response = await fetch(
-        "https://mrferreira-api.vercel.app/api/api/login/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        login(data.token);
+    api
+      .postForm("/login", data)
+      .then(({ data: { token } }) => {
+        sessionStorage.setItem("token", JSON.stringify(token));
         navigate("/");
         toast.success("Bem-vindo!");
-      } else {
-        const errorData = await response.json();
-        if (response.status === 401) {
-          toast.error("Credenciais inválidas.");
-        } else {
-          toast.error("Erro ao fazer login: " + errorData.error);
-        }
-      }
-    } catch (error) {
-      toast.error("Erro ao fazer login: " + error);
-    } finally {
-      setLoading(false);
-    }
+      })
+      .catch(apiErrorHandler)
+      .finally(() => setLoading(false));
   };
+
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   setLoading(true);
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await fetch(
+  //       "/login/",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ email, password }),
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       login(data.token);
+  //       navigate("/");
+  //       toast.success("Bem-vindo!");
+  //     } else {
+  //       const errorData = await response.json();
+  //       if (response.status === 401) {
+  //         toast.error("Credenciais inválidas.");
+  //       } else {
+  //         toast.error("Erro ao fazer login: " + errorData.error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     toast.error("Erro ao fazer login: " + error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -115,7 +139,7 @@ export default function Login() {
           Acesse sua conta
         </h2>
 
-        <form onSubmit={handleLogin} className="mt-8">
+        <form onSubmit={handleSubmit(handleLogin)} className="mt-8">
           <div className="space-y-5">
             <div>
               <label className="text-base font-medium text-gray-900">
@@ -124,13 +148,14 @@ export default function Login() {
               <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                 <input
                   type="email"
-                  name="email"
                   id="email"
                   placeholder="Informe seu e-mail"
                   className="block w-full py-4 pl-5 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-black focus:bg-white"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...register("email", { required: "O e-mail é obrigatório" })}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                )}
               </div>
             </div>
 
@@ -143,13 +168,18 @@ export default function Login() {
               <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                 <input
                   type="password"
-                  name="password"
                   id="password"
                   placeholder="Informe sua senha"
                   className="block w-full py-4 pl-5 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:black focus:bg-whit"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  {...register("password", {
+                    required: "A senha é obrigatória",
+                  })}
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
             </div>
 

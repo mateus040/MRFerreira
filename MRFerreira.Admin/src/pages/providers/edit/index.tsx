@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Inputmask from "react-input-mask";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuth } from "../../../context/auth-context";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import toast from "react-hot-toast";
 import MainLayout from "../../../components/layout";
 import ServiceResult from "../../../interface/service-result";
 import ProviderModel from "../../../interface/models/provider-model";
+import { getApiErrorMessage } from "../../../services/api-error-handler";
+import api from "../../../services/api-client";
 
 interface ProviderField {
   nome: string;
@@ -28,7 +28,6 @@ interface ProviderField {
 
 export default function EditProvider() {
   const { providerId } = useParams<{ providerId: string }>();
-  const { token } = useAuth();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,14 +58,9 @@ export default function EditProvider() {
   const fetchProvider = async (): Promise<void> => {
     setLoadingProviders(true);
 
-    axios
+    api
       .get<ServiceResult<ProviderModel>>(
-        `https://mrferreira-api.vercel.app/api/api/providers/${providerId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `/providers/${providerId}`
       )
       .then(({ data }) => {
         const provider = data.results as ProviderModel;
@@ -114,15 +108,9 @@ export default function EditProvider() {
 
     toast
       .promise<ServiceResult>(
-        axios.post(
-          `https://mrferreira-api.vercel.app/api/api/providers/update/${providerId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        api.post(
+          `/providers/update/${providerId}`,
+          formData
         ),
         {
           loading: "Editando fornecedor...",
@@ -130,18 +118,7 @@ export default function EditProvider() {
             navigate("/empresas");
             return "Fornecedor editado com sucesso!";
           },
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return (
-                "Erro de solicitação: " +
-                (error.response?.data || error.message)
-              );
-            } else if (error instanceof Error) {
-              return "Erro desconhecido: " + error.message;
-            } else {
-              return "Erro inesperado: " + error;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => {

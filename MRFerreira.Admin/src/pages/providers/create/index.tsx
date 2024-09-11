@@ -1,13 +1,13 @@
 import { ChangeEvent, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/auth-context";
 import MainLayout from "../../../components/layout";
 import BreadCrumb, { Page } from "../../../components/bread-crumb";
 import Inputmask from "react-input-mask";
 import ServiceResult from "../../../interface/service-result";
+import api from "../../../services/api-client";
+import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface ProviderField {
   nome: string;
@@ -41,7 +41,6 @@ export default function CreateProvider() {
     },
   ];
 
-  const { token } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -76,15 +75,9 @@ export default function CreateProvider() {
 
     toast
       .promise(
-        axios.post<ServiceResult>(
-          "https://mrferreira-api.vercel.app/api/api/providers/add",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        api.post<ServiceResult>(
+          "/providers/add",
+          formData
         ),
         {
           loading: "Cadastrando fornecedor...",
@@ -92,18 +85,7 @@ export default function CreateProvider() {
             navigate("/empresas");
             return "Fornecedor criado com sucesso!";
           },
-          error: (error) => {
-            if (axios.isAxiosError(error)) {
-              return (
-                "Erro de solicitação: " +
-                (error.response?.data || error.message)
-              );
-            } else if (error instanceof Error) {
-              return "Erro desconhecido: " + error.message;
-            } else {
-              return "Erro inesperado: " + error;
-            }
-          },
+          error: (error) => getApiErrorMessage(error),
         }
       )
       .finally(() => {
@@ -132,7 +114,9 @@ export default function CreateProvider() {
         <BreadCrumb history={breadCrumbHistory} />
       </div>
 
-      <p className="font-medium text-slate-600 mt-8">Campos com (*) são obrigatórios</p>
+      <p className="font-medium text-slate-600 mt-8">
+        Campos com (*) são obrigatórios
+      </p>
 
       <form onSubmit={handleSubmit(onSubmitChange)} className="mt-3">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
