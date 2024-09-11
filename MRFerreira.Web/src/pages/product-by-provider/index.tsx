@@ -7,8 +7,13 @@ import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
+import AOS from "aos";
 
 export default function ProductsByProvider() {
+  useEffect(() => {
+    AOS.init({ duration: 1200 });
+  }, []);
+
   const { providerId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -79,7 +84,7 @@ export default function ProductsByProvider() {
                 />
               </form>
 
-              <div className="mt-8">
+              <div className="mt-8" data-aos="fade-left">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   {products.map((product) => (
                     <div className="col-span-4" key={product.id}>

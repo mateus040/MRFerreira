@@ -8,8 +8,13 @@ import {
   FaPhone,
 } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
+import { useProviderStore } from "../stores/providers.store";
+import { Link } from "react-router-dom";
+import formatNameForURL from "../utils/formatNameForURL";
 
 export const Footer = () => {
+  const { providers } = useProviderStore();
+
   return (
     <div className="bg-white shadow-lg">
       <div className="px-8 lg:px-24 py-12 container mx-auto">
@@ -61,57 +66,22 @@ export const Footer = () => {
                 </div>
               </div>
 
-              {/* TODO: GET de empresas (nome) */}
               <div className="flex flex-col items-start justify-start mb-5 xl:mb-0">
                 <p className="text-2xl font-semibold mb-5">Parcerias</p>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    MovelFar
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    Móveis Otto
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    Jahu Flex
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    OR Design
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    Bigplast
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    MogiMax
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    GRP
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    Arruda Cadeiras
-                  </p>
-                </div>
+                {providers.map((provider) => (
+                  <Link
+                    to={`/empresa/${provider.id}?empresa=${formatNameForURL(
+                      provider.nome
+                    )}`}
+                    className="flex items-center justify-center cursor-pointer mb-5"
+                    key={provider.id}
+                  >
+                    <FaArrowRight />
+                    <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                      {provider.nome}
+                    </p>
+                  </Link>
+                ))}
               </div>
 
               <div className="flex flex-col items-start justify-start mb-5 xl:mb-0">

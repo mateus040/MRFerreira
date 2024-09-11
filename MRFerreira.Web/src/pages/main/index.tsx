@@ -11,8 +11,11 @@ import { useSearchParams } from "react-router-dom";
 import ListServiceResult from "../../interface/list-service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
+import { useProviderStore } from "../../stores/providers.store";
 
 export default function Main() {
+  const { providers, setProviders } = useProviderStore();
+
   const [searchParams, _] = useSearchParams();
   const section = searchParams.get("section");
 
@@ -20,7 +23,7 @@ export default function Main() {
   const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
 
   const [products, setProducts] = useState<ProdutoModel[]>([]);
-  const [providers, setProviders] = useState<FornecedorModel[]>([]);
+  // const [providers, setProviders] = useState<FornecedorModel[]>([]);
 
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});

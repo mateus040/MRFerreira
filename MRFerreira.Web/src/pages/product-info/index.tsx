@@ -8,8 +8,13 @@ import { SectionContact } from "../main/components/contact";
 import ServiceResult from "../../interface/service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
+import AOS from "aos";
 
 export default function ProductInfo() {
+  useEffect(() => {
+    AOS.init({ duration: 800 });
+  }, []);
+
   const { productId } = useParams();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,7 +50,7 @@ export default function ProductInfo() {
 
       {!loading && productInfo && (
         <div className="bg-white">
-          <div className="px-8 lg:px-12 py-12 mt-10 container mx-auto">
+          <div className="px-8 lg:px-12 py-12 mt-10 container mx-auto" data-aos="zoom-in">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="col-span-6 flex items-center justify-center lg:-ms-10">
                 {imageUrl && (
