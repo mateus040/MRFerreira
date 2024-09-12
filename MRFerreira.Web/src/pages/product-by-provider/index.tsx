@@ -8,6 +8,8 @@ import ListServiceResult from "../../interface/list-service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
+import ServiceResult from "../../interface/service-result";
+import FornecedorModel from "../../interface/models/FornecedorModel";
 
 export default function ProductsByProvider() {
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function ProductsByProvider() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<ProdutoModel[]>([]);
+
   const [providerName, setProviderName] = useState<string>("");
 
   const [fotos, setFotos] = useState<{ [key: string]: string }>({});
@@ -35,7 +38,6 @@ export default function ProductsByProvider() {
       .then(({ data }) => {
         const productsData = data.results;
         setProducts(productsData);
-        setProviderName(productsData[0].provider.nome);
 
         const logosTemp: { [key: string]: string } = {};
         productsData.forEach((product) => {
@@ -50,8 +52,20 @@ export default function ProductsByProvider() {
       .finally(() => setLoading(false));
   };
 
+  const fetchNameProvider = async () => {
+    api
+      .get<ServiceResult<FornecedorModel>>(
+        `https://mrferreira-api.vercel.app/api/api/providers/${providerId}`
+      )
+      .then(({ data }) => {
+        setProviderName(data?.results?.nome || "");
+      })
+      .catch(apiErrorHandler);
+  };
+
   useEffect(() => {
     fetchProductsByProvider();
+    fetchNameProvider();
   }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
