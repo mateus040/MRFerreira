@@ -42,9 +42,7 @@ export default function Products() {
     setLoading(true);
 
     api
-      .get<ListServiceResult<ProductModel>>(
-        "/products"
-      )
+      .get<ListServiceResult<ProductModel>>("/products")
       .then(({ data }) => {
         const productsData = data.results;
         setProducts(productsData);
@@ -67,9 +65,7 @@ export default function Products() {
 
     toast
       .promise<ServiceResult>(
-        api.delete(
-          `/products/delete/${productId}`
-        ),
+        api.delete(`/products/delete/${productId}`),
 
         {
           loading: "Excluindo produto...",
@@ -158,7 +154,9 @@ export default function Products() {
                       {product.nome}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.descricao}
+                      {product.descricao.length > 50
+                        ? `${product.descricao.slice(0, 50)}...`
+                        : product.descricao}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {product.category.nome}

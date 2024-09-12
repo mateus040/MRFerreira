@@ -61,9 +61,7 @@ export default function EditProduct() {
     setLoadingProducts(true);
 
     api
-      .get<ServiceResult<ProductModel>>(
-        `/products/${productId}`
-      )
+      .get<ServiceResult<ProductModel>>(`/products/${productId}`)
       .then(({ data }) => {
         const product = data.results as ProductModel;
         setValue("nome", product.nome);
@@ -89,9 +87,7 @@ export default function EditProduct() {
     setLoadingProviders(true);
 
     api
-      .get<ListServiceResult<ProviderModel>>(
-        "/providers"
-      )
+      .get<ListServiceResult<ProviderModel>>("/providers")
       .then(({ data }) => {
         setProviders(data.results);
       })
@@ -105,9 +101,7 @@ export default function EditProduct() {
     setLoadingCategories(true);
 
     api
-      .get<ListServiceResult<CategoryModel>>(
-        "/categories"
-      )
+      .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
         setCategories(data.results);
       })
@@ -139,10 +133,7 @@ export default function EditProduct() {
 
     toast
       .promise(
-        api.post<ServiceResult>(
-          `/products/update/${productId}`,
-          formData
-        ),
+        api.post<ServiceResult>(`/products/update/${productId}`, formData),
         {
           loading: "Editando produto...",
           success: () => {
@@ -215,7 +206,7 @@ export default function EditProduct() {
 
       <form className="mt-8" onSubmit={handleSubmit(onSubmitChange)}>
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-6">
-          <div className="col-span-12 xl:col-span-8">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
@@ -229,6 +220,31 @@ export default function EditProduct() {
             />
             {errors.nome && (
               <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            )}
+          </div>
+          <div className="col-span-12 xl:col-span-4">
+            <label className="block mb-2 font-medium">Categoria*</label>
+            <select
+              id="id_category"
+              className="w-full p-2 rounded-lg border border-gray-300"
+              {...register("id_category", {
+                required: "A categoria é obrigatória",
+              })}
+              disabled={loadingCategories}
+            >
+              <option value="">
+                {loadingCategories ? "..." : "Selecione uma categoria"}
+              </option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.nome}
+                </option>
+              ))}
+            </select>
+            {errors.id_category && (
+              <p className="text-red-500 text-sm">
+                {errors.id_category.message}
+              </p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
@@ -256,10 +272,9 @@ export default function EditProduct() {
               </p>
             )}
           </div>
-          <div className="col-span-12 xl:col-span-8">
+          <div className="col-span-12">
             <label className="block mb-2 font-medium">Descrição*</label>
-            <input
-              type="text"
+            <textarea
               id="descricao"
               placeholder={loadingProducts ? "..." : "Informe a descrição"}
               className="w-full p-2 rounded-lg border border-gray-300"
@@ -267,34 +282,10 @@ export default function EditProduct() {
                 required: "A descrição é obrigatória",
               })}
               disabled={loadingProducts}
+              rows={5}
             />
             {errors.descricao && (
               <p className="text-red-500 text-sm">{errors.descricao.message}</p>
-            )}
-          </div>
-          <div className="col-span-12 xl:col-span-4">
-            <label className="block mb-2 font-medium">Categoria*</label>
-            <select
-              id="id_category"
-              className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("id_category", {
-                required: "A categoria é obrigatória",
-              })}
-              disabled={loadingCategories}
-            >
-              <option value="">
-                {loadingCategories ? "..." : "Selecione uma categoria"}
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.nome}
-                </option>
-              ))}
-            </select>
-            {errors.id_category && (
-              <p className="text-red-500 text-sm">
-                {errors.id_category.message}
-              </p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-12">

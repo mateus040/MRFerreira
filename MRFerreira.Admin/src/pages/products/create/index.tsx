@@ -67,9 +67,7 @@ export default function CreateProducts() {
     setLoadingProviders(true);
 
     api
-      .get<ListServiceResult<ProviderModel>>(
-        "/providers"
-      )
+      .get<ListServiceResult<ProviderModel>>("/providers")
       .then(({ data }) => {
         setProviders(data.results);
       })
@@ -83,9 +81,7 @@ export default function CreateProducts() {
     setLoadingCategories(true);
 
     api
-      .get<ListServiceResult<CategoryModel>>(
-        "/categories"
-      )
+      .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
         setCategories(data.results);
       })
@@ -115,14 +111,11 @@ export default function CreateProducts() {
 
     toast
       .promise(
-        api.post<ServiceResult>(
-          "/products/add",
-          formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            }
-          }
-        ),
+        api.post<ServiceResult>("/products/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }),
         {
           loading: "Cadastrando produto...",
           success: () => {
@@ -196,7 +189,7 @@ export default function CreateProducts() {
       </p>
       <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 mb-6">
-          <div className="col-span-12 xl:col-span-8">
+          <div className="col-span-12 xl:col-span-4">
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
@@ -209,6 +202,33 @@ export default function CreateProducts() {
             />
             {errors.nome && (
               <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            )}
+          </div>
+          <div className="col-span-12 xl:col-span-4">
+            <label className="block mb-2 font-medium">Categoria*</label>
+            <select
+              id="id_category"
+              {...register("id_category", {
+                required: "A categoria é obrigatória",
+              })}
+              className={`w-full p-2 rounded-lg border ${
+                errors.id_category ? "border-red-500" : "border-gray-300"
+              }`}
+              disabled={loadingCategories}
+            >
+              <option value="">
+                {loadingCategories ? "..." : "Selecione uma categoria"}
+              </option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.nome}
+                </option>
+              ))}
+            </select>
+            {errors.id_category && (
+              <p className="text-red-500 text-sm">
+                {errors.id_category.message}
+              </p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
@@ -238,10 +258,9 @@ export default function CreateProducts() {
               </p>
             )}
           </div>
-          <div className="col-span-12 xl:col-span-8">
+          <div className="col-span-12">
             <label className="block mb-2 font-medium">Descrição*</label>
-            <input
-              type="text"
+            <textarea
               id="descricao"
               {...register("descricao", {
                 required: "A descrição é obrigatória",
@@ -250,36 +269,10 @@ export default function CreateProducts() {
               className={`w-full p-2 rounded-lg border ${
                 errors.descricao ? "border-red-500" : "border-gray-300"
               }`}
+              rows={5}
             />
             {errors.descricao && (
               <p className="text-red-500 text-sm">{errors.descricao.message}</p>
-            )}
-          </div>
-          <div className="col-span-12 xl:col-span-4">
-            <label className="block mb-2 font-medium">Categoria*</label>
-            <select
-              id="id_category"
-              {...register("id_category", {
-                required: "A categoria é obrigatória",
-              })}
-              className={`w-full p-2 rounded-lg border ${
-                errors.id_category ? "border-red-500" : "border-gray-300"
-              }`}
-              disabled={loadingCategories}
-            >
-              <option value="">
-                {loadingCategories ? "..." : "Selecione uma categoria"}
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.nome}
-                </option>
-              ))}
-            </select>
-            {errors.id_category && (
-              <p className="text-red-500 text-sm">
-                {errors.id_category.message}
-              </p>
             )}
           </div>
           <div className="col-span-12">
