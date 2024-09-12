@@ -1,5 +1,5 @@
 import axios from "axios";
-import AuthModel from "../interface/models/auth-token";
+import AuthModel from "../interface/models/auth-model";
 
 const defaultOptions = {
   baseURL: "https://mrferreira-api.vercel.app/api/api",

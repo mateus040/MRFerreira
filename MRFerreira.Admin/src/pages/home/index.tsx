@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../../components/layout";
-import { useAuth } from "../../context/auth-context";
 import CardsModel from "../../interface/models/cards-model";
 import toast from "react-hot-toast";
 import Loading from "../../components/loadings/loading";
@@ -8,8 +7,6 @@ import ServiceResult from "../../interface/service-result";
 import api from "../../services/api-client";
 
 export default function Home() {
-  const { token } = useAuth();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<CardsModel>();
 
@@ -17,9 +14,7 @@ export default function Home() {
     setLoading(true);
 
     api
-      .get<ServiceResult<CardsModel>>(`/cards`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get<ServiceResult<CardsModel>>(`/cards`)
       .then(({ data }) => {
         setCards(data.results as CardsModel);
       })
@@ -29,26 +24,6 @@ export default function Home() {
       })
       .finally(() => setLoading(false))
   };
-
-  // const fetchCards = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     const response = await axios.get(
-  //       `/cards`,
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-
-  //     setCards(response.data.results);
-  //   } catch (error) {
-  //     console.error("Erro ao buscar informações cards:", error);
-  //     toast.error("Erro ao buscar informações dos cards.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     fetchCards();

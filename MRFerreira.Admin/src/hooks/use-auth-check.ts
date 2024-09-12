@@ -1,4 +1,4 @@
-import AuthModel from "../interface/models/auth-token";
+import AuthModel from "../interface/models/auth-model";
 
 export interface AuthValidation {
   hasToken: boolean;
