@@ -67,14 +67,13 @@ export const SectionContact = () => {
             <p className="text-sm">17209-838</p>
           </div>
         </div>
-        <div className="flex items-start md:items-center justify-start md:justify-center mb-8 md:mt-0">
+        <div className="flex items-start justify-start mb-8 md:mt-0">
           <div className="bg-black p-5 rounded-md">
             <FaPhoneAlt className="text-white text-3xl" />
           </div>
           <div className="mx-4">
             <p className="font-bold text-lg">Telefone</p>
-            <p className="text-sm">+123 345 6789</p>
-            <p className="text-sm">+111 222 333</p>
+            <p className="text-sm">(14) 99783-1356</p>
           </div>
         </div>
         <div className="flex items-start md:items-center justify-start md:justify-center mb-8 md:mt-0">

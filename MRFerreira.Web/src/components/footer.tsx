@@ -43,13 +43,7 @@ export const Footer = () => {
                 <div className="flex items-center justify-center cursor-pointer mb-5">
                   <FaPhone />
                   <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    + 123-456-7890
-                  </p>
-                </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
-                  <FaPhone />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    + 123-456-7890
+                    (14) 99783-1356
                   </p>
                 </div>
                 <div className="flex items-center justify-center cursor-pointer mb-5">
