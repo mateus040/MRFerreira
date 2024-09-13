@@ -64,64 +64,60 @@ export default function ProductInfo() {
                 {imageUrl && (
                   <img src={imageUrl} className="h-80 object-contain" />
                 )}
-                {/* <img src="/images/logo.png" className="h-80 object-contain" /> */}
               </div>
 
               <div className="col-span-6">
                 <p className="text-sm mb-5 font-medium text-zinc-700 tracking-wider">
                   Home/
                   {productInfo.category.nome}
-                  {/* Cadeiras */}
                 </p>
                 <p className="text-4xl font-bold uppercase mb-1">
                   {productInfo?.nome}
-                  {/* Red Printed Tshirt by HRX */}
                 </p>
-                <p className="mt-5 font-bold text-lg">
-                  Linha:{" "}
-                  <span className="font-normal">
-                    {productInfo?.linha}
-                    {/* Linha do produto */}
-                  </span>
-                </p>
+                {productInfo.linha && (
+                  <p className="mt-5 font-bold text-lg">
+                    Linha:{" "}
+                    <span className="font-normal">{productInfo?.linha}</span>
+                  </p>
+                )}
                 <div className="flex flex-col lg:flex-row lg:items-center mt-5">
-                  <p className="font-bold">
-                    Altura:{" "}
-                    <span className="font-normal">
-                      {productInfo?.altura}
-                      {/* 20 */}
-                    </span>
-                  </p>
-                  <p className="font-bold lg:mx-4 mt-3 lg:mt-0">
-                    Comprimento:{" "}
-                    <span className="font-normal">
-                      {productInfo?.comprimento}
-                      {/* 20 */}
-                    </span>
-                  </p>
-                  <p className="font-bold mt-3 lg:mt-0">
-                    Profundidade:{" "}
-                    <span className="font-normal">
-                      {productInfo?.profundidade}
-                      {/* 20 */}
-                    </span>
-                  </p>
-                  <p className="font-bold lg:mx-4 mt-3 lg:mt-0">
-                    Peso suportado:{" "}
-                    <span className="font-normal">{productInfo?.peso}</span>
-                    {/* <span className="font-normal">20</span> */}
-                  </p>
+                  {productInfo.altura && (
+                    <p className="font-bold">
+                      Altura:{" "}
+                      <span className="font-normal">{productInfo?.altura}</span>
+                    </p>
+                  )}
+                  {productInfo.comprimento && (
+                    <p className="font-bold lg:mx-4 mt-3 lg:mt-0">
+                      Comprimento:{" "}
+                      <span className="font-normal">
+                        {productInfo?.comprimento}
+                      </span>
+                    </p>
+                  )}
+                  {productInfo.profundidade && (
+                    <p className="font-bold mt-3 lg:mt-0">
+                      Profundidade:{" "}
+                      <span className="font-normal">
+                        {productInfo?.profundidade}
+                      </span>
+                    </p>
+                  )}
+                  {productInfo.peso && (
+                    <p className="font-bold lg:mx-4 mt-3 lg:mt-0">
+                      Peso suportado:{" "}
+                      <span className="font-normal">{productInfo?.peso}</span>
+                    </p>
+                  )}
                 </div>
-                <p className="mt-8 lg:mt-7 font-bold text-base">
-                  Mateirais:{" "}
-                  <span className="font-normal">
-                    {productInfo?.materiais}
-                    {/* Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Aliquid nobis neque ab explicabo aut molestias rerum placeat
-                  repellat expedita vel praesentium atque inventore nam, optio
-                  commodi minima perferendis odit molestiae! */}
-                  </span>
-                </p>
+                {productInfo.materiais && (
+                  <p className="mt-8 lg:mt-7 font-bold text-base">
+                    Mateirais:{" "}
+                    <span className="font-normal">
+                      {productInfo?.materiais}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
 
@@ -129,12 +125,7 @@ export default function ProductInfo() {
               Detalhes do produto
             </p>
 
-            <p className="mt-3">
-              {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-            eaque impedit minus maxime illo eum sit non doloribus harum, omnis,
-            tenetur blanditiis assumenda iste voluptas aut qui animi officiis a. */}
-              {productInfo?.descricao}
-            </p>
+            <p className="mt-3">{productInfo?.descricao}</p>
 
             <div className="flex flex-col items-center justify-center mt-16">
               <p className="font-semibold text-base text-center">
