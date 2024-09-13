@@ -24,22 +24,16 @@ export const SectionContact = () => {
   const onSubmit: SubmitHandler<EmailPostArgs> = async (data) => {
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append("nome", data.nome);
-    formData.append("email", data.email);
-    formData.append("descricao", data.descricao);
+    let args: EmailPostArgs = { ...data };
+
+    // const formData = new FormData();
+    // formData.append("nome", data.nome);
+    // formData.append("email", data.email);
+    // formData.append("descricao", data.descricao);
 
     toast
       .promise(
-        api.post(
-          "https://mrferreira-api.vercel.app/api/api/send-email",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        ),
+        api.post("https://mrferreira-api.vercel.app/api/api/send-email", args),
         {
           loading: "Enviando e-mail...",
           success: "E-mail enviado com sucesso!",
@@ -98,6 +92,9 @@ export const SectionContact = () => {
       {/*<div className="flex flex-col items-center justify-center mt-5 bg-white p-8 rounded-md">*/}
       {/*<p className="text-2xl font-semibold mb-5">Envie um e-mail</p>*/}
       <form className="w-full mt-3" onSubmit={handleSubmit(onSubmit)}>
+        {errors.nome && (
+          <p className="text-red-500 text-sm mt-0">{errors.nome.message}</p>
+        )}
         <input
           type="text"
           id="nome"
@@ -107,8 +104,9 @@ export const SectionContact = () => {
             errors.nome ? "border border-red-500" : ""
           }`}
         />
-        {errors.nome && (
-          <p className="text-red-500 text-sm">{errors.nome.message}</p>
+
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
         )}
         <input
           type="email"
@@ -119,8 +117,9 @@ export const SectionContact = () => {
             errors.email ? "border border-red-500" : ""
           }`}
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email.message}</p>
+
+        {errors.descricao && (
+          <p className="text-red-500 text-sm">{errors.descricao.message}</p>
         )}
         <textarea
           id="descricao"
@@ -131,9 +130,6 @@ export const SectionContact = () => {
             errors.descricao ? "border border-red-500" : ""
           }`}
         />
-        {errors.descricao && (
-          <p className="text-red-500 text-sm">{errors.descricao.message}</p>
-        )}
 
         <div className="flex justify-end mt-4">
           <button
