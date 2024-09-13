@@ -15,13 +15,9 @@ class CategoriesController extends Controller
         try {
             $categories = Categories::get();
 
-            if ($categories->count() > 0) {
-                return response()->json([
-                    'results' => $categories,
-                ], 200);
-            } else {
-                return response()->json(['message' => 'Nenhuma categoria encontrada.']);
-            }
+            return response()->json([
+                'results' => $categories,
+            ], 200);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar categorias: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao buscar categorias: ' . $e->getMessage()], 500);
