@@ -25,15 +25,30 @@ export const Footer = () => {
               Confira nossas redes sociais:
             </p>
             <div className="flex items-start justify-start mt-3">
-              <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all">
-                <FaFacebook className="" />
-              </div>
-              <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all mx-2">
-                <FaInstagram className="text-xl" />
-              </div>
-              <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all">
-                <FaLinkedin className="text-xl" />
-              </div>
+              <Link
+                to="https://www.facebook.com/mrferreiramoveis.ferreira"
+                target="_blank"
+              >
+                <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all">
+                  <FaFacebook />
+                </div>
+              </Link>
+              <Link
+                to="https://www.instagram.com/mr_representacoesjau/"
+                target="_blank"
+              >
+                <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all mx-2">
+                  <FaInstagram className="text-xl" />
+                </div>
+              </Link>
+              <Link
+                to="https://www.linkedin.com/in/marcos-ferreira-5074ba291/"
+                target="_blank"
+              >
+                <div className="bg-[#eee] p-3 text-xl rounded-md cursor-pointer hover:bg-black hover:text-white transition-all">
+                  <FaLinkedin className="text-xl" />
+                </div>
+              </Link>
             </div>
           </div>
           <div className="col-span-12 xl:col-span-8 mt-10 xl:mt-0 -ms-0 md:-lg-10 xl:-ms-0">
