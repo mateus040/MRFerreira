@@ -21,7 +21,7 @@ export default function MainLayout({ children }: Props) {
 
       {/* Ícone do WhatsApp */}
       <Link
-        to={`https://api.whatsapp.com/send?phone=5514991896619&text=${encodeURIComponent(
+        to={`https://api.whatsapp.com/send?phone=5514997831356&text=${encodeURIComponent(
           "Olá, tudo bem? Gostaria de saber mais informações sobre os produtos!"
         )}`}
         target="_blank"

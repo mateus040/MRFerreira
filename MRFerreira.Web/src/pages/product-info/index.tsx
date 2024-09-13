@@ -9,6 +9,7 @@ import ServiceResult from "../../interface/service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
+import formatNameForURL from "../../utils/formatNameForURL";
 
 export default function ProductInfo() {
   useEffect(() => {
@@ -41,7 +42,11 @@ export default function ProductInfo() {
   }, []);
 
   const whatsappMessage = productInfo
-    ? `Olá! Gostaria de saber mais informações sobre o produto ${productInfo.nome}. Foto do produto: ${imageUrl}`
+    ? `Olá! Gostaria de saber mais informações sobre o produto ${
+        productInfo.nome
+      }. Link do produto: https://mrferreirarepresentacoes.shop/produtos/${productId}?produto=${formatNameForURL(
+        productInfo.nome
+      )}`
     : "";
 
   return (
@@ -50,7 +55,10 @@ export default function ProductInfo() {
 
       {!loading && productInfo && (
         <div className="bg-white">
-          <div className="px-8 lg:px-12 py-12 mt-10 container mx-auto" data-aos="zoom-in">
+          <div
+            className="px-8 lg:px-12 py-12 mt-10 container mx-auto"
+            data-aos="zoom-in"
+          >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="col-span-6 flex items-center justify-center lg:-ms-10">
                 {imageUrl && (
@@ -135,7 +143,7 @@ export default function ProductInfo() {
               </p>
 
               <Link
-                to={`https://api.whatsapp.com/send?phone=5514991896619&text=${encodeURIComponent(
+                to={`https://api.whatsapp.com/send?phone=5514997831356&text=${encodeURIComponent(
                   whatsappMessage
                 )}`}
                 target="_blank"
