@@ -8,12 +8,14 @@ import ListServiceResult from "../../interface/list-service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
+import CategoriaModel from "../../interface/models/CategoriaModel";
+import ServiceResult from "../../interface/service-result";
 
 export default function ProductsByCategory() {
   useEffect(() => {
     AOS.init({ duration: 1200 });
   }, []);
-  
+
   const { categoryId } = useParams();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,7 +39,6 @@ export default function ProductsByCategory() {
       .then(({ data }) => {
         const productsData = data.results;
         setProducts(productsData);
-        setCategoryName(productsData[0].category.nome);
 
         const logosTemp: { [key: string]: string } = {};
         productsData.forEach((product) => {
@@ -52,6 +53,17 @@ export default function ProductsByCategory() {
       .finally(() => setLoading(false));
   };
 
+  const fetchNameCategory = async () => {
+    api
+      .get<ServiceResult<CategoriaModel>>(
+        `https://mrferreira-api.vercel.app/api/api/categories/${categoryId}`
+      )
+      .then(({ data }) => {
+        setCategoryName(data?.results?.nome || "");
+      })
+      .catch(apiErrorHandler);
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const search = event.target.value;
     setSearchParams({ search });
@@ -59,10 +71,11 @@ export default function ProductsByCategory() {
 
   useEffect(() => {
     fetchProductsByCategory();
+    fetchNameCategory();
   }, [categoryId]);
 
   return (
-    <MainLayout>
+    <MainLayout contact>
       <div className="px-8 lg:px-12 py-12 container mx-auto">
         <div className="mt-10">
           {loading && <Loading centered />}

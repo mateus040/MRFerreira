@@ -58,7 +58,7 @@ export default function AllProviders() {
   }, []);
 
   return (
-    <MainLayout>
+    <MainLayout contact>
       <div className="px-8 lg:px-12 py-12 container mx-auto">
         <div className="mt-10">
           {loading && <Loading centered />}

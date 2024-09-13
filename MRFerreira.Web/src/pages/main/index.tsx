@@ -5,7 +5,6 @@ import { Home } from "./components/home";
 import { SectionProducts } from "./components/products";
 import { SectionProviders } from "./components/providers";
 import { SectionAbout } from "./components/about";
-import { SectionContact } from "./components/contact";
 import MainLayout from "../../components/layouts/main";
 import { useSearchParams } from "react-router-dom";
 import ListServiceResult from "../../interface/list-service-result";
@@ -94,7 +93,7 @@ export default function Main() {
   }, []);
 
   return (
-    <MainLayout>
+    <MainLayout contact>
       <div className="w-full overflow-x-hidden">
         <Home />
 
@@ -111,7 +110,6 @@ export default function Main() {
         />
 
         <SectionAbout />
-        <SectionContact />
       </div>
     </MainLayout>
   );

@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import Loading from "../../components/loading";
 import { FaWhatsapp } from "react-icons/fa6";
 import MainLayout from "../../components/layouts/main";
-import { SectionContact } from "../main/components/contact";
 import ServiceResult from "../../interface/service-result";
 import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
@@ -50,7 +49,7 @@ export default function ProductInfo() {
     : "";
 
   return (
-    <MainLayout>
+    <MainLayout contact>
       {loading && <Loading centered className="mt-28" />}
 
       {!loading && productInfo && (
@@ -153,10 +152,6 @@ export default function ProductInfo() {
           Informações do produto não encontradas.
         </div>
       )}
-
-      <div className="lg:px-12 py-12">
-        <SectionContact />
-      </div>
     </MainLayout>
   );
 }

@@ -9,10 +9,12 @@ import {
 } from "react-icons/fa6";
 import { IoLocationSharp } from "react-icons/io5";
 import { useProviderStore } from "../stores/providers.store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatNameForURL from "../utils/formatNameForURL";
 
 export const Footer = () => {
+  const navigate = useNavigate();
+
   const { providers } = useProviderStore();
 
   return (
@@ -97,27 +99,48 @@ export const Footer = () => {
                 <p className="text-2xl font-semibold mb-5">Links</p>
                 <div className="flex items-center justify-center cursor-pointer mb-5">
                   <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                  <button
+                    onClick={() => navigate("/?section=home")}
+                    className="text-md text-gray-600 mx-3 hover:text-black transition-all"
+                  >
                     Início
-                  </p>
+                  </button>
                 </div>
                 <div className="flex items-center justify-center cursor-pointer mb-5">
                   <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                  <Link
+                    to="/produtos"
+                    className="text-md text-gray-600 mx-3 hover:text-black transition-all"
+                  >
+                    Produtos
+                  </Link>
+                </div>
+                <div className="flex items-center justify-center cursor-pointer mb-5">
+                  <FaArrowRight />
+                  <Link
+                    to="/empresas"
+                    className="text-md text-gray-600 mx-3 hover:text-black transition-all"
+                  >
                     Empresas
-                  </p>
+                  </Link>
                 </div>
                 <div className="flex items-center justify-center cursor-pointer mb-5">
                   <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                  <button
+                    onClick={() => navigate("/?section=sobre")}
+                    className="text-md text-gray-600 mx-3 hover:text-black transition-all"
+                  >
                     Sobre
-                  </p>
+                  </button>
                 </div>
                 <div className="flex items-center justify-center cursor-pointer mb-5">
                   <FaArrowRight />
-                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                  <button
+                    onClick={() => navigate("/?section=contato")}
+                    className="text-md text-gray-600 mx-3 hover:text-black transition-all"
+                  >
                     Contato
-                  </p>
+                  </button>
                 </div>
               </div>
             </div>

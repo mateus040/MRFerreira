@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa6";
 import { Header } from "../header";
 import { Footer } from "../footer";
+import { SectionContact } from "../../pages/main/components/contact";
 
 interface Props {
   children: React.ReactNode;
+  contact?: boolean; 
 }
 
-export default function MainLayout({ children }: Props) {
+export default function MainLayout({ children, contact }: Props) {
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -15,6 +17,7 @@ export default function MainLayout({ children }: Props) {
 
         <div className="flex flex-col grow">
           <main className="grow mt-10">{children}</main>
+          {contact && <SectionContact />}
           <Footer />
         </div>
       </div>
