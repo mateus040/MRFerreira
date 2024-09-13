@@ -32,7 +32,7 @@ class ProductsStoreRequest extends FormRequest
             'peso' => 'nullable|string',
             'linha' => 'nullable|string',
             'materiais' => 'nullable|string',
-            'foto' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'id_provider' => 'required|exists:providers,id',
         ];
     }

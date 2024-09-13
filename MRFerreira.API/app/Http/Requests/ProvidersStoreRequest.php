@@ -36,7 +36,7 @@ class ProvidersStoreRequest extends FormRequest
             'email' => 'required|string',
             'telefone' => 'nullable|string',
             'celular' => 'nullable|string',
-            'logo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'logo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ];
     }
 
