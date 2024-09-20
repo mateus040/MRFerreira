@@ -5,7 +5,6 @@ import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
 import ServiceResult from "../../interface/service-result";
@@ -48,7 +47,7 @@ export default function ProductsByProvider() {
 
         setFotos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 
@@ -60,7 +59,7 @@ export default function ProductsByProvider() {
       .then(({ data }) => {
         setProviderName(data?.results?.nome || "");
       })
-      .catch(apiErrorHandler);
+      // .catch(apiErrorHandler);
   };
 
   useEffect(() => {

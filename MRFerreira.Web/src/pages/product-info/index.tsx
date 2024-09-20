@@ -5,7 +5,6 @@ import Loading from "../../components/loading";
 import { FaWhatsapp } from "react-icons/fa6";
 import MainLayout from "../../components/layouts/main";
 import ServiceResult from "../../interface/service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
 import formatNameForURL from "../../utils/formatNameForURL";
@@ -32,7 +31,7 @@ export default function ProductInfo() {
         setProductInfo(data.results as ProdutoModel);
         setImageUrl(data.results?.foto_url || null);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 

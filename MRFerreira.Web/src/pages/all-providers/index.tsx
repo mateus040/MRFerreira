@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import FornecedorModel from "../../interface/models/FornecedorModel";
 import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
 
@@ -44,7 +43,7 @@ export default function AllProviders() {
 
         setLogos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 

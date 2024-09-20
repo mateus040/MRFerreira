@@ -5,7 +5,6 @@ import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import formatNameForURL from "../../utils/formatNameForURL";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
 import CategoriaModel from "../../interface/models/CategoriaModel";
@@ -49,7 +48,7 @@ export default function ProductsByCategory() {
 
         setFotos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 
@@ -61,7 +60,7 @@ export default function ProductsByCategory() {
       .then(({ data }) => {
         setCategoryName(data?.results?.nome || "");
       })
-      .catch(apiErrorHandler);
+      // .catch(apiErrorHandler);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

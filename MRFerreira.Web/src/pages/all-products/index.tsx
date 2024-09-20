@@ -5,7 +5,6 @@ import formatNameForURL from "../../utils/formatNameForURL";
 import Loading from "../../components/loading";
 import MainLayout from "../../components/layouts/main";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import AOS from "aos";
 
@@ -44,7 +43,7 @@ export default function AllProducts() {
 
         setFotos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoading(false));
   };
 
