@@ -57,19 +57,25 @@ export const Footer = () => {
             <div className="flex flex-col xl:flex-row items-start justify-between">
               <div className="flex flex-col items-start justify-start mb-5 xl:mb-0">
                 <p className="text-2xl font-semibold mb-5">Contato</p>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
+                <div className="flex items-center justify-center mb-5">
                   <FaPhone />
                   <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
                     (14) 99783-1356
                   </p>
                 </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
+                <div className="flex items-center justify-center mb-5">
                   <FaEnvelope />
                   <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
-                    mr.ferreira@mrferreira
+                    mrferreirarepresentacao@hotmail.com
                   </p>
                 </div>
-                <div className="flex items-center justify-center cursor-pointer mb-5">
+                <div className="flex items-center justify-center mb-5">
+                  <FaEnvelope />
+                  <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
+                    marcosr_vendas@yahoo.com.br
+                  </p>
+                </div>
+                <div className="flex items-center justify-center mb-5">
                   <IoLocationSharp />
                   <p className="text-md text-gray-600 mx-3 hover:text-black transition-all">
                     Jaú, SP

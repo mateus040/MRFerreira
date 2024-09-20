@@ -56,8 +56,8 @@ export const SectionContact = () => {
         </p>
       </div>
 
-      <div className="block md:flex items-center justify-between mt-14">
-        <div className="flex items-start md:items-center justify-start md:justify-center mb-8 md:mt-0">
+      <div className="block lg:flex items-center justify-between mt-14">
+        <div className="flex items-start lg:items-center justify-start lg:justify-center mb-8 lg:mt-0">
           <div className="bg-black p-5 rounded-md">
             <IoLocationSharp className="text-white text-3xl" />
           </div>
@@ -67,7 +67,7 @@ export const SectionContact = () => {
             <p className="text-sm">17209-838</p>
           </div>
         </div>
-        <div className="flex items-start justify-start mb-8 md:mt-0">
+        <div className="flex items-start justify-start mb-8 lg:mt-0">
           <div className="bg-black p-5 rounded-md">
             <FaPhoneAlt className="text-white text-3xl" />
           </div>
@@ -76,14 +76,14 @@ export const SectionContact = () => {
             <p className="text-sm">(14) 99783-1356</p>
           </div>
         </div>
-        <div className="flex items-start md:items-center justify-start md:justify-center mb-8 md:mt-0">
+        <div className="flex items-start lg:items-center justify-start lg:justify-center mb-8 lg:mt-0">
           <div className="bg-black p-5 rounded-md">
             <FaEnvelope className="text-white text-3xl" />
           </div>
           <div className="mx-4">
             <p className="font-bold text-lg">Endereço</p>
-            <p className="text-sm">mr.ferreira@mrferreira.com</p>
-            <p className="text-sm">exemplo@gmail.com</p>
+            <p className="text-sm">mrferreirarepresentacao@hotmail.com</p>
+            <p className="text-sm">marcosr_vendas@yahoo.com.br</p>
           </div>
         </div>
       </div>
