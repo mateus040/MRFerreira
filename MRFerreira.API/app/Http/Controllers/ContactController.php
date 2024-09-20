@@ -16,8 +16,7 @@ class ContactController extends Controller
             'descricao' => 'required|string',
         ]);
 
-        // TODO: trocar para o e-mail do marquinho
-        Mail::to('mateusgabrielmoreno264@gmail.com')->send(new ContactMail(
+        Mail::to('mrferreirarepresentacao@hotmail.com')->send(new ContactMail(
             $validated['nome'],
             $validated['email'],
             $validated['descricao']
