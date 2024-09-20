@@ -94,8 +94,8 @@ export const SectionProviders = ({ providers, logos, loading }: Props) => {
           </Swiper>
 
           {!loading && providers.length === 0 && (
-            <div className="flex items-center justify-center text-gray-500 text-xl mt-28">
-              Nenhuma empresa encontrada.
+            <div className="flex items-center justify-center text-gray-500 text-xl mt-8">
+              Nenhuma empresa encontrado.
             </div>
           )}
         </div>

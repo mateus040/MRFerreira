@@ -8,7 +8,6 @@ import { SectionAbout } from "./components/about";
 import MainLayout from "../../components/layouts/main";
 import { useSearchParams } from "react-router-dom";
 import ListServiceResult from "../../interface/list-service-result";
-import apiErrorHandler from "../../services/api-error-handler";
 import api from "../../services/api-client";
 import { useProviderStore } from "../../stores/providers.store";
 
@@ -48,7 +47,7 @@ export default function Main() {
 
         setFotos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoadingProducts(false));
   };
 
@@ -72,7 +71,7 @@ export default function Main() {
 
         setLogos(logosTemp);
       })
-      .catch(apiErrorHandler)
+      // .catch(apiErrorHandler)
       .finally(() => setLoadingProviders(false));
   };
 

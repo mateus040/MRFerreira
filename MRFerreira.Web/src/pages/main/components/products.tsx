@@ -97,8 +97,8 @@ export const SectionProducts = ({ products, fotos, loading }: Props) => {
           </Swiper>
 
           {!loading && products.length === 0 && (
-            <div className="flex items-center justify-center text-gray-500 text-xl mt-28">
-              Nenhuma produto encontrada.
+            <div className="flex items-center justify-center text-gray-500 text-xl mt-8">
+              Nenhuma produto encontrado.
             </div>
           )}
         </div>

@@ -5,7 +5,6 @@ import CategoriaModel from "../interface/models/CategoriaModel";
 import formatNameForURL from "../utils/formatNameForURL";
 import { FaTimes } from "react-icons/fa";
 import ListServiceResult from "../interface/list-service-result";
-import apiErrorHandler from "../services/api-error-handler";
 import api from "../services/api-client";
 
 export const Header = () => {
@@ -32,7 +31,7 @@ export const Header = () => {
       .then(({ data }) => {
         setCategories(data.results);
       })
-      .catch(apiErrorHandler);
+      // .catch(apiErrorHandler);
   };
 
   useEffect(() => {
@@ -41,16 +40,16 @@ export const Header = () => {
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg">
-      <div className="flex justify-between items-center px-5 py-5 container mx-auto">
+      <div className="flex justify-between items-center px-5 py-3 container mx-auto">
         <a
           onClick={() => navigate("/?section=home")}
           className="cursor-pointer"
         >
-          <p className="text-xl font-semibold">MR Ferreira</p>
+          {/* <p className="text-xl font-semibold">MR Ferreira</p>
           <p className="font-semibold mx-4" style={{ fontSize: "12px" }}>
             Representações
-          </p>
-          {/* <img src="/images/logo-transparente.png" alt="logo" className="h-20 w-20" /> */}
+          </p> */}
+          <img src="/images/logo-transparente.png" alt="logo" className="h-16 w-16" />
         </a>
         <div
           className={`nav-links duration-500 lg:static absolute lg:min-h-fit min-h-[40vh] left-0 -mt-1 ${
