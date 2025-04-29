@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ProvidersController;
+use App\Http\Controllers\{
+    ProductsController,
+    CategoriesController,
+    AuthController,
+    ContactController,
+    ProvidersController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Rotas protegidas
     Route::post('/providers/add', [ProvidersController::class, 'store']);
     Route::put('/providers/update/{id}', [ProvidersController::class, 'update']);
     Route::delete('/providers/delete/{id}', [ProvidersController::class, 'destroy']);
@@ -55,8 +55,5 @@ Route::get('/products/{id}', [ProductsController::class, 'show']);
 
 Route::get('/categories', [CategoriesController::class, 'index']);
 Route::get('/categories/{id}', [CategoriesController::class, 'show']);
-
-// Email
-// Route::post('/send-email', [EmailController::class, 'sendEmail']);
 
 Route::post('/send-email', [ContactController::class, 'sendEmail']);

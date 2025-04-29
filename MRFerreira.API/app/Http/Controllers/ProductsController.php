@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
 use App\Http\Requests\ProductsStoreRequest;
-use App\Models\Categories;
-use App\Models\Providers;
-use Illuminate\Support\Str;
-use App\Services\FirebaseStorageService;
-use Illuminate\Support\Facades\Log;
+use App\Models\{
+    Categories,
+    Providers,
+    Products,
+};
+use Illuminate\Support\{
+    Facades\Log,
+    Str,
+};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Services\FirebaseStorageService;
 
 class ProductsController extends Controller
 {

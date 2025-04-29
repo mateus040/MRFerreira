@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Factories\HasFactory,
+    Model,
+};
 use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 
@@ -11,7 +13,19 @@ class Products extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'descricao', 'comprimento', 'altura', 'profundidade', 'linha', 'materiais', 'peso', 'foto', 'id_provider', 'id_category'];
+    protected $fillable = [
+        'id_provider',
+        'id_category',
+        'nome',
+        'descricao',
+        'comprimento',
+        'altura',
+        'profundidade',
+        'linha',
+        'materiais',
+        'peso',
+        'foto',
+    ];
 
     protected $keyType = 'string';
     public $incrementing = false;

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Factories\HasFactory,
+    Model,
+};
 use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 
@@ -12,9 +14,19 @@ class Providers extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome', 'cnpj', 'rua', 'bairro',
-        'numero', 'cep', 'cidade', 'estado', 'complemento',
-        'email', 'telefone', 'celular', 'logo'
+        'nome',
+        'cnpj',
+        'rua',
+        'bairro',
+        'numero',
+        'cep',
+        'cidade',
+        'estado',
+        'complemento',
+        'email',
+        'telefone',
+        'celular',
+        'logo',
     ];
 
     protected $keyType = 'string';

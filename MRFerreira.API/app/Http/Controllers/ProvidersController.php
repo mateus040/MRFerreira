@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProvidersStoreRequest;
-use App\Http\Resources\ProviderResource;
 use App\Models\Providers;
 use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
