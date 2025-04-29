@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProvidersStoreRequest;
+use App\Http\Resources\Provider\{
+    IndexResource,
+    ShowResource,
+};
 use App\Models\Providers;
-use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\{
+    Facades\Log,
+    Str,
+};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProvidersController extends Controller
@@ -23,10 +29,7 @@ class ProvidersController extends Controller
         try {
             $providers = Providers::get();
 
-
-            return response()->json([
-                'results' => $providers,
-            ], 200);
+            return IndexResource::collection($providers);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar empresas: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao buscar empresas: ' . $e->getMessage()], 500);
@@ -76,11 +79,9 @@ class ProvidersController extends Controller
     public function show($id)
     {
         try {
-            $providers = Providers::findOrFail($id);
+            $provider = Providers::findOrFail($id);
 
-            return response()->json([
-                'results' => $providers
-            ], 200);
+            return app(ShowResource::class, ['resource' => $provider]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Empresa não encontrada.'], 404);
         } catch (\Exception $e) {

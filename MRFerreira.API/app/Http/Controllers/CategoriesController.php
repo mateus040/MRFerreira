@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoriesStoreRequest;
+use App\Http\Resources\Category\{
+    IndexResource,
+    ShowResource,
+};
 use App\Models\Categories;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,9 +18,7 @@ class CategoriesController extends Controller
         try {
             $categories = Categories::get();
 
-            return response()->json([
-                'results' => $categories,
-            ], 200);
+            return IndexResource::collection($categories);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar categorias: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao buscar categorias: ' . $e->getMessage()], 500);
@@ -52,9 +54,7 @@ class CategoriesController extends Controller
         try {
             $categories = Categories::findOrFail($id);
 
-            return response()->json([
-                'results' => $categories
-            ], 200);
+            return app(ShowResource::class, ['resource' => $categories]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Categoria não encontrada.'], 404);
         } catch (\Exception $e) {

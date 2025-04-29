@@ -29,7 +29,6 @@ class ProductsController extends Controller
         try {
             $products = Products::with(['provider', 'category'])->get();
 
-
             return response()->json([
                 'results' => $products,
             ], 200);

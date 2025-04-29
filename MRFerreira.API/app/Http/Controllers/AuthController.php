@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\User\MeResource;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -25,7 +26,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($request->password),
+                'password' => bcrypt($request->password), // TODO: utilizar o HASH direto na model
             ]);
 
             return response()->json([
@@ -71,7 +72,10 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            $request->user()->tokens()->delete();
+            $request
+                ->user()
+                ->tokens() // TODO: aqui provavelmente ele está excluido todos os tokens do usuário
+                ->delete();
 
             return response()->json([
                 'message' => 'Deslogado com sucesso!'
@@ -82,10 +86,12 @@ class AuthController extends Controller
         }
     }
 
-    public function getUser(Request $request)
+    public function getUser()
     {
         try {
-            return $request->user();
+            $user = Auth::user();
+
+            return app(MeResource::class, ['resource' => $user]);
         } catch (\Exception $e) {
             Log::error('Erro ao obter usuário: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao obter usuário: ' . $e->getMessage()], 500);
