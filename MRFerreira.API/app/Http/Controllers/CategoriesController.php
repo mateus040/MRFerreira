@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoriesStoreRequest;
+use App\Http\Requests\Category\StoreRequest;
 use App\Http\Resources\Category\{
     IndexResource,
     ShowResource,
@@ -25,7 +25,7 @@ class CategoriesController extends Controller
         }
     }
 
-    public function store(CategoriesStoreRequest $request)
+    public function store(StoreRequest $request)
     {
         try {
             $existingCategory = Categories::where('nome', $request->nome)->first();
@@ -63,7 +63,7 @@ class CategoriesController extends Controller
         }
     }
 
-    public function update(CategoriesStoreRequest $request, $id)
+    public function update(StoreRequest $request, $id)
     {
         try {
             $categories = Categories::findOrFail($id);

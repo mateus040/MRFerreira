@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Contact\SendEmailRequest;
 use App\Mail\ContactMail;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function sendEmail(Request $request)
+    public function sendEmail(SendEmailRequest $request)
     {
-        $validated = $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email',
-            'descricao' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         Mail::to('mrferreirarepresentacao@hotmail.com')->send(new ContactMail(
             $validated['nome'],

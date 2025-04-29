@@ -3,30 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\User\MeResource;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\User\{
+    RegisterRequest,
+    LoginRequest,
+};
 use App\Models\User;
 use Illuminate\Support\Facades\{
     Auth,
+    Hash,
     Log,
 };
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Carbon\Carbon;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|unique:users|max:255',
-                'password' => 'required|string|min:6',
-            ]);
+            $validated = $request->validated();
 
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password), // TODO: utilizar o HASH direto na model
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']), // TODO: utilizar o HASH direto na model
             ]);
 
             return response()->json([
@@ -39,23 +39,22 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|string|email',
-                'password' => 'required|string',
-            ]);
+            $validated = $request->validated();
 
-            $credentials = $request->only('email', 'password');
+            $user = User::where('email', $validated['email'])->first();
 
-            if (!Auth::attempt($credentials)) {
-                return response()->json(['message' => 'Credênciais inválidas.'], 401);
+            if (!$user || !Hash::check($validated['password'], $user['password'])) {
+                return response()->json([
+                    'message' => 'Credenciais inválidas',
+                ], HttpResponse::HTTP_UNAUTHORIZED);
             }
 
-            $user = $request->user();
-
-            $token = $user->createToken('token-name')->plainTextToken;
+            $token = $user
+                ->createToken('token-name')
+                ->plainTextToken;
 
             $expiration = Carbon::now()->addMinutes(config('sanctum.expiration'));
 
@@ -69,24 +68,23 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         try {
-            $request
-                ->user()
-                ->tokens() // TODO: aqui provavelmente ele está excluido todos os tokens do usuário
+            $user = Auth::user();
+
+            $user
+                ->currentAccessToken()
                 ->delete();
 
-            return response()->json([
-                'message' => 'Deslogado com sucesso!'
-            ]);
+            return response()->noContent();
         } catch (\Exception $e) {
             Log::error('Erro ao deslogar: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao deslogar: ' . $e->getMessage()], 500);
         }
     }
 
-    public function getUser()
+    public function me()
     {
         try {
             $user = Auth::user();

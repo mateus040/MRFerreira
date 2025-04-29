@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProvidersStoreRequest;
+use App\Http\Requests\Provider\StoreRequest;
 use App\Http\Resources\Provider\{
     IndexResource,
     ShowResource,
@@ -36,7 +36,7 @@ class ProvidersController extends Controller
         }
     }
 
-    public function store(ProvidersStoreRequest $request)
+    public function store(StoreRequest $request)
     {
         try {
             $existingCompany = Providers::where('cnpj', $request->cnpj)->first();
@@ -90,7 +90,7 @@ class ProvidersController extends Controller
         }
     }
 
-    public function update(ProvidersStoreRequest $request, $id)
+    public function update(StoreRequest $request, $id)
     {
         try {
             $provider = Providers::findOrFail($id);

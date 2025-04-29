@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductsStoreRequest;
+use App\Http\Requests\Product\StoreRequest;
 use App\Models\{
     Categories,
     Providers,
@@ -38,7 +38,7 @@ class ProductsController extends Controller
         }
     }
 
-    public function store(ProductsStoreRequest $request)
+    public function store(StoreRequest $request)
     {
         try {
             $existingProduct = Products::where('nome', $request->nome)->first();
@@ -93,7 +93,7 @@ class ProductsController extends Controller
     }
 
 
-    public function update(ProductsStoreRequest $request, $id)
+    public function update(StoreRequest $request, $id)
     {
         try {
             $products = Products::find($id);
