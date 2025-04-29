@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\{
 };
 use Illuminate\Support\Str;
 
-class Categories extends Model
+class Category extends Model
 {
     use HasFactory;
 

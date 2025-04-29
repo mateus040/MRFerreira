@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\{
 use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 
-class Products extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -52,12 +52,12 @@ class Products extends Model
 
     public function provider()
     {
-        return $this->belongsTo(Providers::class, 'id_provider');
+        return $this->belongsTo(Provider::class, 'id_provider');
     }
 
 
     public function category()
     {
-        return $this->belongsTo(Categories::class, 'id_category');
+        return $this->belongsTo(Category::class, 'id_category');
     }
 }

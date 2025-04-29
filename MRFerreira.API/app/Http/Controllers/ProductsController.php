@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreRequest;
+use App\Http\Resources\Product\ShowResource;
 use App\Models\{
-    Categories,
-    Providers,
-    Products,
+    Category,
+    Provider,
+    Product,
 };
 use Illuminate\Support\{
     Facades\Log,
@@ -15,7 +16,7 @@ use Illuminate\Support\{
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\FirebaseStorageService;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     protected $firebaseStorage;
 
@@ -27,7 +28,7 @@ class ProductsController extends Controller
     public function index()
     {
         try {
-            $products = Products::with(['provider', 'category'])->get();
+            $products = Product::with(['provider', 'category'])->get();
 
             return response()->json([
                 'results' => $products,
@@ -41,7 +42,7 @@ class ProductsController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $existingProduct = Products::where('nome', $request->nome)->first();
+            $existingProduct = Product::where('nome', $request->nome)->first();
 
             if ($existingProduct) {
                 return response()->json([
@@ -52,7 +53,7 @@ class ProductsController extends Controller
             $imageName = Str::random(32) . "." . $request->foto->getClientOriginalExtension();
             $imageUrl = $this->firebaseStorage->uploadFile($request->foto, $imageName);
 
-            Products::create([
+            Product::create([
                 'nome' => $request->nome,
                 'descricao' => $request->descricao,
                 'comprimento' => $request->comprimento ?? "",
@@ -79,11 +80,9 @@ class ProductsController extends Controller
     public function show($id)
     {
         try {
-            $products = Products::with(['category', 'provider'])->findOrFail($id);
+            $product = Product::with(['category', 'provider'])->findOrFail($id);
 
-            return response()->json([
-                'results' => $products
-            ], 200);
+            return app(ShowResource::class, ['resource' => $product]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Produto não encontrado.'], 404);
         } catch (\Exception $e) {
@@ -96,14 +95,14 @@ class ProductsController extends Controller
     public function update(StoreRequest $request, $id)
     {
         try {
-            $products = Products::find($id);
-            if (!$products) {
+            $product = Product::find($id);
+            if (!$product) {
                 return response()->json([
                     'message' => 'Produto não encontrado.'
                 ], 404);
             }
 
-            $products->update([
+            $product->update([
                 'nome' => $request->nome,
                 'descricao' => $request->descricao,
                 'comprimento' => $request->comprimento ?? "",
@@ -117,10 +116,10 @@ class ProductsController extends Controller
             ]);
 
             if ($request->hasFile('foto')) {
-                $this->firebaseStorage->deleteFile($products->foto);
+                $this->firebaseStorage->deleteFile($product->foto);
                 $imageName = Str::random(32) . "." . $request->foto->getClientOriginalExtension();
                 $imageUrl = $this->firebaseStorage->uploadFile($request->foto, $imageName);
-                $products->update(['foto' => $imageName]);
+                $product->update(['foto' => $imageName]);
             }
 
             $imageUrl = isset($imageUrl) ? $imageUrl : null;
@@ -140,9 +139,11 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         try {
-            $product = Products::findOrFail($id);
+            $product = Product::findOrFail($id);
 
-            $this->firebaseStorage->deleteFile($product->foto);
+            $this
+                ->firebaseStorage
+                ->deleteFile($product->foto);
 
             $product->delete();
 
@@ -160,7 +161,7 @@ class ProductsController extends Controller
     public function productsByCompany($id)
     {
         try {
-            $products = Products::where('id_provider', $id)->with(['provider', 'category'])->get();
+            $products = Product::where('id_provider', $id)->with(['provider', 'category'])->get();
 
             return response()->json([
                 'results' => $products,
@@ -174,7 +175,7 @@ class ProductsController extends Controller
     public function productsByCategory($id)
     {
         try {
-            $products = Products::where('id_category', $id)->with(['provider', 'category'])->get();
+            $products = Product::where('id_category', $id)->with(['provider', 'category'])->get();
 
             return response()->json([
                 'results' => $products,
@@ -188,9 +189,9 @@ class ProductsController extends Controller
     public function getCards()
     {
         try {
-            $products_count = Products::count();
-            $providers_count = Providers::count();
-            $categories_count = Categories::count();
+            $products_count = Product::count();
+            $providers_count = Provider::count();
+            $categories_count = Category::count();
 
             return response()->json([
                 'results' => [

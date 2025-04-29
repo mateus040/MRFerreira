@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\{
 use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 
-class Providers extends Model
+class Provider extends Model
 {
     use HasFactory;
 

@@ -7,16 +7,16 @@ use App\Http\Resources\Category\{
     IndexResource,
     ShowResource,
 };
-use App\Models\Categories;
+use App\Models\Category;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class CategoriesController extends Controller
+class CategoryController extends Controller
 {
     public function index()
     {
         try {
-            $categories = Categories::get();
+            $categories = Category::get();
 
             return IndexResource::collection($categories);
         } catch (\Exception $e) {
@@ -28,7 +28,7 @@ class CategoriesController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $existingCategory = Categories::where('nome', $request->nome)->first();
+            $existingCategory = Category::where('nome', $request->nome)->first();
 
             if ($existingCategory) {
                 return response()->json([
@@ -36,7 +36,7 @@ class CategoriesController extends Controller
                 ], 400);
             }
 
-            Categories::create([
+            Category::create([
                 'nome' => $request->nome,
             ]);
 
@@ -52,9 +52,9 @@ class CategoriesController extends Controller
     public function show($id)
     {
         try {
-            $categories = Categories::findOrFail($id);
+            $category = Category::findOrFail($id);
 
-            return app(ShowResource::class, ['resource' => $categories]);
+            return app(ShowResource::class, ['resource' => $category]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Categoria não encontrada.'], 404);
         } catch (\Exception $e) {
@@ -66,9 +66,9 @@ class CategoriesController extends Controller
     public function update(StoreRequest $request, $id)
     {
         try {
-            $categories = Categories::findOrFail($id);
+            $category = Category::findOrFail($id);
 
-            $categories->update([
+            $category->update([
                 'nome' => $request->nome,
             ]);
 
@@ -86,9 +86,9 @@ class CategoriesController extends Controller
     public function destroy($id)
     {
         try {
-            $categories = Categories::findOrFail($id);
+            $category = Category::findOrFail($id);
 
-            $categories->delete();
+            $category->delete();
 
             return response()->json([
                 'message' => "Categoria excluída com sucesso!",

@@ -7,7 +7,7 @@ use App\Http\Resources\Provider\{
     IndexResource,
     ShowResource,
 };
-use App\Models\Providers;
+use App\Models\Provider;
 use App\Services\FirebaseStorageService;
 use Illuminate\Support\{
     Facades\Log,
@@ -15,7 +15,7 @@ use Illuminate\Support\{
 };
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ProvidersController extends Controller
+class ProviderController extends Controller
 {
     protected $firebaseStorage;
 
@@ -27,7 +27,7 @@ class ProvidersController extends Controller
     public function index()
     {
         try {
-            $providers = Providers::get();
+            $providers = Provider::get();
 
             return IndexResource::collection($providers);
         } catch (\Exception $e) {
@@ -39,7 +39,7 @@ class ProvidersController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $existingCompany = Providers::where('cnpj', $request->cnpj)->first();
+            $existingCompany = Provider::where('cnpj', $request->cnpj)->first();
 
             if ($existingCompany) {
                 return response()->json([
@@ -50,7 +50,7 @@ class ProvidersController extends Controller
             $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
             $imageUrl = $this->firebaseStorage->uploadFile($request->logo, $imageName);
 
-            Providers::create([
+            Provider::create([
                 'nome' => $request->nome,
                 'cnpj' => $request->cnpj ?? null,
                 'rua' => $request->rua,
@@ -79,7 +79,7 @@ class ProvidersController extends Controller
     public function show($id)
     {
         try {
-            $provider = Providers::findOrFail($id);
+            $provider = Provider::findOrFail($id);
 
             return app(ShowResource::class, ['resource' => $provider]);
         } catch (ModelNotFoundException $e) {
@@ -93,7 +93,7 @@ class ProvidersController extends Controller
     public function update(StoreRequest $request, $id)
     {
         try {
-            $provider = Providers::findOrFail($id);
+            $provider = Provider::findOrFail($id);
 
             $provider->update([
                 'nome' => $request->nome,
@@ -138,7 +138,7 @@ class ProvidersController extends Controller
     public function destroy($id)
     {
         try {
-            $provider = Providers::findOrFail($id);
+            $provider = Provider::findOrFail($id);
 
             $this->firebaseStorage->deleteFile($provider->logo);
             $provider->delete();
