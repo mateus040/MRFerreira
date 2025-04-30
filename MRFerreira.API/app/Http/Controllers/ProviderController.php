@@ -14,6 +14,7 @@ use Illuminate\Support\{
     Str,
 };
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class ProviderController extends Controller
 {
@@ -38,8 +39,12 @@ class ProviderController extends Controller
 
     public function store(StoreRequest $request)
     {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
         try {
-            $existingCompany = Provider::where('cnpj', $request->cnpj)->first();
+            $existingCompany = Provider::where('cnpj', $validated['cnpj'])->first();
 
             if ($existingCompany) {
                 return response()->json([
@@ -47,30 +52,41 @@ class ProviderController extends Controller
                 ], 400);
             }
 
-            $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
-            $imageUrl = $this->firebaseStorage->uploadFile($request->logo, $imageName);
+            $imageName = Str::random(32) . "." . $validated['logo']->getClientOriginalExtension();
+            $imageUrl = $this
+                ->firebaseStorage
+                ->uploadFile($validated['logo'], $imageName);
 
-            Provider::create([
-                'name' => $request->name,
-                'cnpj' => $request->cnpj ?? null,
-                'street' => $request->street,
-                'neighborhood' => $request->neighborhood,
-                'number' => $request->number,
-                'zipcode' => $request->zipcode,
-                'city' => $request->city,
-                'state' => $request->state,
-                'complement' => $request->complement ?? null,
-                'email' => $request->email,
-                'phone' => $request->phone ?? null,
-                'cellphone' => $request->cellphone ?? null,
+            $provider = Provider::create([
+                'name' => $validated['name'],
+                'cnpj' => $validated['cnpj'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'cellphone' => $validated['cellphone'] ?? null,
                 'logo' => $imageName,
             ]);
+
+            $provider
+                ->addresses()
+                ->create([
+                    'zipcode' => $validated['zipcode'],
+                    'street' => $validated['street'],
+                    'neighborhood' => $validated['neighborhood'],
+                    'number' => $validated['number'],
+                    'state' => $validated['state'],
+                    'city' => $validated['city'],
+                    'complement' => $validated['complement'],
+                ]);
+
+            DB::commit();
 
             return response()->json([
                 'message' => "Empresa cadastrada com sucesso!",
                 'imageUrl' => $imageUrl
             ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
+
             Log::error('Erro ao cadastrar empresa: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao cadastrar empresa: ' . $e->getMessage()], 500);
         }
@@ -92,34 +108,53 @@ class ProviderController extends Controller
 
     public function update(StoreRequest $request, $id)
     {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
         try {
             $provider = Provider::findOrFail($id);
 
             $provider->update([
-                'name' => $request->name,
-                'cnpj' => $request->cnpj,
-                'street' => $request->street,
-                'neighborhood' => $request->neighborhood,
-                'number' => $request->number,
-                'zipcode' => $request->zipcode,
-                'city' => $request->city,
-                'state' => $request->state,
-                'complement' => $request->complement,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'cellphone' => $request->cellphone,
+                'name' => $validated['name'],
+                'cnpj' => $validated['cnpj'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'cellphone' => $validated['cellphone'],
             ]);
+
+            // TODO: verificar se é obrigatório atualizar o endereço
+            $provider
+                ->addresses()
+                ->update([
+                    'zipcode' => $validated['zipcode'],
+                    'street' => $validated['street'],
+                    'neighborhood' => $validated['neighborhood'],
+                    'number' => $validated['number'],
+                    'state' => $validated['state'],
+                    'city' => $validated['city'],
+                    'complement' => $validated['complement'],
+                ]);
 
             // Verifica se foi feito upload de uma nova imagem
             if ($request->hasFile('logo')) {
-                $this->firebaseStorage->deleteFile($provider->logo);
-                $imageName = Str::random(32) . "." . $request->logo->getClientOriginalExtension();
-                $imageUrl = $this->firebaseStorage->uploadFile($request->logo, $imageName);
+                $this
+                    ->firebaseStorage
+                    ->deleteFile($provider->logo);
+
+                $imageName = Str::random(32) . "." . $validated['logo']->getClientOriginalExtension();
+
+                $imageUrl = $this
+                    ->firebaseStorage
+                    ->uploadFile($validated['logo'], $imageName);
+
                 $provider->update(['logo' => $imageName]);
             }
 
             // Defina $imageUrl para evitar erro de variável não definida
             $imageUrl = isset($imageUrl) ? $imageUrl : null;
+
+            DB::commit();
 
             return response()->json([
                 'message' => "Fornecedor atualizado com sucesso!",
@@ -129,23 +164,25 @@ class ProviderController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Empresa não encontrada.'], 404);
         } catch (\Exception $e) {
+            DB::rollBack();
+
             Log::error('Erro ao atualizar empresa: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao atualizar empresa: ' . $e->getMessage()], 500);
         }
     }
-
 
     public function destroy($id)
     {
         try {
             $provider = Provider::findOrFail($id);
 
-            $this->firebaseStorage->deleteFile($provider->logo);
+            $this
+                ->firebaseStorage
+                ->deleteFile($provider->logo);
+            
             $provider->delete();
 
-            return response()->json([
-                'message' => 'Empresa excluída com sucesso!'
-            ], 200);
+            return response()->noContent();
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Empresa não encontrada.'], 404);
         } catch (\Exception $e) {

@@ -27,8 +27,10 @@ class CategoryController extends Controller
 
     public function store(StoreRequest $request)
     {
+        $validated = $request->validated();
+
         try {
-            $existingCategory = Category::where('name', $request->name)->first();
+            $existingCategory = Category::where('name', $validated['name'])->first();
 
             if ($existingCategory) {
                 return response()->json([
@@ -37,7 +39,7 @@ class CategoryController extends Controller
             }
 
             Category::create([
-                'name' => $request->name,
+                'name' => $validated['name'],
             ]);
 
             return response()->json([
@@ -65,11 +67,13 @@ class CategoryController extends Controller
 
     public function update(StoreRequest $request, $id)
     {
+        $validated = $request->validated();
+
         try {
             $category = Category::findOrFail($id);
 
             $category->update([
-                'name' => $request->name,
+                'name' => $validated['name'],
             ]);
 
             return response()->json([
@@ -90,9 +94,7 @@ class CategoryController extends Controller
 
             $category->delete();
 
-            return response()->json([
-                'message' => "Categoria excluída com sucesso!",
-            ], 200);
+            return response()->noContent();
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Categoria não encontrada.'], 404);
         } catch (\Exception $e) {

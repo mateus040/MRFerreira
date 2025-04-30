@@ -26,39 +26,6 @@ class StoreRequest extends FormRequest
                 'string',
                 'regex:/^[0-9]{14}$/',
             ],
-            'street' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'neighborhood' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'number' => [
-                'required',
-                'integer',
-            ],
-            'zipcode' => [
-                'required',
-                'string',
-                'regex:/^[0-9]{8}',
-            ],
-            'city' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'state' => [
-                'required',
-                'string',
-                'max:2',
-            ],
-            'complemento' => [
-                'nullable',
-                'string',
-            ],
             'email' => [
                 'required',
                 'string',
@@ -78,6 +45,39 @@ class StoreRequest extends FormRequest
                 'mimes:jpeg,png,jpg,gif,svg,webp',
                 'max:2048',
             ],
+            'address.zipcode' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{8}',
+            ],
+            'address.street' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'address.number' => [
+                'required',
+                'integer',
+            ],
+            'address.neighborhood' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'address.state' => [
+                'required',
+                'string',
+                'max:2',
+            ],
+            'address.city' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'address.complement' => [
+                'nullable',
+                'string',
+            ],
         ];
     }
 
@@ -85,15 +85,15 @@ class StoreRequest extends FormRequest
     {
         return [
             'name.required' => 'Nome é obrigatório',
-            'street.required' => 'Rua é obrigatório!',
-            'neighborhood.required' => 'Bairro é obrigatório!',
-            'number.required' => 'Número é obrigatório!',
-            'zipcode.required' => 'CEP é obrigatório!',
-            'city.required' => 'Cidade é obrigatório!',
-            'state.required' => 'Estado é obrigatório!',
             'email.required' => 'Email é obrigatório!',
             'logo.required' => 'Logo é obrigatório!',
             'logo.mimes' => 'Formato de imagem inválido, deve ser jpeg, png, jpg, gif ou svg',
+            'address.zipcode.required' => 'CEP é obrigatório!',
+            'address.street.required' => 'Rua é obrigatório!',
+            'address.number.required' => 'Número é obrigatório!',
+            'address.neighborhood.required' => 'Bairro é obrigatório!',
+            'address.state.required' => 'Estado é obrigatório!',
+            'address,city.required' => 'Cidade é obrigatório!',
         ];
     }
 
