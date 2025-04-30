@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreRequest;
-use App\Http\Resources\Product\IndexResource;
-use App\Http\Resources\Product\ShowResource;
+use App\Http\Resources\Product\{
+    IndexResource,
+    ShowResource,
+};
 use App\Models\{
     Category,
     Provider,
