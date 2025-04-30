@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreRequest;
+use App\Http\Resources\Product\IndexResource;
 use App\Http\Resources\Product\ShowResource;
 use App\Models\{
     Category,
@@ -30,9 +31,7 @@ class ProductController extends Controller
         try {
             $products = Product::with(['provider', 'category'])->get();
 
-            return response()->json([
-                'results' => $products,
-            ], 200);
+            return IndexResource::collection($products);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar produtos: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao buscar produtos: ' . $e->getMessage()], 500);
@@ -42,7 +41,7 @@ class ProductController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $existingProduct = Product::where('nome', $request->nome)->first();
+            $existingProduct = Product::where('name', $request->name)->first();
 
             if ($existingProduct) {
                 return response()->json([
@@ -50,19 +49,19 @@ class ProductController extends Controller
                 ], 400);
             }
 
-            $imageName = Str::random(32) . "." . $request->foto->getClientOriginalExtension();
-            $imageUrl = $this->firebaseStorage->uploadFile($request->foto, $imageName);
+            $imageName = Str::random(32) . "." . $request->photo->getClientOriginalExtension();
+            $imageUrl = $this->firebaseStorage->uploadFile($request->photo, $imageName);
 
             Product::create([
-                'nome' => $request->nome,
-                'descricao' => $request->descricao,
-                'comprimento' => $request->comprimento ?? "",
-                'altura' => $request->altura ?? "",
-                'profundidade' => $request->profundidade ?? "",
-                'peso' => $request->peso ?? "",
-                'linha' => $request->linha ?? "",
-                'materiais' => $request->materiais ?? "",
-                'foto' => $imageName,
+                'name' => $request->name,
+                'description' => $request->description,
+                'length' => $request->length ?? "",
+                'height' => $request->height ?? "",
+                'depth' => $request->depth ?? "",
+                'weight' => $request->weight ?? "",
+                'line' => $request->line ?? "",
+                'materials' => $request->materials ?? "",
+                'photo' => $imageName,
                 'id_provider' => $request->id_provider,
                 'id_category' => $request->id_category,
             ]);
@@ -103,23 +102,23 @@ class ProductController extends Controller
             }
 
             $product->update([
-                'nome' => $request->nome,
-                'descricao' => $request->descricao,
-                'comprimento' => $request->comprimento ?? "",
-                'altura' => $request->altura ?? "",
-                'profundidade' => $request->profundidade ?? "",
-                'peso' => $request->peso ?? "",
-                'linha' => $request->linha ?? "",
-                'materiais' => $request->materiais ?? "",
+                'name' => $request->name,
+                'description' => $request->description,
+                'length' => $request->length ?? "",
+                'height' => $request->height ?? "",
+                'depth' => $request->depth ?? "",
+                'weight' => $request->weight ?? "",
+                'line' => $request->line ?? "",
+                'materials' => $request->materials ?? "",
                 'id_provider' => $request->id_provider,
                 'id_category' => $request->id_category,
             ]);
 
-            if ($request->hasFile('foto')) {
-                $this->firebaseStorage->deleteFile($product->foto);
-                $imageName = Str::random(32) . "." . $request->foto->getClientOriginalExtension();
-                $imageUrl = $this->firebaseStorage->uploadFile($request->foto, $imageName);
-                $product->update(['foto' => $imageName]);
+            if ($request->hasFile('photo')) {
+                $this->firebaseStorage->deleteFile($product->photo);
+                $imageName = Str::random(32) . "." . $request->photo->getClientOriginalExtension();
+                $imageUrl = $this->firebaseStorage->uploadFile($request->photo, $imageName);
+                $product->update(['photo' => $imageName]);
             }
 
             $imageUrl = isset($imageUrl) ? $imageUrl : null;
@@ -143,7 +142,7 @@ class ProductController extends Controller
 
             $this
                 ->firebaseStorage
-                ->deleteFile($product->foto);
+                ->deleteFile($product->photo);
 
             $product->delete();
 

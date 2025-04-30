@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',
@@ -26,31 +26,31 @@ class StoreRequest extends FormRequest
                 'string',
                 'regex:/^[0-9]{14}$/',
             ],
-            'rua' => [
+            'street' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'bairro' => [
+            'neighborhood' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'numero' => [
+            'number' => [
                 'required',
                 'integer',
             ],
-            'cep' => [
+            'zipcode' => [
                 'required',
                 'string',
                 'regex:/^[0-9]{8}',
             ],
-            'cidade' => [
+            'city' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'estado' => [
+            'state' => [
                 'required',
                 'string',
                 'max:2',
@@ -64,11 +64,11 @@ class StoreRequest extends FormRequest
                 'string',
                 'email',
             ],
-            'telefone' => [
+            'phone' => [
                 'nullable',
                 'string',
             ],
-            'celular' => [
+            'cellphone' => [
                 'nullable',
                 'string',
             ],
@@ -84,13 +84,13 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'nome.required' => 'Nome é obrigatório',
-            'rua.required' => 'Rua é obrigatório!',
-            'bairro.required' => 'Bairro é obrigatório!',
-            'numero.required' => 'Número é obrigatório!',
-            'cep.required' => 'CEP é obrigatório!',
-            'cidade.required' => 'Cidade é obrigatório!',
-            'estado.required' => 'Estado é obrigatório!',
+            'name.required' => 'Nome é obrigatório',
+            'street.required' => 'Rua é obrigatório!',
+            'neighborhood.required' => 'Bairro é obrigatório!',
+            'number.required' => 'Número é obrigatório!',
+            'zipcode.required' => 'CEP é obrigatório!',
+            'city.required' => 'Cidade é obrigatório!',
+            'state.required' => 'Estado é obrigatório!',
             'email.required' => 'Email é obrigatório!',
             'logo.required' => 'Logo é obrigatório!',
             'logo.mimes' => 'Formato de imagem inválido, deve ser jpeg, png, jpg, gif ou svg',

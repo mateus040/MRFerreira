@@ -13,7 +13,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome'
+        'name'
     ];
 
     protected $keyType = 'string';

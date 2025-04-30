@@ -16,7 +16,7 @@ class IndexResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nome' => $this->nome,
+            'name' => $this->name,
         ];
     }
 }

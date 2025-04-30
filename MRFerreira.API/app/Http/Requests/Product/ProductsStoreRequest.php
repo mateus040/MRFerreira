@@ -16,46 +16,46 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'descricao' => [
+            'description' => [
                 'required',
                 'string',
             ],
-            'comprimento' => [
+            'length' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-            'altura' => [
+            'height' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-            'profundidade' => [
+            'depth' => [
                 'nullable',
                 'string',
                 'max:255',                
             ],
-            'peso' => [
+            'weight' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-            'linha' => [
+            'line' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-            'materiais' => [
+            'materials' => [
                 'nullable',
                 'string',
                 'max:255',
             ],
-            'foto' => [
+            'photo' => [
                 'sometimes',
                 'image',
                 'mimes:jpeg,png,jpg,gif,svg,webp',
@@ -71,10 +71,10 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'nome.required' => 'Nome é obrigatório!',
-            'descricao.required' => 'Descrição é obrigatório!',
-            'foto.required' => 'Foto é obrigatório!',
-            'foto.mimes' => 'Formato de imagem inválido, deve ser jpeg, png, jpg, gif ou svg',
+            'name.required' => 'Nome é obrigatório!',
+            'description.required' => 'Descrição é obrigatório!',
+            'photo.required' => 'Foto é obrigatório!',
+            'photo.mimes' => 'Formato de imagem inválido, deve ser jpeg, png, jpg, gif ou svg',
             'id_provider.required' => 'O fornecedor selecionado não existe!'
         ];
     }
