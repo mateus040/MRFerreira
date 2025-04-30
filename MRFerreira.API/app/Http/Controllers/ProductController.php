@@ -42,8 +42,10 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
+        $validated = $request->validated();
+
         try {
-            $existingProduct = Product::where('name', $request->name)->first();
+            $existingProduct = Product::where('name', $validated['name'])->first();
 
             if ($existingProduct) {
                 return response()->json([
@@ -51,21 +53,24 @@ class ProductController extends Controller
                 ], 400);
             }
 
-            $imageName = Str::random(32) . "." . $request->photo->getClientOriginalExtension();
-            $imageUrl = $this->firebaseStorage->uploadFile($request->photo, $imageName);
+            $imageName = Str::random(32) . "." . $validated['photo']->getClientOriginalExtension();
+
+            $imageUrl = $this
+                ->firebaseStorage
+                ->uploadFile($validated['photo'], $imageName);
 
             Product::create([
-                'name' => $request->name,
-                'description' => $request->description,
-                'length' => $request->length ?? "",
-                'height' => $request->height ?? "",
-                'depth' => $request->depth ?? "",
-                'weight' => $request->weight ?? "",
-                'line' => $request->line ?? "",
-                'materials' => $request->materials ?? "",
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'length' => $validated['length'] ?? "",
+                'height' => $validated['height'] ?? "",
+                'depth' => $validated['depth'] ?? "",
+                'weight' => $validated['weight'] ?? "",
+                'line' => $validated['line'] ?? "",
+                'materials' => $validated['materials'] ?? "",
                 'photo' => $imageName,
-                'id_provider' => $request->id_provider,
-                'id_category' => $request->id_category,
+                'id_provider' => $validated['id_provider'],
+                'id_category' => $validated['id_category'],
             ]);
 
             return response()->json([
@@ -95,6 +100,8 @@ class ProductController extends Controller
 
     public function update(StoreRequest $request, $id)
     {
+        $validated = $request->validated();
+
         try {
             $product = Product::find($id);
             if (!$product) {
@@ -104,22 +111,29 @@ class ProductController extends Controller
             }
 
             $product->update([
-                'name' => $request->name,
-                'description' => $request->description,
-                'length' => $request->length ?? "",
-                'height' => $request->height ?? "",
-                'depth' => $request->depth ?? "",
-                'weight' => $request->weight ?? "",
-                'line' => $request->line ?? "",
-                'materials' => $request->materials ?? "",
-                'id_provider' => $request->id_provider,
-                'id_category' => $request->id_category,
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'length' => $validated['length'] ?? "",
+                'height' => $validated['height'] ?? "",
+                'depth' => $validated['depth'] ?? "",
+                'weight' => $validated['weight'] ?? "",
+                'line' => $validated['line'] ?? "",
+                'materials' => $validated['materials'] ?? "",
+                'id_provider' => $validated['id_provider'],
+                'id_category' => $validated['id_category'],
             ]);
 
             if ($request->hasFile('photo')) {
-                $this->firebaseStorage->deleteFile($product->photo);
-                $imageName = Str::random(32) . "." . $request->photo->getClientOriginalExtension();
-                $imageUrl = $this->firebaseStorage->uploadFile($request->photo, $imageName);
+                $this
+                    ->firebaseStorage
+                    ->deleteFile($product->photo);
+
+                $imageName = Str::random(32) . "." . $validated['photo']->getClientOriginalExtension();
+
+                $imageUrl = $this
+                    ->firebaseStorage
+                    ->uploadFile($validated['photo'], $imageName);
+
                 $product->update(['photo' => $imageName]);
             }
 
@@ -148,9 +162,7 @@ class ProductController extends Controller
 
             $product->delete();
 
-            return response()->json([
-                'message' => 'Produto deletado com sucesso!'
-            ], 200);
+            return response()->noContent();
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Produto não encontrado.'], 404);
         } catch (\Exception $e) {
