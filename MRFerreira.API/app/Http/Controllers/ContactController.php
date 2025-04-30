@@ -12,7 +12,9 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        Mail::to('mrferreirarepresentacao@hotmail.com')->send(new ContactMail(
+        $recipientEmail = env('MAIL_RECIPIENT');
+
+        Mail::to($recipientEmail)->send(new ContactMail(
             $validated['nome'],
             $validated['email'],
             $validated['descricao']

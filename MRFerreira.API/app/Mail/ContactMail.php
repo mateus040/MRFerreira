@@ -60,7 +60,9 @@ class ContactMail extends Mailable
 
     public function build()
     {
-        return $this->from('suporte.mrferreira@gmail.com') // O endereço que enviará o e-mail
+        $senderEmail = env('MAIL_USERNAME');
+
+        return $this->from($senderEmail) // O endereço que enviará o e-mail
             ->replyTo($this->email) // O endereço para o qual as respostas devem ser enviadas
             ->subject('Novo contato de ' . $this->nome)
             ->view('emails.contact')
