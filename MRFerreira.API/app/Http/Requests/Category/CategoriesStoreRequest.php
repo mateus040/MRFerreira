@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',
@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'nome.required' => 'Nome é obrigatório',
+            'name.required' => 'Nome é obrigatório',
         ];
     }
 

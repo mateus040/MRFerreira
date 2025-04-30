@@ -16,15 +16,15 @@ class Product extends Model
     protected $fillable = [
         'id_provider',
         'id_category',
-        'nome',
-        'descricao',
-        'comprimento',
-        'altura',
-        'profundidade',
-        'linha',
-        'materiais',
-        'peso',
-        'foto',
+        'name',
+        'description',
+        'length',
+        'height',
+        'depth',
+        'weight',
+        'line',
+        'materials',
+        'photo',
     ];
 
     protected $keyType = 'string';
@@ -47,7 +47,7 @@ class Product extends Model
     public function getFotoUrlAttribute()
     {
         $firebaseStorage = app(FirebaseStorageService::class);
-        return $firebaseStorage->getFileUrl($this->foto);
+        return $firebaseStorage->getFileUrl($this->photo);
     }
 
     public function provider()

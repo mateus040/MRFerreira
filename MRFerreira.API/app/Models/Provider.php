@@ -14,18 +14,18 @@ class Provider extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nome',
+        'name',
         'cnpj',
-        'rua',
-        'bairro',
-        'numero',
-        'cep',
-        'cidade',
-        'estado',
-        'complemento',
+        'street',
+        'neighborhood',
+        'number',
+        'zipcode',
+        'city',
+        'state',
+        'complement',
         'email',
-        'telefone',
-        'celular',
+        'phone',
+        'cellphone',
         'logo',
     ];
 

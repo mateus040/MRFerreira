@@ -28,7 +28,7 @@ class CategoryController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            $existingCategory = Category::where('nome', $request->nome)->first();
+            $existingCategory = Category::where('name', $request->name)->first();
 
             if ($existingCategory) {
                 return response()->json([
@@ -37,7 +37,7 @@ class CategoryController extends Controller
             }
 
             Category::create([
-                'nome' => $request->nome,
+                'name' => $request->name,
             ]);
 
             return response()->json([
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
 
             $category->update([
-                'nome' => $request->nome,
+                'name' => $request->name,
             ]);
 
             return response()->json([

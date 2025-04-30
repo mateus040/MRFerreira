@@ -51,18 +51,18 @@ class ProviderController extends Controller
             $imageUrl = $this->firebaseStorage->uploadFile($request->logo, $imageName);
 
             Provider::create([
-                'nome' => $request->nome,
+                'name' => $request->name,
                 'cnpj' => $request->cnpj ?? null,
-                'rua' => $request->rua,
-                'bairro' => $request->bairro,
-                'numero' => $request->numero,
-                'cep' => $request->cep,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'complemento' => $request->complemento ?? null,
+                'street' => $request->street,
+                'neighborhood' => $request->neighborhood,
+                'number' => $request->number,
+                'zipcode' => $request->zipcode,
+                'city' => $request->city,
+                'state' => $request->state,
+                'complement' => $request->complement ?? null,
                 'email' => $request->email,
-                'telefone' => $request->telefone ?? null,
-                'celular' => $request->celular ?? null,
+                'phone' => $request->phone ?? null,
+                'cellphone' => $request->cellphone ?? null,
                 'logo' => $imageName,
             ]);
 
@@ -96,18 +96,18 @@ class ProviderController extends Controller
             $provider = Provider::findOrFail($id);
 
             $provider->update([
-                'nome' => $request->nome,
+                'name' => $request->name,
                 'cnpj' => $request->cnpj,
-                'rua' => $request->rua,
-                'bairro' => $request->bairro,
-                'numero' => $request->numero,
-                'cep' => $request->cep,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'complemento' => $request->complemento,
+                'street' => $request->street,
+                'neighborhood' => $request->neighborhood,
+                'number' => $request->number,
+                'zipcode' => $request->zipcode,
+                'city' => $request->city,
+                'state' => $request->state,
+                'complement' => $request->complement,
                 'email' => $request->email,
-                'telefone' => $request->telefone,
-                'celular' => $request->celular,
+                'phone' => $request->phone,
+                'cellphone' => $request->cellphone,
             ]);
 
             // Verifica se foi feito upload de uma nova imagem
