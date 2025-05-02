@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\{
     Factories\HasFactory,
+    Relations\MorphMany,
     Model,
 };
 use Illuminate\Support\Str;
@@ -60,4 +61,9 @@ class Provider extends Model
     protected $casts = [
         'created_at' => 'datetime',
     ];
+
+    public function addresses(): MorphMany
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
 }
