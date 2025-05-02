@@ -34,10 +34,8 @@ class CategoryController extends Controller
         ], HttpResponse::HTTP_CREATED);
     }
 
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = Category::findOrFail($id);
-
         return app(ShowResource::class, ['resource' => $category]);
     }
 
