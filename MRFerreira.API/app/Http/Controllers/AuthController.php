@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\{
     Auth,
     Hash,
-    Log,
 };
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Carbon\Carbon;

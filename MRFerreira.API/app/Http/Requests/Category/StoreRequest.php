@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreRequest extends FormRequest
 {
@@ -19,22 +17,9 @@ class StoreRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:128',
+                'unique:categories,name',
             ],
         ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Nome é obrigatório',
-        ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'message' => $validator->errors()
-        ], 422));
     }
 }
