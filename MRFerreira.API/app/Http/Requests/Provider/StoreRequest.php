@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
                 'regex:/^[0-9]{14}$/',
+                'unique:providers.cnpj',
             ],
             'street' => [
                 'required',

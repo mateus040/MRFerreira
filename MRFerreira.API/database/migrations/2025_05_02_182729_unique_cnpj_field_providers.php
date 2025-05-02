@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->unique('name');
+        Schema::table('providers', function (Blueprint $table) {
+            $table->unique('cnpj');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropUnique(['name']);
+        Schema::table('providers', function (Blueprint $table) {
+            $table->dropUnique(['cnpj']);
         });
     }
 };
