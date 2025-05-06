@@ -13,20 +13,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->morphs('addressable');
+            $table->string('name', 128);
             $table
-                ->string('zipcode', 8)
+                ->string('cnpj', 14)
+                ->unique()
                 ->nullable();
-            $table->string('street', 256);
-            $table->string('number', 4);
-            $table->string('neighborhood', 256);
-            $table->string('state', 32);
-            $table->string('city', 64);
+            $table->string('email');
             $table
-                ->string('complement', 256)
+                ->string('phone', 15)
                 ->nullable();
+            $table
+                ->string('cellphone', 15)
+                ->nullable();
+            $table->text('logo');
             $table->timestamps();
         });
     }
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('providers');
     }
 };

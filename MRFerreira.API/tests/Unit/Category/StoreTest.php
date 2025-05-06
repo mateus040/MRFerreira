@@ -97,7 +97,7 @@ class StoreTest extends CustomTestCase
             ],
         ];
 
-        yield 'min size or empty' => [
+        yield 'empty' => [
             [
                 'name' => '',
             ],

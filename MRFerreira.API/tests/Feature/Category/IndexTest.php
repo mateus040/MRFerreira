@@ -14,8 +14,6 @@ class IndexTest extends CustomTestCase
     #[Test]
     public function returnStatusCode200WhenRequestIsSuccessfully(): void
     {
-        Category::factory()->create();
-
         $response = $this->getJson(self::ENDPOINT);
 
         $response

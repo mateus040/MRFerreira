@@ -39,10 +39,8 @@ class CategoryController extends Controller
         return app(ShowResource::class, ['resource' => $category]);
     }
 
-    public function update(StoreRequest $request, $id)
+    public function update(StoreRequest $request, Category $category)
     {
-        $category = Category::findOrFail($id);
-
         $category->update([
             'name' => $request->name,
         ]);
@@ -50,10 +48,8 @@ class CategoryController extends Controller
         return response()->noContent();
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
-
         $category->delete();
 
         return response()->noContent();

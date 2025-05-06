@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/categories')->group(function () {
         Route::post('/', [CategoryController::class, 'store']);
 
-        Route::prefix('/{id}')->group(function () {
+        Route::prefix('/{category}')->group(function () {
             Route::put('/', [CategoryController::class, 'update']);
             Route::delete('/', [CategoryController::class, 'destroy']);
         });
@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/providers')->group(function () {
         Route::post('/', [ProviderController::class, 'store']);
 
-        Route::prefix('/{id}')->group(function () {
+        Route::prefix('/{provider}')->group(function () {
             Route::put('/', [ProviderController::class, 'update']);
             Route::delete('/', [ProviderController::class, 'destroy']);
         });
@@ -70,7 +70,7 @@ Route::prefix('/products')->group(function () {
 
 Route::prefix('/providers')->group(function () {
     Route::get('/', [ProviderController::class, 'index']);
-    Route::get('/{id}', [ProviderController::class, 'show']);
+    Route::get('/{provider}', [ProviderController::class, 'show']);
 });
 
 Route::get('/providers/{id}/products', [ProductController::class, 'productsByCompany']);

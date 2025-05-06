@@ -19,7 +19,7 @@ class StoreRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'description' => [
                 'required',
@@ -28,32 +28,31 @@ class StoreRequest extends FormRequest
             'length' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'height' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'depth' => [
                 'nullable',
                 'string',
-                'max:255',                
+                'max:256',                
             ],
             'weight' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'line' => [
                 'nullable',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'materials' => [
                 'nullable',
                 'string',
-                'max:255',
             ],
             'photo' => [
                 'sometimes',

@@ -60,13 +60,15 @@ class UpdateTest extends CustomTestCase
     #[Test]
     public function returnStatusCode422WhenFieldsHaveAnError(): void
     {
+        $category = Category::factory()->create();
+
         $fieldWithErrors = [
             'name',
         ];
 
         $response = $this
             ->withoutMiddleware(Authenticate::class)
-            ->postJson(self::ENDPOINT, []);
+            ->putJson(self::ENDPOINT . '/' . $category->id, []);
 
         $response
             ->assertUnprocessable()

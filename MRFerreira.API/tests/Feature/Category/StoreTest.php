@@ -48,6 +48,22 @@ class StoreTest extends CustomTestCase
     }
 
     #[Test]
+    public function returnStatusCode422WhenANewCategoryHasADuplicateName(): void
+    {
+        $category = Category::factory()->create();
+
+        $categoryNameDuplicate = Category::factory()->make([
+            'name' => $category->name,
+        ]);
+
+        $response = $this
+            ->withoutMiddleware(Authenticate::class)
+            ->postJson(self::ENDPOINT, $categoryNameDuplicate->getAttributes());
+
+        $response->assertUnprocessable();
+    }
+
+    #[Test]
     public function checkIfTheCategoryIsSavedInTheDatabase(): void
     {
         $category = Category::factory()->make();
@@ -66,21 +82,5 @@ class StoreTest extends CustomTestCase
                 'name' => $body['name'],
             ]
         );
-    }
-
-    #[Test]
-    public function returnStatusCode422WhenANewCategoryHasADuplicateName(): void
-    {
-        $category = Category::factory()->create();
-
-        $categoryNameDuplicate = Category::factory()->make([
-            'name' => $category->name,
-        ]);
-
-        $response = $this
-            ->withoutMiddleware(Authenticate::class)
-            ->postJson(self::ENDPOINT, $categoryNameDuplicate->getAttributes());
-
-        $response->assertUnprocessable();
     }
 }

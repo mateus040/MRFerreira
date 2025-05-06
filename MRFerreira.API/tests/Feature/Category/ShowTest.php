@@ -29,7 +29,6 @@ class ShowTest extends CustomTestCase
     }
 
     #[Test]
-    /** @test */
     public function returnStatusCode404IfCategoryNotExists(): void
     {
         $response = $this->getJson(self::ENDPOINT . '/0');
