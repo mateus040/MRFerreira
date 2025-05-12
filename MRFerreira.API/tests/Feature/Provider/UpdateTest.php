@@ -160,7 +160,7 @@ class UpdateTest extends CustomTestCase
             $mock->shouldReceive('deleteFile')->andReturnTrue();
         });
 
-        $response = $this
+        $this
             ->withoutMiddleware(Authenticate::class)
             ->putJson(self::ENDPOINT . '/' . $provider->id, $body);
 

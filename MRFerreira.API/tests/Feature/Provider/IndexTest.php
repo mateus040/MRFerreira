@@ -101,7 +101,7 @@ class IndexTest extends CustomTestCase
     }
 
     #[Test]
-    public function checkIfDeletedCategoriesAreNotReturned(): void
+    public function checkIfDeletedProviderAreNotReturned(): void
     {
         $provider = Provider::factory()
             ->has(Address::factory())

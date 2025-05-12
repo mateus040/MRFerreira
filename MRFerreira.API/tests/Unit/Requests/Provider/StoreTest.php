@@ -224,7 +224,6 @@ class StoreTest extends CustomTestCase
             [],
             [
                 'name',
-                'name',
                 'email',
                 'address.zipcode',
                 'address.street',

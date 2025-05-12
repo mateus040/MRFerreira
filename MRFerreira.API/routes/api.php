@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/products')->group(function () {
         Route::post('/', [ProductController::class, 'store']);
 
-        Route::prefix('/{id}')->group(function () {
+        Route::prefix('/{product}')->group(function () {
             Route::put('/', [ProductController::class, 'update']);
             Route::delete('/', [ProductController::class, 'destroy']);
         });
@@ -65,7 +65,7 @@ Route::prefix('/categories')->group(function () {
 
 Route::prefix('/products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
-    Route::get('/{id}', [ProductController::class, 'show']);
+    Route::get('/{product}', [ProductController::class, 'show']);
 });
 
 Route::prefix('/providers')->group(function () {

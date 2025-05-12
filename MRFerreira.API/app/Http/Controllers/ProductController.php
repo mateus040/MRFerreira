@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ResponseException;
+use App\Helpers\ExceptionHelper;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Resources\Product\{
     IndexResource,
@@ -16,8 +18,10 @@ use Illuminate\Support\{
     Facades\Log,
     Str,
 };
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\FirebaseStorageService;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -30,36 +34,25 @@ class ProductController extends Controller
 
     public function index()
     {
-        try {
-            $products = Product::with(['provider', 'category'])->get();
+        $products = Product::with(['provider', 'category'])->get();
 
-            return IndexResource::collection($products);
-        } catch (\Exception $e) {
-            Log::error('Erro ao buscar produtos: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao buscar produtos: ' . $e->getMessage()], 500);
-        }
+        return IndexResource::collection($products);
     }
 
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 
+        DB::beginTransaction();
+
         try {
-            $existingProduct = Product::where('name', $validated['name'])->first();
-
-            if ($existingProduct) {
-                return response()->json([
-                    'message' => 'Produto já registrado.'
-                ], 400);
-            }
-
             $imageName = Str::random(32) . "." . $validated['photo']->getClientOriginalExtension();
 
-            $imageUrl = $this
+            $this
                 ->firebaseStorage
                 ->uploadFile($validated['photo'], $imageName);
 
-            Product::create([
+            $product = Product::create([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
                 'length' => $validated['length'] ?? "",
@@ -73,43 +66,36 @@ class ProductController extends Controller
                 'id_category' => $validated['id_category'],
             ]);
 
+            DB::commit();
+
             return response()->json([
-                'message' => "Produto cadastrado com sucesso!",
-                'imageUrl' => $imageUrl
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao cadastrar produto: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao cadastrar produto: ' . $e->getMessage()], 500);
+                'data' => [
+                    'id' => $product->id,
+                ],
+            ], HttpResponse::HTTP_CREATED);
+        } catch (Throwable $th) {
+            DB::rollBack();
+
+            throw app(
+                ResponseException::class,
+                ['message' => ExceptionHelper::getExceptionMessage($th)],
+            );
         }
     }
 
-    public function show($id)
+    public function show(Product $product)
     {
-        try {
-            $product = Product::with(['category', 'provider'])->findOrFail($id);
-
-            return app(ShowResource::class, ['resource' => $product]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Produto não encontrado.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar produto: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornar produtos: ' . $e->getMessage()], 500);
-        }
+        return app(ShowResource::class, ['resource' => $product]);
     }
 
 
-    public function update(StoreRequest $request, $id)
+    public function update(StoreRequest $request, Product $product)
     {
         $validated = $request->validated();
 
-        try {
-            $product = Product::find($id);
-            if (!$product) {
-                return response()->json([
-                    'message' => 'Produto não encontrado.'
-                ], 404);
-            }
+        DB::beginTransaction();
 
+        try {
             $product->update([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
@@ -130,45 +116,35 @@ class ProductController extends Controller
 
                 $imageName = Str::random(32) . "." . $validated['photo']->getClientOriginalExtension();
 
-                $imageUrl = $this
+                $this
                     ->firebaseStorage
                     ->uploadFile($validated['photo'], $imageName);
 
                 $product->update(['photo' => $imageName]);
             }
 
-            $imageUrl = isset($imageUrl) ? $imageUrl : null;
+            DB::commit();
 
-            return response()->json([
-                'message' => "Produto atualizado com sucesso!",
-                'imageUrl' => $imageUrl,
-            ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Produto não encontrado.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao atualizar produto: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao atualizar produto: ' . $e->getMessage()], 500);
+            return response()->noContent();
+        } catch (Throwable $th) {
+            DB::rollBack();
+
+            throw app(
+                ResponseException::class,
+                ['message' => ExceptionHelper::getExceptionMessage($th)],
+            );
         }
     }
 
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        try {
-            $product = Product::findOrFail($id);
+        $this
+            ->firebaseStorage
+            ->deleteFile($product->photo);
 
-            $this
-                ->firebaseStorage
-                ->deleteFile($product->photo);
+        $product->delete();
 
-            $product->delete();
-
-            return response()->noContent();
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Produto não encontrado.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao excluir produto: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao excluir produto: ' . $e->getMessage()], 500);
-        }
+        return response()->noContent();
     }
 
     public function productsByCompany($id)
