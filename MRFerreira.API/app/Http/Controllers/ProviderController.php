@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ResponseException;
+use App\Helpers\ExceptionHelper;
 use App\Http\Requests\Provider\StoreRequest;
 use App\Http\Resources\Provider\{
     IndexResource,
@@ -10,11 +12,11 @@ use App\Http\Resources\Provider\{
 use App\Models\Provider;
 use App\Services\FirebaseStorageService;
 use Illuminate\Support\{
-    Facades\Log,
+    Facades\DB,
     Str,
 };
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Throwable;
 
 class ProviderController extends Controller
 {
@@ -27,14 +29,9 @@ class ProviderController extends Controller
 
     public function index()
     {
-        try {
-            $providers = Provider::get();
+        $providers = Provider::get();
 
-            return IndexResource::collection($providers);
-        } catch (\Exception $e) {
-            Log::error('Erro ao buscar empresas: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao buscar empresas: ' . $e->getMessage()], 500);
-        }
+        return IndexResource::collection($providers);
     }
 
     public function store(StoreRequest $request)
@@ -44,23 +41,16 @@ class ProviderController extends Controller
         DB::beginTransaction();
 
         try {
-            $existingCompany = Provider::where('cnpj', $validated['cnpj'])->first();
-
-            if ($existingCompany) {
-                return response()->json([
-                    'message' => 'Fornecedor já registrado.'
-                ], 400);
-            }
-
             $imageName = Str::random(32) . "." . $validated['logo']->getClientOriginalExtension();
-            $imageUrl = $this
+
+            $this
                 ->firebaseStorage
                 ->uploadFile($validated['logo'], $imageName);
 
             $provider = Provider::create([
                 'name' => $validated['name'],
                 'cnpj' => $validated['cnpj'] ?? null,
-                'email' => $validated['email'] ?? null,
+                'email' => $validated['email'],
                 'phone' => $validated['phone'] ?? null,
                 'cellphone' => $validated['cellphone'] ?? null,
                 'logo' => $imageName,
@@ -68,73 +58,48 @@ class ProviderController extends Controller
 
             $provider
                 ->addresses()
-                ->create([
-                    'zipcode' => $validated['zipcode'],
-                    'street' => $validated['street'],
-                    'neighborhood' => $validated['neighborhood'],
-                    'number' => $validated['number'],
-                    'state' => $validated['state'],
-                    'city' => $validated['city'],
-                    'complement' => $validated['complement'],
-                ]);
+                ->create($validated['address']);
 
             DB::commit();
 
             return response()->json([
-                'message' => "Empresa cadastrada com sucesso!",
-                'imageUrl' => $imageUrl
-            ], 200);
-        } catch (\Exception $e) {
+                'data' => [
+                    'id' => $provider->id,
+                ],
+            ], HttpResponse::HTTP_CREATED);
+        } catch (Throwable $th) {
             DB::rollBack();
 
-            Log::error('Erro ao cadastrar empresa: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao cadastrar empresa: ' . $e->getMessage()], 500);
+            throw app(
+                ResponseException::class,
+                ['message' => ExceptionHelper::getExceptionMessage($th)],
+            );
         }
     }
 
-    public function show($id)
+    public function show(Provider $provider)
     {
-        try {
-            $provider = Provider::findOrFail($id);
-
-            return app(ShowResource::class, ['resource' => $provider]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Empresa não encontrada.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar empresa: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornar empresa: ' . $e->getMessage()], 500);
-        }
+        return app(ShowResource::class, ['resource' => $provider]);
     }
 
-    public function update(StoreRequest $request, $id)
+    public function update(StoreRequest $request, Provider $provider)
     {
         $validated = $request->validated();
 
         DB::beginTransaction();
 
         try {
-            $provider = Provider::findOrFail($id);
-
             $provider->update([
                 'name' => $validated['name'],
-                'cnpj' => $validated['cnpj'],
+                'cnpj' => $validated['cnpj'] ?? null,
                 'email' => $validated['email'],
-                'phone' => $validated['phone'],
-                'cellphone' => $validated['cellphone'],
+                'phone' => $validated['phone'] ?? null,
+                'cellphone' => $validated['cellphone'] ?? null,
             ]);
 
-            // TODO: verificar se é obrigatório atualizar o endereço
             $provider
                 ->addresses()
-                ->update([
-                    'zipcode' => $validated['zipcode'],
-                    'street' => $validated['street'],
-                    'neighborhood' => $validated['neighborhood'],
-                    'number' => $validated['number'],
-                    'state' => $validated['state'],
-                    'city' => $validated['city'],
-                    'complement' => $validated['complement'],
-                ]);
+                ->update($validated['address']);
 
             // Verifica se foi feito upload de uma nova imagem
             if ($request->hasFile('logo')) {
@@ -144,50 +109,38 @@ class ProviderController extends Controller
 
                 $imageName = Str::random(32) . "." . $validated['logo']->getClientOriginalExtension();
 
-                $imageUrl = $this
+                $this
                     ->firebaseStorage
                     ->uploadFile($validated['logo'], $imageName);
 
                 $provider->update(['logo' => $imageName]);
             }
 
-            // Defina $imageUrl para evitar erro de variável não definida
-            $imageUrl = isset($imageUrl) ? $imageUrl : null;
-
             DB::commit();
 
-            return response()->json([
-                'message' => "Fornecedor atualizado com sucesso!",
-                'provider' => $provider,
-                'imageUrl' => $imageUrl,
-            ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Empresa não encontrada.'], 404);
-        } catch (\Exception $e) {
+            return response()->noContent();
+        } catch (Throwable $th) {
             DB::rollBack();
 
-            Log::error('Erro ao atualizar empresa: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao atualizar empresa: ' . $e->getMessage()], 500);
+            throw app(
+                ResponseException::class,
+                ['message' => ExceptionHelper::getExceptionMessage($th)],
+            );
         }
     }
 
-    public function destroy($id)
+    public function destroy(Provider $provider)
     {
-        try {
-            $provider = Provider::findOrFail($id);
+        $this
+            ->firebaseStorage
+            ->deleteFile($provider->logo);
 
-            $this
-                ->firebaseStorage
-                ->deleteFile($provider->logo);
-            
-            $provider->delete();
+        $provider->delete();
 
-            return response()->noContent();
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Empresa não encontrada.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao excluir empresa: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao excluir empresa: ' . $e->getMessage()], 500);
-        }
+        $provider
+            ->addresses()
+            ->delete();
+
+        return response()->noContent();
     }
 }

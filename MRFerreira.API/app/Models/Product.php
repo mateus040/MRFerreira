@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\{
     Factories\HasFactory,
     Model,
 };
-use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 
 class Product extends Model
@@ -26,21 +25,6 @@ class Product extends Model
         'materials',
         'photo',
     ];
-
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-    // Gerando UUID
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = Str::uuid()->toString();
-            }
-        });
-    }
 
     protected $appends = ['foto_url'];
 

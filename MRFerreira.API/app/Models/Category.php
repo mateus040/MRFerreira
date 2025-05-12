@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{
+    Relations\HasMany,
     Factories\HasFactory,
     Model,
 };
-use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -16,18 +16,8 @@ class Category extends Model
         'name'
     ];
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-    // Gerando UUID
-    public static function boot()
+    public function products(): HasMany
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = Str::uuid()->toString();
-            }
-        });
+        return $this->hasMany(Product::class, 'id_category');
     }
 }

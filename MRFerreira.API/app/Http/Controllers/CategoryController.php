@@ -8,98 +8,50 @@ use App\Http\Resources\Category\{
     ShowResource,
 };
 use App\Models\Category;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        try {
-            $categories = Category::get();
+        $categories = Category::get();
 
-            return IndexResource::collection($categories);
-        } catch (\Exception $e) {
-            Log::error('Erro ao buscar categorias: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao buscar categorias: ' . $e->getMessage()], 500);
-        }
+        return IndexResource::collection($categories);
     }
 
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 
-        try {
-            $existingCategory = Category::where('name', $validated['name'])->first();
+        $category = Category::create([
+            'name' => $validated['name'],
+        ]);
 
-            if ($existingCategory) {
-                return response()->json([
-                    'message' => 'Categoria já registrada.'
-                ], 400);
-            }
-
-            Category::create([
-                'name' => $validated['name'],
-            ]);
-
-            return response()->json([
-                'message' => "Categoria cadastrada com sucesso!",
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao cadastrar categoria: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao cadastrar categoria: ' . $e->getMessage()], 500);
-        }
+        return response()->json([
+            'data' => [
+                'id' => $category->id,
+            ],
+        ], HttpResponse::HTTP_CREATED);
     }
 
-    public function show($id)
+    public function show(Category $category)
     {
-        try {
-            $category = Category::findOrFail($id);
-
-            return app(ShowResource::class, ['resource' => $category]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar categoria: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornar categoria: ' . $e->getMessage()], 500);
-        }
+        return app(ShowResource::class, ['resource' => $category]);
     }
 
-    public function update(StoreRequest $request, $id)
+    public function update(StoreRequest $request, Category $category)
     {
-        $validated = $request->validated();
+        $category->update([
+            'name' => $request->name,
+        ]);
 
-        try {
-            $category = Category::findOrFail($id);
-
-            $category->update([
-                'name' => $validated['name'],
-            ]);
-
-            return response()->json([
-                'message' => "Categoria atualizada com sucesso!",
-            ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao atualizar categoria: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao atualizar categoria: ' . $e->getMessage()], 500);
-        }
+        return response()->noContent();
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        try {
-            $category = Category::findOrFail($id);
+        $category->delete();
 
-            $category->delete();
-
-            return response()->noContent();
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
-        } catch (\Exception $e) {
-            Log::error('Erro ao excluir categoria: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao excluir categoria: ' . $e->getMessage()], 500);
-        }
+        return response()->noContent();
     }
 }

@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
-            $table->string('zipcode', 8);
+            $table
+                ->string('zipcode', 8)
+                ->nullable();
             $table->string('street', 256);
             $table->string('number', 4);
             $table->string('neighborhood', 256);

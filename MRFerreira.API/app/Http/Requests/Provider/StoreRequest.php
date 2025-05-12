@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Provider;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreRequest extends FormRequest
 {
@@ -19,12 +17,13 @@ class StoreRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:128',
             ],
             'cnpj' =>[
                 'nullable',
                 'string',
                 'regex:/^[0-9]{14}$/',
+                'unique:providers,cnpj',
             ],
             'email' => [
                 'required',
@@ -34,10 +33,12 @@ class StoreRequest extends FormRequest
             'phone' => [
                 'nullable',
                 'string',
+                'max:15',
             ],
             'cellphone' => [
                 'nullable',
                 'string',
+                'max:15',
             ],
             'logo' => [
                 'sometimes',
@@ -48,59 +49,37 @@ class StoreRequest extends FormRequest
             'address.zipcode' => [
                 'required',
                 'string',
-                'regex:/^[0-9]{8}',
+                'regex:/^[0-9]{8}$/',
             ],
             'address.street' => [
                 'required',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'address.number' => [
                 'required',
                 'integer',
+                'regex:/^[1-9]{1,4}$/',
             ],
             'address.neighborhood' => [
                 'required',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'address.state' => [
                 'required',
                 'string',
-                'max:2',
+                'max:32',
             ],
             'address.city' => [
                 'required',
                 'string',
-                'max:255',
+                'max:256',
             ],
             'address.complement' => [
                 'nullable',
                 'string',
             ],
         ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Nome é obrigatório',
-            'email.required' => 'Email é obrigatório!',
-            'logo.required' => 'Logo é obrigatório!',
-            'logo.mimes' => 'Formato de imagem inválido, deve ser jpeg, png, jpg, gif ou svg',
-            'address.zipcode.required' => 'CEP é obrigatório!',
-            'address.street.required' => 'Rua é obrigatório!',
-            'address.number.required' => 'Número é obrigatório!',
-            'address.neighborhood.required' => 'Bairro é obrigatório!',
-            'address.state.required' => 'Estado é obrigatório!',
-            'address,city.required' => 'Cidade é obrigatório!',
-        ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'message' => $validator->errors()
-        ], 422));
     }
 }

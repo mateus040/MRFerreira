@@ -28,32 +28,52 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/providers/add', [ProviderController::class, 'store']);
-    Route::put('/providers/update/{id}', [ProviderController::class, 'update']);
-    Route::delete('/providers/delete/{id}', [ProviderController::class, 'destroy']);
+    Route::prefix('/categories')->group(function () {
+        Route::post('/', [CategoryController::class, 'store']);
 
+        Route::prefix('/{category}')->group(function () {
+            Route::put('/', [CategoryController::class, 'update']);
+            Route::delete('/', [CategoryController::class, 'destroy']);
+        });
+    });
 
-    Route::post('/products/add', [ProductController::class, 'store']);
-    Route::put('/products/update/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/delete/{id}', [ProductController::class, 'destroy']);
+    Route::prefix('/providers')->group(function () {
+        Route::post('/', [ProviderController::class, 'store']);
 
-    Route::post('/categories/add', [CategoryController::class, 'store']);
-    Route::put('/categories/update/{id}', [CategoryController::class, 'update']);
-    Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy']);
+        Route::prefix('/{provider}')->group(function () {
+            Route::put('/', [ProviderController::class, 'update']);
+            Route::delete('/', [ProviderController::class, 'destroy']);
+        });
+    });
+
+    Route::prefix('/products')->group(function () {
+        Route::post('/', [ProductController::class, 'store']);
+
+        Route::prefix('/{product}')->group(function () {
+            Route::put('/', [ProductController::class, 'update']);
+            Route::delete('/', [ProductController::class, 'destroy']);
+        });
+    });
 
     Route::get('/cards', [ProductController::class, 'getCards']);
 });
 
+Route::prefix('/categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::get('/{category}', [CategoryController::class, 'show']);
+});
+
+Route::prefix('/products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/{product}', [ProductController::class, 'show']);
+});
+
+Route::prefix('/providers')->group(function () {
+    Route::get('/', [ProviderController::class, 'index']);
+    Route::get('/{provider}', [ProviderController::class, 'show']);
+});
+
 Route::get('/providers/{id}/products', [ProductController::class, 'productsByCompany']);
-Route::get('/category/{id}', [ProductController::class, 'productsByCategory']);
-
-Route::get('/providers', [ProviderController::class, 'index']);
-Route::get('/providers/{id}', [ProviderController::class, 'show']);
-
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
-
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::get('/categories/{id}/products', [ProductController::class, 'productsByCategory']);
 
 Route::post('/send-email', [ContactController::class, 'sendEmail']);

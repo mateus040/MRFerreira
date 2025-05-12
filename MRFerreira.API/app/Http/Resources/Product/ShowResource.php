@@ -33,6 +33,7 @@ class ShowResource extends JsonResource
             'id_category' => $this->id_category,
             'provider' => $this->whenNotNull(app(ProviderResource::class, ['resource' => $this->provider])),
             'category' => $this->whenNotNull(app(CategoryResource::class, ['resource' => $this->category])),
+            'created_at' => $this->created_at->toDateTimeLocalString(),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Provider;
 
+use App\Http\Resources\Address\AddressResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,18 +19,13 @@ class ShowResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'cnpj' => $this->cnpj,
-            'street' => $this->street,
-            'neighborhood' => $this->neighborhood,
-            'number' => $this->number,
-            'zipcode' => $this->zipcode,
-            'state' => $this->state,
-            'city' => $this->city,
-            'complement' => $this->complement,
             'email' => $this->email,
             'phone' => $this->phone,
             'cellphone' => $this->cellphone,
             'logo' => $this->logo,
             'logo_url' => $this->logo_url,
+            'address' => $this->whenNotNull(app(AddressResource::class, ['resource' => $this->addresses->first()])),
+            'created_at' => $this->created_at->toDateTimeLocalString(),
         ];
     }
 }
