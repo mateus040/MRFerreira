@@ -81,11 +81,11 @@ class ShowTest extends CustomTestCase
         $response = $this->getJson(self::ENDPOINT . '/0');
 
         $response
-            ->assertNotFound();
-            // ->assertJson(
-            //     [
-            //         'message' => __('exceptions.not_found'),
-            //     ],
-            // );
+            ->assertNotFound()
+            ->assertJson(
+                [
+                    'message' => __('exceptions.not_found'),
+                ],
+            );
     }
 }
