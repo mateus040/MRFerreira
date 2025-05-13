@@ -21,12 +21,12 @@ use App\Http\Controllers\{
 |
 */
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/admin/register', [AuthController::class, 'register']);
+Route::post('/admin/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/me', [AuthController::class, 'me']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/admin/me', [AuthController::class, 'me']);
+    Route::post('/admin/logout', [AuthController::class, 'logout']);
 
     Route::prefix('/categories')->group(function () {
         Route::post('/', [CategoryController::class, 'store']);
