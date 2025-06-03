@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\{
 };
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 
 /**
  * @OA\Tag(
@@ -103,7 +106,7 @@ class AuthController extends Controller
      *     ),
      * )
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -155,7 +158,7 @@ class AuthController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function logout()
+    public function logout(): Response
     {
         $user = Auth::user();
 
@@ -199,7 +202,7 @@ class AuthController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function me()
+    public function me(): JsonResource
     {
         $user = Auth::user();
 

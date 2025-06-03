@@ -12,11 +12,17 @@ use App\Http\Resources\Provider\{
 };
 use App\Models\Provider;
 use App\Services\FirebaseStorageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\{
     Facades\DB,
     Str,
 };
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Illuminate\Http\Resources\Json\{
+    AnonymousResourceCollection,
+    JsonResource,
+};
+use Illuminate\Http\Response;
 use Throwable;
 
 /**
@@ -74,7 +80,7 @@ class ProviderController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $providers = Provider::get();
 
@@ -159,7 +165,7 @@ class ProviderController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -259,7 +265,7 @@ class ProviderController extends Controller
      *     )
      * )
      */
-    public function show(Provider $provider)
+    public function show(Provider $provider): JsonResource
     {
         return app(ShowResource::class, ['resource' => $provider]);
     }
@@ -353,7 +359,7 @@ class ProviderController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function update(StoreRequest $request, Provider $provider)
+    public function update(StoreRequest $request, Provider $provider): Response
     {
         $validated = $request->validated();
 
@@ -445,7 +451,7 @@ class ProviderController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function destroy(Provider $provider)
+    public function destroy(Provider $provider): Response
     {
         $this
             ->firebaseStorage

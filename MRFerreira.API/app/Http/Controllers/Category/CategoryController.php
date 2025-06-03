@@ -9,6 +9,12 @@ use App\Http\Resources\Category\{
     ShowResource,
 };
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\{
+    AnonymousResourceCollection,
+    JsonResource,
+};
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
@@ -42,7 +48,7 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $categories = Category::get();
 
@@ -111,7 +117,7 @@ class CategoryController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -166,7 +172,7 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function show(Category $category)
+    public function show(Category $category): JsonResource
     {
         return app(ShowResource::class, ['resource' => $category]);
     }
@@ -245,7 +251,7 @@ class CategoryController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function update(StoreRequest $request, Category $category)
+    public function update(StoreRequest $request, Category $category): Response
     {
         $category->update([
             'name' => $request->name,
@@ -299,7 +305,7 @@ class CategoryController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): Response
     {
         $category->delete();
 

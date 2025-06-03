@@ -19,8 +19,14 @@ use Illuminate\Support\{
     Str,
 };
 use App\Services\FirebaseStorageService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Resources\Json\{
+    AnonymousResourceCollection,
+    JsonResource,
+};
+use Illuminate\Http\Response;
 use Throwable;
 
 /**
@@ -102,7 +108,7 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $products = Product::with(['provider', 'category'])->get();
 
@@ -181,7 +187,7 @@ class ProductController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -306,7 +312,7 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function show(Product $product)
+    public function show(Product $product): JsonResource
     {
         return app(ShowResource::class, ['resource' => $product]);
     }
@@ -395,7 +401,7 @@ class ProductController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function update(StoreRequest $request, Product $product)
+    public function update(StoreRequest $request, Product $product): Response
     {
         $validated = $request->validated();
 
@@ -487,7 +493,7 @@ class ProductController extends Controller
      *     security={{"bearerAuth": {}}}
      * )
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): Response
     {
         $this
             ->firebaseStorage
