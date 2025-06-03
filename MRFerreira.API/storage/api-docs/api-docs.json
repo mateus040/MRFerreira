@@ -7,18 +7,18 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
+            "url": "http://127.0.0.1:8000",
             "description": "Servidor da API"
         }
     ],
     "paths": {
-        "/admin/login": {
+        "/api/admin/login": {
             "post": {
                 "tags": [
                     "Auth - Admin"
                 ],
                 "summary": "Logar como admin",
-                "operationId": "185c8bb891440b91646b8f6b9cf5cf79",
+                "operationId": "52072ab0ab3a6409abf44ae228659d79",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -112,13 +112,13 @@
                 }
             }
         },
-        "/admin/logout": {
+        "/api/admin/logout": {
             "post": {
                 "tags": [
                     "Auth - Admin"
                 ],
                 "summary": "Encerrar sessão",
-                "operationId": "5490f6f73efe10a780296f44e62806ba",
+                "operationId": "db8d26e4c798faabe0c89ea0adfc8c31",
                 "responses": {
                     "204": {
                         "description": "No Content",
@@ -154,13 +154,13 @@
                 ]
             }
         },
-        "/admin/me": {
+        "/api/admin/me": {
             "get": {
                 "tags": [
                     "Auth - Admin"
                 ],
                 "summary": "Exibir os dados do usuário autenticado",
-                "operationId": "7d8274168d6d5de4e4522b1b2c00b679",
+                "operationId": "e6fc6fb4968061bf7b2782895d7faf8c",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -580,6 +580,681 @@
                 ]
             }
         },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Listar produtos",
+                "operationId": "1bfaa78d1c2c3848ab8165c5dadcad3e",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "length": {
+                                                        "type": "string"
+                                                    },
+                                                    "height": {
+                                                        "type": "string"
+                                                    },
+                                                    "depth": {
+                                                        "type": "string"
+                                                    },
+                                                    "weight": {
+                                                        "type": "string"
+                                                    },
+                                                    "line": {
+                                                        "type": "string"
+                                                    },
+                                                    "materials": {
+                                                        "type": "string"
+                                                    },
+                                                    "photo": {
+                                                        "type": "string"
+                                                    },
+                                                    "id_provider": {
+                                                        "type": "integer"
+                                                    },
+                                                    "id_category": {
+                                                        "type": "integer"
+                                                    },
+                                                    "provider": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "cnpj": {
+                                                                "type": "string"
+                                                            },
+                                                            "email": {
+                                                                "type": "string"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string"
+                                                            },
+                                                            "cellphone": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo_url": {
+                                                                "type": "string"
+                                                            },
+                                                            "address": {
+                                                                "properties": {
+                                                                    "zipcode": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "street": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "neighborhood": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "number": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "state": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "city": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "complement": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "category": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-25T15:30:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Cadastrar um novo produto",
+                "operationId": "e8185e307706e2cd84bbcf5171e2f09d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "photo",
+                                    "id_provider",
+                                    "id_category"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Produto 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Descrição do produto"
+                                    },
+                                    "length": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "height": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "depth": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "weight": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "line": {
+                                        "type": "string",
+                                        "example": "Linha do produto"
+                                    },
+                                    "materials": {
+                                        "type": "string",
+                                        "example": "Materiais do produto"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "id_provider": {
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "id_category": {
+                                        "type": "integer",
+                                        "example": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{product}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Visualizar os dados de um produto",
+                "operationId": "05f6ffcb49f47b4f4fc1a1c21ed60011",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "length": {
+                                                    "type": "string"
+                                                },
+                                                "height": {
+                                                    "type": "string"
+                                                },
+                                                "depth": {
+                                                    "type": "string"
+                                                },
+                                                "weight": {
+                                                    "type": "string"
+                                                },
+                                                "line": {
+                                                    "type": "string"
+                                                },
+                                                "materials": {
+                                                    "type": "string"
+                                                },
+                                                "photo": {
+                                                    "type": "string"
+                                                },
+                                                "id_provider": {
+                                                    "type": "integer"
+                                                },
+                                                "id_category": {
+                                                    "type": "integer"
+                                                },
+                                                "provider": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "cnpj": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "phone": {
+                                                            "type": "string"
+                                                        },
+                                                        "cellphone": {
+                                                            "type": "string"
+                                                        },
+                                                        "logo": {
+                                                            "type": "string"
+                                                        },
+                                                        "logo_url": {
+                                                            "type": "string"
+                                                        },
+                                                        "address": {
+                                                            "properties": {
+                                                                "zipcode": {
+                                                                    "type": "string"
+                                                                },
+                                                                "street": {
+                                                                    "type": "string"
+                                                                },
+                                                                "neighborhood": {
+                                                                    "type": "string"
+                                                                },
+                                                                "number": {
+                                                                    "type": "string"
+                                                                },
+                                                                "state": {
+                                                                    "type": "string"
+                                                                },
+                                                                "city": {
+                                                                    "type": "string"
+                                                                },
+                                                                "complement": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-07-25T15:30:00"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "category": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-07-25T15:30:00"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-07-25T15:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Atualizar um produto",
+                "operationId": "c474d1318e5b8c3de1f4d52b6053111f",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "photo",
+                                    "id_provider",
+                                    "id_category"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Produto 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Descrição do produto"
+                                    },
+                                    "length": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "height": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "depth": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "weight": {
+                                        "type": "string",
+                                        "example": "10"
+                                    },
+                                    "line": {
+                                        "type": "string",
+                                        "example": "Linha do produto"
+                                    },
+                                    "materials": {
+                                        "type": "string",
+                                        "example": "Materiais do produto"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "id_provider": {
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "id_category": {
+                                        "type": "integer",
+                                        "example": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Deletar um produto",
+                "operationId": "1a0a353d0842ff4f9347bb66ec53e3ea",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/providers": {
             "get": {
                 "tags": [
@@ -664,6 +1339,489 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Cadastrar um novo fornecedor",
+                "operationId": "c6b8bd1bd0d9d78359553ea08bf93208",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "logo",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Forncedor 1"
+                                    },
+                                    "cnpj": {
+                                        "type": "string",
+                                        "example": "01234567890123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "email@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "012345678901234"
+                                    },
+                                    "cellphone": {
+                                        "type": "string",
+                                        "example": "012345678901234"
+                                    },
+                                    "logo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "address": {
+                                        "properties": {
+                                            "zipcode": {
+                                                "type": "string",
+                                                "example": "0123456"
+                                            },
+                                            "street": {
+                                                "type": "string",
+                                                "example": "Rua 1"
+                                            },
+                                            "number": {
+                                                "type": "integer",
+                                                "example": "123"
+                                            },
+                                            "neighborhood": {
+                                                "type": "string",
+                                                "example": "Bairro 1"
+                                            },
+                                            "state": {
+                                                "type": "string",
+                                                "example": "SP"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "São Paulo"
+                                            },
+                                            "complement": {
+                                                "type": "string",
+                                                "example": "Complemento 1"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/providers/{provider}": {
+            "get": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Visualizar os dados de um fornecedor",
+                "operationId": "bf43f6c023ae1c0b984c98ee82e3f220",
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "cnpj": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "phone": {
+                                                    "type": "string"
+                                                },
+                                                "cellphone": {
+                                                    "type": "string"
+                                                },
+                                                "logo": {
+                                                    "type": "string"
+                                                },
+                                                "logo_url": {
+                                                    "type": "string"
+                                                },
+                                                "address": {
+                                                    "properties": {
+                                                        "zipcode": {
+                                                            "type": "string"
+                                                        },
+                                                        "street": {
+                                                            "type": "string"
+                                                        },
+                                                        "neighborhood": {
+                                                            "type": "string"
+                                                        },
+                                                        "number": {
+                                                            "type": "string"
+                                                        },
+                                                        "state": {
+                                                            "type": "string"
+                                                        },
+                                                        "city": {
+                                                            "type": "string"
+                                                        },
+                                                        "complement": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-07-25T15:30:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Atualizar um fornecedor",
+                "operationId": "5f1de918f54f9331cc6099096b67b2f6",
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Forncedor 1"
+                                    },
+                                    "cnpj": {
+                                        "type": "string",
+                                        "example": "01234567890123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "email@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "012345678901234"
+                                    },
+                                    "cellphone": {
+                                        "type": "string",
+                                        "example": "012345678901234"
+                                    },
+                                    "logo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "address": {
+                                        "properties": {
+                                            "zipcode": {
+                                                "type": "string",
+                                                "example": "0123456"
+                                            },
+                                            "street": {
+                                                "type": "string",
+                                                "example": "Rua 1"
+                                            },
+                                            "number": {
+                                                "type": "integer",
+                                                "example": "123"
+                                            },
+                                            "neighborhood": {
+                                                "type": "string",
+                                                "example": "Bairro 1"
+                                            },
+                                            "state": {
+                                                "type": "string",
+                                                "example": "SP"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": "São Paulo"
+                                            },
+                                            "complement": {
+                                                "type": "string",
+                                                "example": "Complemento 1"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Providers"
+                ],
+                "summary": "Deletar um fornecedor",
+                "operationId": "630766c056b6c5b6907f111eb62f3276",
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -683,6 +1841,9 @@
         },
         {
             "name": "Categories"
+        },
+        {
+            "name": "Products"
         },
         {
             "name": "Providers"

@@ -42,7 +42,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/admin/login",
+     *     path="/api/admin/login",
      *     tags={"Auth - Admin"},
      *     summary="Logar como admin",
      *     @OA\RequestBody(
@@ -131,7 +131,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/admin/logout",
+     *     path="/api/admin/logout",
      *     tags={"Auth - Admin"},
      *     summary="Encerrar sessão",
      *     @OA\Response(
@@ -168,7 +168,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/me",
+     *     path="/api/admin/me",
      *     tags={"Auth - Admin"},
      *     summary="Exibir os dados do usuário autenticado",
      *     @OA\Response(
