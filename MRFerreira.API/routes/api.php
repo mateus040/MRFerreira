@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AuthController,
     ProductController,
-    CategoryController,
     ContactController,
-    ProviderController,
+    Category\CategoryController,
+    Provider\ProviderController,
+    Provider\ProductController as ProviderProductController,
+    Category\ProductController as CategoryProductController
 };
 
 /*
@@ -58,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cards', [ProductController::class, 'getCards']);
 });
 
+# Public Routes
 Route::prefix('/categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::get('/{category}', [CategoryController::class, 'show']);
@@ -73,7 +76,7 @@ Route::prefix('/providers')->group(function () {
     Route::get('/{provider}', [ProviderController::class, 'show']);
 });
 
-Route::get('/providers/{id}/products', [ProductController::class, 'productsByCompany']);
-Route::get('/categories/{id}/products', [ProductController::class, 'productsByCategory']);
+Route::get('/providers/{provider}/products', [ProviderProductController::class, 'index']);
+Route::get('/categories/{category}/products', [CategoryProductController::class, 'index']);
 
 Route::post('/send-email', [ContactController::class, 'sendEmail']);

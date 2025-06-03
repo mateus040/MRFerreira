@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Provider;
 
 use App\Exceptions\ResponseException;
 use App\Helpers\ExceptionHelper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Provider\StoreRequest;
 use App\Http\Resources\Provider\{
     IndexResource,

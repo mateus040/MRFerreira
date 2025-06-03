@@ -498,34 +498,6 @@ class ProductController extends Controller
         return response()->noContent();
     }
 
-    public function productsByCompany($id)
-    {
-        try {
-            $products = Product::where('id_provider', $id)->with(['provider', 'category'])->get();
-
-            return response()->json([
-                'results' => $products,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornas produtos: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornar produtos: ' . $e->getMessage()], 500);
-        }
-    }
-
-    public function productsByCategory($id)
-    {
-        try {
-            $products = Product::where('id_category', $id)->with(['provider', 'category'])->get();
-
-            return response()->json([
-                'results' => $products,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar produtos: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornos produtos: ' . $e->getMessage()], 500);
-        }
-    }
-
     public function getCards()
     {
         try {
