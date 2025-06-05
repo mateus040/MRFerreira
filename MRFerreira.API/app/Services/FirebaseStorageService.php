@@ -17,7 +17,9 @@ class FirebaseStorageService
 
     public function uploadFile($file, $fileName)
     {
-        $bucket = $this->storage->getBucket();
+        $bucket = $this
+            ->storage
+            ->getBucket();
 
         $bucket->upload(
             file_get_contents($file),
@@ -26,12 +28,16 @@ class FirebaseStorageService
             ]
         );
 
-        return $bucket->object($fileName)->signedUrl(new \DateTime('tomorrow'));
+        return $bucket
+            ->object($fileName)
+            ->signedUrl(new \DateTime('tomorrow'));
     }
 
     public function deleteFile($fileName)
     {
-        $bucket = $this->storage->getBucket();
+        $bucket = $this
+            ->storage
+            ->getBucket();
 
         $object = $bucket->object($fileName);
         if ($object->exists()) {
@@ -41,8 +47,12 @@ class FirebaseStorageService
 
     public function getFileUrl($fileName)
     {
-        $bucket = $this->storage->getBucket();
+        $bucket = $this
+            ->storage
+            ->getBucket();
+        
         $object = $bucket->object($fileName);
+
         return $object->signedUrl(new \DateTime('tomorrow'));
     }
 }
