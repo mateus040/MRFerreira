@@ -39,7 +39,6 @@ class Product extends Model
         return $this->belongsTo(Provider::class, 'id_provider');
     }
 
-
     public function category()
     {
         return $this->belongsTo(Category::class, 'id_category');

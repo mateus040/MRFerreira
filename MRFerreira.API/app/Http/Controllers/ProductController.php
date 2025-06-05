@@ -19,10 +19,21 @@ use Illuminate\Support\{
     Str,
 };
 use App\Services\FirebaseStorageService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Resources\Json\{
+    AnonymousResourceCollection,
+    JsonResource,
+};
+use Illuminate\Http\Response;
 use Throwable;
 
+/**
+ * @OA\Tag(
+ *     name="Products",
+ * )
+ */
 class ProductController extends Controller
 {
     protected $firebaseStorage;
@@ -32,14 +43,151 @@ class ProductController extends Controller
         $this->firebaseStorage = $firebaseStorage;
     }
 
-    public function index()
+    /**
+     * @OA\Get(
+     *     path="/api/products",
+     *     tags={"Products"},
+     *     summary="Listar produtos",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="name", type="string"),
+     *                     @OA\Property(property="description", type="string"),
+     *                     @OA\Property(property="length", type="string"),
+     *                     @OA\Property(property="height", type="string"),
+     *                     @OA\Property(property="depth", type="string"),
+     *                     @OA\Property(property="weight", type="string"),
+     *                     @OA\Property(property="line", type="string"),
+     *                     @OA\Property(property="materials", type="string"),
+     *                     @OA\Property(property="photo", type="string"),
+     *                     @OA\Property(property="id_provider", type="integer"),
+     *                     @OA\Property(property="id_category", type="integer"),
+     *                     @OA\Property(
+     *                         property="provider",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="cnpj", type="string"),
+     *                         @OA\Property(property="email", type="string"),
+     *                         @OA\Property(property="phone", type="string"),
+     *                         @OA\Property(property="cellphone", type="string"),
+     *                         @OA\Property(property="logo", type="string"),
+     *                         @OA\Property(property="logo_url", type="string"),
+     *                         @OA\Property(
+     *                             property="address",
+     *                             type="object",
+     *                             @OA\Property(property="zipcode", type="string"),
+     *                             @OA\Property(property="street", type="string"),
+     *                             @OA\Property(property="neighborhood", type="string"),
+     *                             @OA\Property(property="number", type="string"),
+     *                             @OA\Property(property="state", type="string"),
+     *                             @OA\Property(property="city", type="string"),
+     *                             @OA\Property(property="complement", type="string")
+     *                         ),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *                     ),
+     *                     @OA\Property(
+     *                         property="category",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *                     ),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function index(): AnonymousResourceCollection
     {
         $products = Product::with(['provider', 'category'])->get();
 
         return IndexResource::collection($products);
     }
 
-    public function store(StoreRequest $request)
+    /**
+     * @OA\Post(
+     *     path="/api/products",
+     *     tags={"Products"},
+     *     summary="Cadastrar um novo produto",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "description", "photo", "id_provider", "id_category"},
+     *             @OA\Property(property="name", type="string", example="Produto 1"),
+     *             @OA\Property(property="description", type="string", example="Descrição do produto"),
+     *             @OA\Property(property="length", type="string", example="10"),
+     *             @OA\Property(property="height", type="string", example="10"),
+     *             @OA\Property(property="depth", type="string", example="10"),
+     *             @OA\Property(property="weight", type="string", example="10"),
+     *             @OA\Property(property="line", type="string", example="Linha do produto"),
+     *             @OA\Property(property="materials", type="string", example="Materiais do produto"),
+     *             @OA\Property(property="photo", type="string", format="binary"),
+     *             @OA\Property(property="id_provider", type="integer", example=0),
+     *             @OA\Property(property="id_category", type="integer", example=0),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Content",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                     @OA\Property(
+     *                         property="errors",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="field",
+     *                             type="array",
+     *                             items=@OA\Items(type="string")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function store(StoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -83,13 +231,177 @@ class ProductController extends Controller
         }
     }
 
-    public function show(Product $product)
+    /**
+     * @OA\Get(
+     *     path="/api/products/{product}",
+     *     tags={"Products"},
+     *     summary="Visualizar os dados de um produto",
+     *     @OA\Parameter(
+     *         name="product",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="name", type="string"),
+     *                     @OA\Property(property="description", type="string"),
+     *                     @OA\Property(property="length", type="string"),
+     *                     @OA\Property(property="height", type="string"),
+     *                     @OA\Property(property="depth", type="string"),
+     *                     @OA\Property(property="weight", type="string"),
+     *                     @OA\Property(property="line", type="string"),
+     *                     @OA\Property(property="materials", type="string"),
+     *                     @OA\Property(property="photo", type="string"),
+     *                     @OA\Property(property="id_provider", type="integer"),
+     *                     @OA\Property(property="id_category", type="integer"),
+     *                     @OA\Property(
+     *                         property="provider",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="cnpj", type="string"),
+     *                         @OA\Property(property="email", type="string"),
+     *                         @OA\Property(property="phone", type="string"),
+     *                         @OA\Property(property="cellphone", type="string"),
+     *                         @OA\Property(property="logo", type="string"),
+     *                         @OA\Property(property="logo_url", type="string"),
+     *                         @OA\Property(
+     *                             property="address",
+     *                             type="object",
+     *                             @OA\Property(property="zipcode", type="string"),
+     *                             @OA\Property(property="street", type="string"),
+     *                             @OA\Property(property="neighborhood", type="string"),
+     *                             @OA\Property(property="number", type="string"),
+     *                             @OA\Property(property="state", type="string"),
+     *                             @OA\Property(property="city", type="string"),
+     *                             @OA\Property(property="complement", type="string")
+     *                         ),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *                     ),
+     *                     @OA\Property(
+     *                         property="category",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *                     ),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string")
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     */
+    public function show(Product $product): JsonResource
     {
         return app(ShowResource::class, ['resource' => $product]);
     }
 
-
-    public function update(StoreRequest $request, Product $product)
+    /**
+     * @OA\Put(
+     *     path="/api/products/{product}",
+     *     tags={"Products"},
+     *     summary="Atualizar um produto",
+     *     @OA\Parameter(
+     *         name="product",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "description", "photo", "id_provider", "id_category"},
+     *             @OA\Property(property="name", type="string", example="Produto 1"),
+     *             @OA\Property(property="description", type="string", example="Descrição do produto"),
+     *             @OA\Property(property="length", type="string", example="10"),
+     *             @OA\Property(property="height", type="string", example="10"),
+     *             @OA\Property(property="depth", type="string", example="10"),
+     *             @OA\Property(property="weight", type="string", example="10"),
+     *             @OA\Property(property="line", type="string", example="Linha do produto"),
+     *             @OA\Property(property="materials", type="string", example="Materiais do produto"),
+     *             @OA\Property(property="photo", type="string", format="binary"),
+     *             @OA\Property(property="id_provider", type="integer", example=0),
+     *             @OA\Property(property="id_category", type="integer", example=0),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content",
+     *         @OA\JsonContent(type="object", additionalProperties=false)
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string")
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Content",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                     @OA\Property(
+     *                         property="errors",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="field",
+     *                             type="array",
+     *                             items=@OA\Items(type="string")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function update(StoreRequest $request, Product $product): Response
     {
         $validated = $request->validated();
 
@@ -136,7 +448,52 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product)
+    /**
+     * @OA\Delete(
+     *     path="/api/products/{product}",
+     *     tags={"Products"},
+     *     summary="Deletar um produto",
+     *     @OA\Parameter(
+     *         name="product",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content",
+     *         @OA\JsonContent(type="object", additionalProperties=false)
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string")
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function destroy(Product $product): Response
     {
         $this
             ->firebaseStorage
@@ -145,34 +502,6 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->noContent();
-    }
-
-    public function productsByCompany($id)
-    {
-        try {
-            $products = Product::where('id_provider', $id)->with(['provider', 'category'])->get();
-
-            return response()->json([
-                'results' => $products,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornas produtos: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornar produtos: ' . $e->getMessage()], 500);
-        }
-    }
-
-    public function productsByCategory($id)
-    {
-        try {
-            $products = Product::where('id_category', $id)->with(['provider', 'category'])->get();
-
-            return response()->json([
-                'results' => $products,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar produtos: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornos produtos: ' . $e->getMessage()], 500);
-        }
     }
 
     public function getCards()

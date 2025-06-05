@@ -14,27 +14,99 @@ use Illuminate\Support\Facades\{
 };
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 
+/**
+ * @OA\Tag(
+ *     name="Auth - Admin",
+ * )
+ */
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
-    {
-        $validated = $request->validated();
+    // TODO: esse endpoint poderá ser acessado apenas no painel administrativo
+    // public function register(RegisterRequest $request)
+    // {
+    //     $validated = $request->validated();
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-        ]);
+    //     $user = User::create([
+    //         'name' => $validated['name'],
+    //         'email' => $validated['email'],
+    //         'password' => $validated['password'],
+    //     ]);
 
-        return response()->json([
-            'data' => [
-                'id' => $user->id
-            ],
-        ], HttpResponse::HTTP_CREATED);
-    }
+    //     return response()->json([
+    //         'data' => [
+    //             'id' => $user->id
+    //         ],
+    //     ], HttpResponse::HTTP_CREATED);
+    // }
 
-    public function login(LoginRequest $request)
+    /**
+     * @OA\Post(
+     *     path="/api/admin/login",
+     *     tags={"Auth - Admin"},
+     *     summary="Logar como admin",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email, password"},
+     *             @OA\Property(property="email", type="string", example="admin@example.com"),
+     *             @OA\Property(property="password", type="string", example="123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="token", type="string"),
+     *                 @OA\Property(property="expires_in", type="string", format="date-time", example="2024-07-25T15:30:00")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unprocessable Content",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                     @OA\Property(
+     *                         property="errors",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="field",
+     *                             type="array",
+     *                             items=@OA\Items(type="string")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         }
+     *     ),
+     * )
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -60,7 +132,33 @@ class AuthController extends Controller
         );
     }
 
-    public function logout()
+    /**
+     * @OA\Post(
+     *     path="/api/admin/logout",
+     *     tags={"Auth - Admin"},
+     *     summary="Encerrar sessão",
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content",
+     *         @OA\JsonContent(type="object", additionalProperties=false)
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function logout(): Response
     {
         $user = Auth::user();
 
@@ -71,7 +169,40 @@ class AuthController extends Controller
         return response()->noContent();
     }
 
-    public function me()
+    /**
+     * @OA\Get(
+     *     path="/api/admin/me",
+     *     tags={"Auth - Admin"},
+     *     summary="Exibir os dados do usuário autenticado",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="name", type="string")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     type="object",
+     *                     @OA\Property(property="message", type="string"),
+     *                 )
+     *             )
+     *         }
+     *     ),
+     *     security={{"bearerAuth": {}}}
+     * )
+     */
+    public function me(): JsonResource
     {
         $user = Auth::user();
 
