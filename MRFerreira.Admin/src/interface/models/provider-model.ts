@@ -1,17 +1,21 @@
 export default interface ProviderModel {
   id: string;
-  nome: string;
+  name: string;
   cnpj: string;
-  rua: string;
-  bairro: string;
-  numero: string;
-  cep: string;
-  estado: string;
-  cidade: string;
-  complemento: string | null;
   email: string;
-  telefone: string;
-  celular: string;
+  phone: string;
+  cellphone: string;
   logo: string;
   logo_url: string;
+  address: Address;
+}
+
+interface Address {
+  street: string;
+  neighborhood: string;
+  number: string;
+  zipcode: string;
+  state: string;
+  city: string;
+  complement: string | null;
 }

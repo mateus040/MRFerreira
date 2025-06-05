@@ -15,7 +15,7 @@ import ServiceResult from "../../interface/service-result";
 import api from "../../services/api-client";
 
 interface CategoryField {
-  nome: string;
+  name: string;
 }
 
 export default function Categories() {
@@ -55,7 +55,7 @@ export default function Categories() {
     api
       .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
-        setCategories(data.results);
+        setCategories(data.data);
       })
       .catch(apiErrorHandler)
       .finally(() => setLoadingCategories(false));
@@ -65,7 +65,7 @@ export default function Categories() {
     setLoadingDelete(true);
 
     toast
-      .promise(api.delete<ServiceResult>(`/categories/delete/${categoryId}`), {
+      .promise(api.delete<ServiceResult>(`/categories/${categoryId}`), {
         loading: "Excluindo categoria...",
         success: () => {
           const updatedCategories = categories.filter(
@@ -84,9 +84,9 @@ export default function Categories() {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("nome", data.nome);
+    formData.append("name", data.name);
 
-    toast.promise(api.post<ServiceResult>("/categories/add", formData), {
+    toast.promise(api.post<ServiceResult>("/categories", formData), {
       loading: "Cadastrando categoria...",
       success: () => {
         fetchCategories();
@@ -112,13 +112,13 @@ export default function Categories() {
           <div className="col-span-12 lg:col-span-10">
             <input
               type="text"
-              id="nome"
+              id="name"
               placeholder="Informe o nome da categoria"
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("nome", { required: "O nome é obrigatório" })}
+              {...register("name", { required: "O nome é obrigatório" })}
             />
-            {errors.nome && (
-              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
 
@@ -154,7 +154,7 @@ export default function Categories() {
                 {categories.map((category) => (
                   <tr className="bg-white" key={category.id}>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {category.nome}
+                      {category.name}
                     </td>
                     <td className="px-3 py-6 whitespace-nowrap flex items-center text-center">
                       <AiOutlineEdit

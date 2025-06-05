@@ -10,10 +10,10 @@ import api from "../../../services/api-client";
 import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface CategoryField {
-  nome: string;
+  name: string;
 }
 
-export default function EditCaategory() {
+export default function EditCategory() {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
 
@@ -50,8 +50,8 @@ export default function EditCaategory() {
         `/categories/${categoryId}`
       )
       .then(({ data }) => {
-        const category = data.results as CategoryModel;
-        setValue("nome", category.nome);
+        const category = data.data as CategoryModel;
+        setValue("name", category.name);
       })
       .catch((error) => {
         toast.error("Erro ao buscar dados do fornecedor: ", error);
@@ -64,11 +64,11 @@ export default function EditCaategory() {
 
     const formData = new FormData();
     formData.append("_method", "PUT");
-    formData.append("nome", data.nome);
+    formData.append("name", data.name);
 
     toast.promise(
       api.post<ServiceResult>(
-        `/categories/update/${categoryId}`,
+        `/categories/${categoryId}`,
         formData
       ),
 
@@ -98,16 +98,16 @@ export default function EditCaategory() {
           <div className="col-span-12 lg:col-span-10">
             <input
               type="text"
-              id="nome"
+              id="name"
               placeholder={
                 loadingCategory ? "..." : "Informe o nome da categoria"
               }
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("nome", { required: "O nome é obrigatório" })}
+              {...register("name", { required: "O nome é obrigatório" })}
               disabled={loadingCategory}
             />
-            {errors.nome && (
-              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
 
