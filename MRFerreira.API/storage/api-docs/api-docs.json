@@ -211,7 +211,7 @@
                     "Categories"
                 ],
                 "summary": "Listar categorias",
-                "operationId": "3f5817a34833d0a1f4af4548dd3aeaba",
+                "operationId": "4217660caec9cd97efc29e9918fb2e40",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -251,7 +251,7 @@
                     "Categories"
                 ],
                 "summary": "Cadastrar uma categoria",
-                "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
+                "operationId": "a6cf07e39ad220c2c208a08bf1f172db",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -347,7 +347,7 @@
                     "Categories"
                 ],
                 "summary": "Visualizar os dados de uma categoria",
-                "operationId": "e92579e78391b6199e78c2a091dbea0a",
+                "operationId": "ed490793526d3ffabb797b0c094ed185",
                 "parameters": [
                     {
                         "name": "category",
@@ -409,7 +409,7 @@
                     "Categories"
                 ],
                 "summary": "Atualizar uma categoria",
-                "operationId": "02aa39951e67916277e28086f85909c8",
+                "operationId": "74478a5b1a7211304dc05189341819f3",
                 "parameters": [
                     {
                         "name": "category",
@@ -519,7 +519,7 @@
                     "Categories"
                 ],
                 "summary": "Deletar uma categoria",
-                "operationId": "d9ecd5c4a74c4d75339251863eedc08c",
+                "operationId": "3bea674427fdefe254e591e5dce94e88",
                 "parameters": [
                     {
                         "name": "category",
@@ -578,6 +578,154 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/category/{id}/products": {
+            "get": {
+                "tags": [
+                    "Category - Products"
+                ],
+                "summary": "Listar produtos de uma categoria",
+                "operationId": "f5d0905005503c1818d55d50b0ee609a",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "length": {
+                                                        "type": "string"
+                                                    },
+                                                    "height": {
+                                                        "type": "string"
+                                                    },
+                                                    "depth": {
+                                                        "type": "string"
+                                                    },
+                                                    "weight": {
+                                                        "type": "string"
+                                                    },
+                                                    "line": {
+                                                        "type": "string"
+                                                    },
+                                                    "materials": {
+                                                        "type": "string"
+                                                    },
+                                                    "photo": {
+                                                        "type": "string"
+                                                    },
+                                                    "id_provider": {
+                                                        "type": "integer"
+                                                    },
+                                                    "id_category": {
+                                                        "type": "integer"
+                                                    },
+                                                    "provider": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "cnpj": {
+                                                                "type": "string"
+                                                            },
+                                                            "email": {
+                                                                "type": "string"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string"
+                                                            },
+                                                            "cellphone": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo_url": {
+                                                                "type": "string"
+                                                            },
+                                                            "address": {
+                                                                "properties": {
+                                                                    "zipcode": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "street": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "neighborhood": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "number": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "state": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "city": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "complement": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "category": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-25T15:30:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/products": {
@@ -1255,13 +1403,161 @@
                 ]
             }
         },
+        "/api/provider/{id}/products": {
+            "get": {
+                "tags": [
+                    "Provider - Products"
+                ],
+                "summary": "Listar produtos de uma fornecedor",
+                "operationId": "b077f6aa7f3c156704cf53806b9ff7b7",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "length": {
+                                                        "type": "string"
+                                                    },
+                                                    "height": {
+                                                        "type": "string"
+                                                    },
+                                                    "depth": {
+                                                        "type": "string"
+                                                    },
+                                                    "weight": {
+                                                        "type": "string"
+                                                    },
+                                                    "line": {
+                                                        "type": "string"
+                                                    },
+                                                    "materials": {
+                                                        "type": "string"
+                                                    },
+                                                    "photo": {
+                                                        "type": "string"
+                                                    },
+                                                    "id_provider": {
+                                                        "type": "integer"
+                                                    },
+                                                    "id_category": {
+                                                        "type": "integer"
+                                                    },
+                                                    "provider": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "cnpj": {
+                                                                "type": "string"
+                                                            },
+                                                            "email": {
+                                                                "type": "string"
+                                                            },
+                                                            "phone": {
+                                                                "type": "string"
+                                                            },
+                                                            "cellphone": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo": {
+                                                                "type": "string"
+                                                            },
+                                                            "logo_url": {
+                                                                "type": "string"
+                                                            },
+                                                            "address": {
+                                                                "properties": {
+                                                                    "zipcode": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "street": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "neighborhood": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "number": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "state": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "city": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "complement": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "category": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-07-25T15:30:00"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-25T15:30:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/providers": {
             "get": {
                 "tags": [
                     "Providers"
                 ],
                 "summary": "Listar fornecedores",
-                "operationId": "386f3ddc2b7b26effa6a559287ccbe4c",
+                "operationId": "8a7d799e5c734109a36a5a12976c04cc",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1345,7 +1641,7 @@
                     "Providers"
                 ],
                 "summary": "Cadastrar um novo fornecedor",
-                "operationId": "c6b8bd1bd0d9d78359553ea08bf93208",
+                "operationId": "c9a60ab5372cd0dcdc8899c4ec63e10a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1497,7 +1793,7 @@
                     "Providers"
                 ],
                 "summary": "Visualizar os dados de um fornecedor",
-                "operationId": "bf43f6c023ae1c0b984c98ee82e3f220",
+                "operationId": "8088a31157a82879989ac38a5a8a8b96",
                 "parameters": [
                     {
                         "name": "provider",
@@ -1603,7 +1899,7 @@
                     "Providers"
                 ],
                 "summary": "Atualizar um fornecedor",
-                "operationId": "5f1de918f54f9331cc6099096b67b2f6",
+                "operationId": "a0d41d59a66c709cc87113b91150002d",
                 "parameters": [
                     {
                         "name": "provider",
@@ -1763,7 +2059,7 @@
                     "Providers"
                 ],
                 "summary": "Deletar um fornecedor",
-                "operationId": "630766c056b6c5b6907f111eb62f3276",
+                "operationId": "763d3e7e85357e9ae9487da35e666c09",
                 "parameters": [
                     {
                         "name": "provider",
@@ -1843,7 +2139,13 @@
             "name": "Categories"
         },
         {
+            "name": "Category - Products"
+        },
+        {
             "name": "Products"
+        },
+        {
+            "name": "Provider - Products"
         },
         {
             "name": "Providers"
