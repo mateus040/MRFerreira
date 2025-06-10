@@ -27,9 +27,9 @@ export default function AppRouter() {
           }
         />
 
-        {/* Rotas empresas parceiras */}
+        {/* Rotas fornecedores parceiros */}
         <Route
-          path="/empresas"
+          path="/fornecedores"
           element={
             <PrivateRoute>
               <Providers />
@@ -38,7 +38,7 @@ export default function AppRouter() {
         />
 
         <Route
-          path="/empresas/adicionar"
+          path="/fornecedores/adicionar"
           element={
             <PrivateRoute>
               <CreateProvider />
@@ -47,7 +47,7 @@ export default function AppRouter() {
         />
 
         <Route
-          path="/empresas/editar/:providerId"
+          path="/fornecedores/editar/:providerId"
           element={
             <PrivateRoute>
               <EditProvider />

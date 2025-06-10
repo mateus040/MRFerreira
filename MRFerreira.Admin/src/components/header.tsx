@@ -57,13 +57,13 @@ export const Header = ({ toggleSidebar }: Props) => {
                 Início
               </Link>
               <Link
-                to="/empresas"
+                to="/fornecedores"
                 className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
                 role="menuitem"
                 tabIndex={-1}
                 id="menu-item-1"
               >
-                Empresas
+                Fornecedores
               </Link>
               <Link
                 to="/produtos"

@@ -88,7 +88,7 @@ export default function Login() {
                   <FaCheck className="text-sm" />
                 </div>
                 <span className="text-lg font-medium text-white">
-                  Adicionar empresas
+                  Adicionar fornecedores
                 </span>
               </li>
             </ul>

@@ -33,11 +33,11 @@ export default function CreateProvider() {
       name: "Início",
     },
     {
-      link: "/empresas",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
     {
-      link: "/empresas/adicionar",
+      link: "/fornecedores/adicionar",
       name: "Adicionar fornecedores",
     },
   ];
@@ -85,7 +85,7 @@ export default function CreateProvider() {
         {
           loading: "Cadastrando fornecedor...",
           success: () => {
-            navigate("/empresas");
+            navigate("/fornecedores");
             return "Fornecedor criado com sucesso!";
           },
           error: (error) => getApiErrorMessage(error),

@@ -92,7 +92,7 @@ export default function EditProduct() {
         setProviders(data.data);
       })
       .catch((error) => {
-        toast.error("Erro ao buscar empresas: ", error);
+        toast.error("Erro ao buscar fornecedores: ", error);
       })
       .finally(() => setLoadingProviders(false));
   };
@@ -246,17 +246,17 @@ export default function EditProduct() {
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
-            <label className="block mb-2 font-medium">Empresa*</label>
+            <label className="block mb-2 font-medium">Fornecedor*</label>
             <select
               id="id_provider"
               className="w-full p-2 rounded-lg border border-gray-300"
               {...register("id_provider", {
-                required: "A empresa é obrigatória",
+                required: "O fornecedor é obrigatório",
               })}
               disabled={loadingProviders}
             >
               <option value="">
-                {loadingProviders ? "..." : "Selecione uma empresa"}
+                {loadingProviders ? "..." : "Selecione um fornecedor"}
               </option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>

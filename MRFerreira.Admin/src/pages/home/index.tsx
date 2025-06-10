@@ -16,7 +16,7 @@ export default function Home() {
     api
       .get<ServiceResult<CardsModel>>(`/cards`)
       .then(({ data }) => {
-        setCards(data.results as CardsModel);
+        setCards(data.data as CardsModel);
       })
       .catch((error) => {
         console.error("Erro ao buscar informações cards:", error);
@@ -34,7 +34,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
         <div className="col-span-1 lg:col-span-4">
           <div className="bg-white shadow-lg w-full py-4 px-5">
-            <p className="text-sm font-medium">Empresas cadastrados</p>
+            <p className="text-sm font-medium">Fornecedores cadastrados</p>
             <div className="mt-2">
               {loading && <Loading className="mt-2 mb-2" />}
 

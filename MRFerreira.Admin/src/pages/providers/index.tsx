@@ -20,7 +20,7 @@ export default function Providers() {
       name: "Início",
     },
     {
-      link: "/empresas",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
   ];
@@ -33,7 +33,7 @@ export default function Providers() {
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
   const navigateToEditPage = (provider: ProviderModel) => {
-    navigate(`/empresas/editar/${provider.id}`);
+    navigate(`/fornecedores/editar/${provider.id}`);
   };
 
   const fetchProviders = async (): Promise<void> => {
@@ -97,7 +97,7 @@ export default function Providers() {
       <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between mb-3">
         <BreadCrumb history={breadCrumbHistory} />
         <Link
-          to="/empresas/adicionar"
+          to="/fornecedores/adicionar"
           className="rounded-full px-8 py-2 bg-slate-900 text-white hover:bg-slate-800 transition-all text-center mt-3 lg:mt-0 mb-2 lg:mb-0 w-full lg:w-[200px]"
         >
           Adicionar

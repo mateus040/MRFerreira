@@ -234,11 +234,11 @@ export default function CreateProducts() {
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
-            <label className="block mb-2 font-medium">Empresa*</label>
+            <label className="block mb-2 font-medium">Fornecedor*</label>
             <select
               id="id_provider"
               {...register("id_provider", {
-                required: "A empresa é obrigatória",
+                required: "O fornecedor é obrigatória",
               })}
               className={`w-full p-2 rounded-lg border ${
                 errors.id_provider ? "border-red-500" : "border-gray-300"
@@ -246,7 +246,7 @@ export default function CreateProducts() {
               disabled={loadingProviders}
             >
               <option value="">
-                {loadingProviders ? "..." : "Selecione uma empresa"}
+                {loadingProviders ? "..." : "Selecione um fornecedor"}
               </option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>
