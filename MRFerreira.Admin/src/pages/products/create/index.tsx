@@ -238,7 +238,7 @@ export default function CreateProducts() {
             <select
               id="id_provider"
               {...register("id_provider", {
-                required: "O fornecedor é obrigatória",
+                required: "O fornecedor é obrigatório",
               })}
               className={`w-full p-2 rounded-lg border ${
                 errors.id_provider ? "border-red-500" : "border-gray-300"
