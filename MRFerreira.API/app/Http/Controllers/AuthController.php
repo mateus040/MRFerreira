@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\User\MeResource;
-use App\Http\Requests\User\{
-    RegisterRequest,
-    LoginRequest,
-};
+use App\Http\Resources\User\Auth\MeResource;
+use App\Http\Requests\User\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\{
     Auth,
@@ -14,9 +11,11 @@ use Illuminate\Support\Facades\{
 };
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\{
+    JsonResponse,
+    Response,
+};
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
 
 /**
  * @OA\Tag(
@@ -25,24 +24,6 @@ use Illuminate\Http\Response;
  */
 class AuthController extends Controller
 {
-    // TODO: esse endpoint poderá ser acessado apenas no painel administrativo
-    // public function register(RegisterRequest $request)
-    // {
-    //     $validated = $request->validated();
-
-    //     $user = User::create([
-    //         'name' => $validated['name'],
-    //         'email' => $validated['email'],
-    //         'password' => $validated['password'],
-    //     ]);
-
-    //     return response()->json([
-    //         'data' => [
-    //             'id' => $user->id
-    //         ],
-    //     ], HttpResponse::HTTP_CREATED);
-    // }
-
     /**
      * @OA\Post(
      *     path="/api/admin/login",

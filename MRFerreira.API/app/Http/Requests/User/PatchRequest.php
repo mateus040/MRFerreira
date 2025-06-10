@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class PatchRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -23,11 +23,6 @@ class RegisterRequest extends FormRequest
                 'string',
                 'email',
                 'unique:users,email',
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:6',
             ],
         ];
     }
