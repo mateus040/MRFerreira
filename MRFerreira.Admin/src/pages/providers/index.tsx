@@ -20,7 +20,7 @@ export default function Providers() {
       name: "Início",
     },
     {
-      link: "/empresas",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
   ];
@@ -33,7 +33,7 @@ export default function Providers() {
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
 
   const navigateToEditPage = (provider: ProviderModel) => {
-    navigate(`/empresas/editar/${provider.id}`);
+    navigate(`/fornecedores/editar/${provider.id}`);
   };
 
   const fetchProviders = async (): Promise<void> => {
@@ -44,7 +44,7 @@ export default function Providers() {
         "/providers"
       )
       .then(({ data }) => {
-        const providersData = data.results;
+        const providersData = data.data;
 
         setProviders(providersData);
 
@@ -67,7 +67,7 @@ export default function Providers() {
     toast
       .promise(
         api.delete<ServiceResult>(
-          `/providers/delete/${providerId}`
+          `/providers/${providerId}`
         ),
 
         {
@@ -97,7 +97,7 @@ export default function Providers() {
       <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between mb-3">
         <BreadCrumb history={breadCrumbHistory} />
         <Link
-          to="/empresas/adicionar"
+          to="/fornecedores/adicionar"
           className="rounded-full px-8 py-2 bg-slate-900 text-white hover:bg-slate-800 transition-all text-center mt-3 lg:mt-0 mb-2 lg:mb-0 w-full lg:w-[200px]"
         >
           Adicionar
@@ -160,40 +160,40 @@ export default function Providers() {
                 {providers.map((provider) => (
                   <tr className="bg-white" key={provider.id}>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.nome}
+                      {provider.name}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {provider.cnpj}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.cep}
+                      {provider.address.zipcode}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.rua}
+                      {provider.address.street}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.bairro}
+                      {provider.address.neighborhood}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.numero}
+                      {provider.address.number}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.cidade}
+                      {provider.address.city}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.estado}
+                      {provider.address.state}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.complemento}
+                      {provider.address.complement}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {provider.email}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.telefone}
+                      {provider.phone}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {provider.celular}
+                      {provider.cellphone}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                       {logos[provider.logo] && (
@@ -232,47 +232,47 @@ export default function Providers() {
               >
                 <div className="flex items-center space-x-2 text-sm">
                   <span>Nome:</span>
-                  <span className="text-gray-500">{provider.nome}</span>
+                  <span className="text-gray-500">{provider.name}</span>
                 </div>
                 <div className="text-sm">
                   CNPJ: <span className="text-gray-700">{provider.cnpj}</span>
                 </div>
                 <div className="text-sm">
-                  CEP: <span className="text-gray-700">{provider.cep}</span>
+                  CEP: <span className="text-gray-700">{provider.address.zipcode}</span>
                 </div>
                 <div className="text-sm">
-                  Rua: <span className="text-gray-700">{provider.rua}</span>
+                  Rua: <span className="text-gray-700">{provider.address.street}</span>
                 </div>
                 <div className="text-sm">
                   Bairro:{" "}
-                  <span className="text-gray-700">{provider.bairro}</span>
+                  <span className="text-gray-700">{provider.address.neighborhood}</span>
                 </div>
                 <div className="text-sm">
                   Número:{" "}
-                  <span className="text-gray-700">{provider.numero}</span>
+                  <span className="text-gray-700">{provider.address.number}</span>
                 </div>
                 <div className="text-sm">
                   Cidade:{" "}
-                  <span className="text-gray-700">{provider.cidade}</span>
+                  <span className="text-gray-700">{provider.address.city}</span>
                 </div>
                 <div className="text-sm">
                   Estado:{" "}
-                  <span className="text-gray-700">{provider.estado}</span>
+                  <span className="text-gray-700">{provider.address.state}</span>
                 </div>
                 <div className="text-sm">
                   Complemento:{" "}
-                  <span className="text-gray-700">{provider.complemento}</span>
+                  <span className="text-gray-700">{provider.address.complement}</span>
                 </div>
                 <div className="text-sm">
                   Email: <span className="text-gray-700">{provider.email}</span>
                 </div>
                 <div className="text-sm">
                   Telefone:{" "}
-                  <span className="text-gray-700">{provider.telefone}</span>
+                  <span className="text-gray-700">{provider.phone}</span>
                 </div>
                 <div className="text-sm">
                   Celular:{" "}
-                  <span className="text-gray-700">{provider.celular}</span>
+                  <span className="text-gray-700">{provider.cellphone}</span>
                 </div>
                 {logos[provider.logo] && (
                   <img

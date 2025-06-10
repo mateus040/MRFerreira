@@ -9,21 +9,22 @@ import ServiceResult from "../../../interface/service-result";
 import ProviderModel from "../../../interface/models/provider-model";
 import { getApiErrorMessage } from "../../../services/api-error-handler";
 import api from "../../../services/api-client";
+import { removeSpecialCharacters } from "../../../utils/format-fields";
 
 interface ProviderField {
-  nome: string;
+  name: string;
   cnpj: string;
-  rua: string;
-  bairro: string;
-  numero: string;
-  cep: string;
-  cidade: string;
-  estado: string;
-  complemento: string;
+  street: string;
+  neighborhood: string;
+  number: string;
+  zipcode: string;
+  city: string;
+  state: string;
+  complement: string;
   email: string;
-  telefone: string;
-  celular: string;
-  logo: File | string;
+  phone: string;
+  cellphone: string;
+  logo: FileList;
 }
 
 export default function EditProvider() {
@@ -46,11 +47,11 @@ export default function EditProvider() {
       name: "Início",
     },
     {
-      link: "/empresas",
+      link: "/fornecedores",
       name: "Fornecedores",
     },
     {
-      link: `/empresas/editar/${providerId}`,
+      link: `/fornecedores/editar/${providerId}`,
       name: `Editar fornecedor`,
     },
   ];
@@ -59,23 +60,21 @@ export default function EditProvider() {
     setLoadingProviders(true);
 
     api
-      .get<ServiceResult<ProviderModel>>(
-        `/providers/${providerId}`
-      )
+      .get<ServiceResult<ProviderModel>>(`/providers/${providerId}`)
       .then(({ data }) => {
-        const provider = data.results as ProviderModel;
-        setValue("nome", provider.nome || "");
+        const provider = data.data as ProviderModel;
+        setValue("name", provider.name || "");
         setValue("cnpj", provider.cnpj || "");
-        setValue("rua", provider.rua || "");
-        setValue("bairro", provider.bairro || "");
-        setValue("cep", provider.cep || "");
-        setValue("numero", provider.numero || "");
-        setValue("cidade", provider.cidade || "");
-        setValue("estado", provider.estado || "");
-        setValue("complemento", provider.complemento || "");
+        setValue("street", provider.address.street || "");
+        setValue("neighborhood", provider.address.neighborhood || "");
+        setValue("zipcode", provider.address.zipcode || "");
+        setValue("number", provider.address.number || "");
+        setValue("city", provider.address.city || "");
+        setValue("state", provider.address.state || "");
+        setValue("complement", provider.address.complement || "");
         setValue("email", provider.email || "");
-        setValue("celular", provider.celular || "");
-        setValue("telefone", provider.telefone || "");
+        setValue("cellphone", provider.cellphone || "");
+        setValue("phone", provider.phone || "");
       })
       .catch((error) => {
         toast.error("Erro ao buscar dados do fornecedor: ", error);
@@ -88,39 +87,37 @@ export default function EditProvider() {
 
     const formData = new FormData();
     formData.append("_method", "PUT");
-    formData.append("nome", data.nome);
-    formData.append("cnpj", data.cnpj);
-    formData.append("rua", data.rua);
-    formData.append("bairro", data.bairro);
-    formData.append("numero", data.numero);
-    formData.append("cep", data.cep);
-    formData.append("cidade", data.cidade);
-    formData.append("estado", data.estado);
-    formData.append("complemento", data.complemento || "");
+    formData.append("name", data.name);
+    formData.append("cnpj", removeSpecialCharacters(data.cnpj));
     formData.append("email", data.email);
-    formData.append("telefone", data.telefone);
-    formData.append("celular", data.celular);
+    formData.append("phone", removeSpecialCharacters(data.phone));
+    formData.append("cellphone", removeSpecialCharacters(data.cellphone));
 
-    // Verifica se logo é uma instância de File e a adiciona ao FormData
-    if (data.logo instanceof File) {
-      formData.append("logo", data.logo);
+    if (data.logo.length > 0) {
+      formData.append("logo", data.logo[0]);
     }
 
+    formData.append("address[zipcode]", removeSpecialCharacters(data.zipcode));
+    formData.append("address[street]", data.street);
+    formData.append("address[number]", data.number);
+    formData.append("address[neighborhood]", data.neighborhood);
+    formData.append("address[state]", data.state);
+    formData.append("address[city]", data.city);
+    formData.append("address[complement]", data.complement || "");
+
     toast
-      .promise<ServiceResult>(
-        api.post(
-          `/providers/update/${providerId}`,
-          formData
-        ),
-        {
-          loading: "Editando fornecedor...",
-          success: () => {
-            navigate("/empresas");
-            return "Fornecedor editado com sucesso!";
-          },
-          error: (error) => getApiErrorMessage(error),
-        }
-      )
+      .promise<ServiceResult>(api.post(`/providers/${providerId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }), {
+        loading: "Editando fornecedor...",
+        success: () => {
+          navigate("/fornecedores");
+          return "Fornecedor editado com sucesso!";
+        },
+        error: (error) => getApiErrorMessage(error),
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -136,22 +133,26 @@ export default function EditProvider() {
         <BreadCrumb history={breadCrumbHistory} />
       </div>
 
-      <form className="mt-8" onSubmit={handleSubmit(onSubmitChange)}>
+      <form
+        className="mt-8"
+        onSubmit={handleSubmit(onSubmitChange)}
+        encType="multipart/form-data"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
           <div className="col-span-12 lg:col-span-8">
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
-              id="nome"
+              id="name"
               placeholder={
                 loadingProviders ? "..." : "Informe o nome do fornecedor"
               }
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("nome", { required: "O nome é obrigatório" })}
+              {...register("name", { required: "O nome é obrigatório" })}
               disabled={loadingProviders}
             />
-            {errors.nome && (
-              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-4">
@@ -170,79 +171,83 @@ export default function EditProvider() {
             <Inputmask
               mask="99999-999"
               placeholder={loadingProviders ? "..." : "_____-___"}
-              id="cep"
+              id="zipcode"
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("cep", { required: "O CEP é obrigatório" })}
+              {...register("zipcode", { required: "O CEP é obrigatório" })}
               disabled={loadingProviders}
             />
-            {errors.cep && (
-              <p className="text-red-500 text-sm">{errors.cep.message}</p>
+            {errors.zipcode && (
+              <p className="text-red-500 text-sm">{errors.zipcode.message}</p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-8">
             <label className="block mb-2 font-medium">Rua*</label>
             <input
               type="text"
-              id="rua"
+              id="street"
               placeholder={loadingProviders ? "..." : "Informe o nome da rua"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("rua", {
+              {...register("street", {
                 required: "O nome da rua é obrigatório",
               })}
               disabled={loadingProviders}
             />
-            {errors.rua && (
-              <p className="text-red-500 text-sm">{errors.rua.message}</p>
+            {errors.street && (
+              <p className="text-red-500 text-sm">{errors.street.message}</p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-6">
             <label className="block mb-2 font-medium">Bairro*</label>
             <input
               type="text"
-              id="bairro"
+              id="neighborhood"
               placeholder={loadingProviders ? "..." : "Informe o bairro"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("bairro", { required: "O bairro é obrigatório" })}
+              {...register("neighborhood", {
+                required: "O bairro é obrigatório",
+              })}
               disabled={loadingProviders}
             />
-            {errors.bairro && (
-              <p className="text-red-500 text-sm">{errors.bairro.message}</p>
+            {errors.neighborhood && (
+              <p className="text-red-500 text-sm">
+                {errors.neighborhood.message}
+              </p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-1">
             <label className="block mb-2 font-medium">Nº*</label>
             <input
               type="text"
-              id="numero"
+              id="number"
               placeholder={loadingProviders ? "..." : "Nº"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("numero", { required: "O número é obrigatório" })}
+              {...register("number", { required: "O número é obrigatório" })}
               disabled={loadingProviders}
             />
-            {errors.numero && (
-              <p className="text-red-500 text-sm">{errors.numero.message}</p>
+            {errors.number && (
+              <p className="text-red-500 text-sm">{errors.number.message}</p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-4">
             <label className="block mb-2 font-medium">Cidade*</label>
             <input
               type="text"
-              id="cidade"
+              id="city"
               placeholder={loadingProviders ? "..." : "Informe a cidade"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("cidade", { required: "A cidade é obrigatório" })}
+              {...register("city", { required: "A cidade é obrigatório" })}
               disabled={loadingProviders}
             />
-            {errors.cidade && (
-              <p className="text-red-500 text-sm">{errors.cidade.message}</p>
+            {errors.city && (
+              <p className="text-red-500 text-sm">{errors.city.message}</p>
             )}
           </div>
           <div className="col-span-12 lg:col-span-1">
             <label className="block mb-2 font-medium">Estado*</label>
             <select
-              id="estado"
+              id="state"
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("estado", { required: "O estado é obrigatório" })}
+              {...register("state", { required: "O estado é obrigatório" })}
               disabled={loadingProviders}
             >
               <option value="" disabled selected>
@@ -276,18 +281,18 @@ export default function EditProvider() {
               <option value="SE">SE</option>
               <option value="TO">TO</option>
             </select>
-            {errors.estado && (
-              <p className="text-red-500 text-sm">{errors.estado.message}</p>
+            {errors.state && (
+              <p className="text-red-500 text-sm">{errors.state.message}</p>
             )}
           </div>
           <div className="col-span-12">
             <label className="block mb-2 font-medium">Complemento</label>
             <input
               type="text"
-              id="complemento"
+              id="complement"
               placeholder={loadingProviders ? "..." : "Informe o complemento"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("complemento")}
+              {...register("complement")}
               disabled={loadingProviders}
             />
           </div>
@@ -309,10 +314,10 @@ export default function EditProvider() {
             <label className="block mb-2 font-medium">Telefone</label>
             <Inputmask
               mask="(99) 9999-9999"
-              id="telefone"
+              id="phone"
               placeholder={loadingProviders ? "..." : "(__) _____-____"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("telefone")}
+              {...register("phone")}
               disabled={loadingProviders}
             />
           </div>
@@ -320,10 +325,10 @@ export default function EditProvider() {
             <label className="block mb-2 font-medium">Celular</label>
             <Inputmask
               mask="(99) 99999-9999"
-              id="celular"
+              id="cellphone"
               placeholder={loadingProviders ? "..." : "(__) _____-____"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("celular")}
+              {...register("cellphone")}
               disabled={loadingProviders}
             />
           </div>
@@ -331,15 +336,10 @@ export default function EditProvider() {
             <label className="block mb-2 font-medium">Logo</label>
             <input
               type="file"
+              accept="image/*"
               id="logo"
-              {...register("logo")}
               className="w-full p-2 rounded-lg border border-gray-300"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setValue("logo", e.target.files[0]);
-                }
-              }}
-              disabled={loadingProviders}
+              {...register("logo")}
             />
           </div>
         </div>

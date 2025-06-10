@@ -56,18 +56,18 @@ export const Sidebar = ({ isSidebarOpen }: Props) => {
           </li>
           <li
             className={`flex items-center justify-center py-3 lg:py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
-              isActive("/empresas")
+              isActive("/fornecedores")
                 ? `${!isSidebarOpen ? "bg-slate-600 text-white" : ""}`
                 : "hover:bg-slate-600 hover:text-white text-slate-400"
             } mb-2`}
           >
             <Link
-              to="/empresas"
+              to="/fornecedores"
               className="flex items-center overflow-hidden transition-all"
             >
               <FaCartFlatbed size={25} className="lg:-mt-1" />
               <span className="hidden lg:flex overflow-hidden transition-all w-52 ml-3">
-                Empresas
+                Fornecedores
               </span>
             </Link>
           </li>

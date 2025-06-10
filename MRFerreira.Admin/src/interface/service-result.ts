@@ -1,4 +1,4 @@
 export default interface ServiceResult<T = null> {
-  results: T | null;
+  data: T | null;
   message: string | Record<string, string[]>;
 }

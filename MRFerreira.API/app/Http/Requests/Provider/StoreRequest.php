@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Provider;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
                 'regex:/^[0-9]{14}$/',
-                'unique:providers,cnpj',
+                Rule::unique('providers', 'cnpj')->ignore($this->provider),
             ],
             'email' => [
                 'required',

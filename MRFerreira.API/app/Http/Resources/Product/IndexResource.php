@@ -29,6 +29,7 @@ class IndexResource extends JsonResource
             'line' => $this->line,
             'materials' => $this->materials,
             'photo' => $this->photo,
+            'foto_url' => $this->foto_url,
             'id_provider' => $this->id_provider,
             'id_category' => $this->id_category,
             'provider' => $this->whenNotNull(app(ProviderResource::class, ['resource' => $this->provider])),

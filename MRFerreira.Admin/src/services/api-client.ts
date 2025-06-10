@@ -2,7 +2,7 @@ import axios from "axios";
 import AuthModel from "../interface/models/auth-model";
 
 const defaultOptions = {
-  baseURL: "https://mrferreira-api.vercel.app/api/api",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",

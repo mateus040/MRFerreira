@@ -44,13 +44,14 @@ export default function Products() {
     api
       .get<ListServiceResult<ProductModel>>("/products")
       .then(({ data }) => {
-        const productsData = data.results;
+        const productsData = data.data;
+
         setProducts(productsData);
 
         const logosTemp: { [key: string]: string } = {};
         productsData.forEach((product) => {
           if (product.foto_url) {
-            logosTemp[product.foto] = product.foto_url;
+            logosTemp[product.photo] = product.foto_url;
           }
         });
 
@@ -65,7 +66,7 @@ export default function Products() {
 
     toast
       .promise<ServiceResult>(
-        api.delete(`/products/delete/${productId}`),
+        api.delete(`/products/${productId}`),
 
         {
           loading: "Excluindo produto...",
@@ -151,41 +152,41 @@ export default function Products() {
                 {products.map((product) => (
                   <tr className="bg-white" key={product.id}>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.nome}
+                      {product.name}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.descricao.length > 50
-                        ? `${product.descricao.slice(0, 50)}...`
-                        : product.descricao}
+                      {product.description.length > 50
+                        ? `${product.description.slice(0, 50)}...`
+                        : product.description}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.category.nome}
+                      {product.category.name}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.provider.nome}
+                      {product.provider.name}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.linha}
+                      {product.line}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.materiais}
+                      {product.materials}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.comprimento}
+                      {product.length}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.altura}
+                      {product.height}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.profundidade}
+                      {product.depth}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {product.peso}
+                      {product.weight}
                     </td>
                     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {logos[product.foto] && (
+                      {logos[product.photo] && (
                         <img
-                          src={logos[product.foto]}
+                          src={logos[product.photo]}
                           className="max-w-[50px] max-h-[50px] object-cover"
                           alt="foto"
                         />
@@ -219,45 +220,45 @@ export default function Products() {
               >
                 <div className="flex items-center space-x-2 text-sm">
                   <span>Nome:</span>
-                  <span className="text-gray-500">{product.nome}</span>
+                  <span className="text-gray-500">{product.name}</span>
                 </div>
                 <div className="text-sm">
                   Descrição:{" "}
-                  <span className="text-gray-700">{product.descricao}</span>
+                  <span className="text-gray-700">{product.description}</span>
                 </div>
                 <div className="text-sm">
                   Categoria:{" "}
-                  <span className="text-gray-700">{product.category.nome}</span>
+                  <span className="text-gray-700">{product.category.name}</span>
                 </div>
                 <div className="text-sm">
                   Fornecedor:{" "}
-                  <span className="text-gray-700">{product.provider.nome}</span>
+                  <span className="text-gray-700">{product.provider.name}</span>
                 </div>
                 <div className="text-sm">
-                  Linha: <span className="text-gray-700">{product.linha}</span>
+                  Linha: <span className="text-gray-700">{product.line}</span>
                 </div>
                 <div className="text-sm">
                   Materiais:{" "}
-                  <span className="text-gray-700">{product.materiais}</span>
+                  <span className="text-gray-700">{product.materials}</span>
                 </div>
                 <div className="text-sm">
                   Comprimento:{" "}
-                  <span className="text-gray-700">{product.comprimento}</span>
+                  <span className="text-gray-700">{product.length}</span>
                 </div>
                 <div className="text-sm">
                   Altura:{" "}
-                  <span className="text-gray-700">{product.altura}</span>
+                  <span className="text-gray-700">{product.height}</span>
                 </div>
                 <div className="text-sm">
                   Profundidade:{" "}
-                  <span className="text-gray-700">{product.profundidade}</span>
+                  <span className="text-gray-700">{product.depth}</span>
                 </div>
                 <div className="text-sm">
-                  Peso: <span className="text-gray-700">{product.peso}</span>
+                  Peso: <span className="text-gray-700">{product.weight}</span>
                 </div>
-                {logos[product.foto] && (
+                {logos[product.photo] && (
                   <img
-                    src={logos[product.foto]}
+                    src={logos[product.photo]}
                     className="object-cover"
                     alt="foto"
                   />

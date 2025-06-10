@@ -27,10 +27,13 @@ export default function Login() {
     setLoading(true);
 
     api
-      .postForm("/login", data)
-      .then(({ data: { token } }) => {
+      .postForm("/admin/login", data)
+      .then(({ data }) => {
+        const token = data.data.token;
+
         sessionStorage.setItem("auth", JSON.stringify({ token }));
         navigate("/");
+
         toast.success("Bem-vindo!");
       })
       .catch(apiErrorHandler)
@@ -85,7 +88,7 @@ export default function Login() {
                   <FaCheck className="text-sm" />
                 </div>
                 <span className="text-lg font-medium text-white">
-                  Adicionar empresas
+                  Adicionar fornecedores
                 </span>
               </li>
             </ul>
