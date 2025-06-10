@@ -9,15 +9,8 @@ use App\Http\Resources\Product\{
     IndexResource,
     ShowResource,
 };
-use App\Models\{
-    Category,
-    Provider,
-    Product,
-};
-use Illuminate\Support\{
-    Facades\Log,
-    Str,
-};
+use App\Models\Product;
+use Illuminate\Support\Str;
 use App\Services\FirebaseStorageService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -502,25 +495,5 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->noContent();
-    }
-
-    public function getCards()
-    {
-        try {
-            $products_count = Product::count();
-            $providers_count = Provider::count();
-            $categories_count = Category::count();
-
-            return response()->json([
-                'results' => [
-                    'products_count' => $products_count,
-                    'providers_count' => $providers_count,
-                    'categories_count' => $categories_count
-                ]
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Erro ao retornar informações: ' . $e->getMessage());
-            return response()->json(['message' => 'Erro ao retornos informações: ' . $e->getMessage()], 500);
-        }
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
     AuthController,
+    CardController,
     ProductController,
     ContactController,
     Category\CategoryController,
@@ -57,7 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::get('/cards', [ProductController::class, 'getCards']);
+    Route::get('/cards', [CardController::class, 'index']);
 });
 
 # Public Routes
