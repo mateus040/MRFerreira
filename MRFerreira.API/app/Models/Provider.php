@@ -27,7 +27,7 @@ class Provider extends Model
 
     protected $appends = ['logo_url'];
 
-    public function getLogoUrlAttribute()
+    public function getLogoUrlAttribute(): string
     {
         $firebaseStorage = app(FirebaseStorageService::class);
         return $firebaseStorage->getFileUrl($this->logo);

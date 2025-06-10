@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\{
     Model,
 };
 use App\Services\FirebaseStorageService;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -28,18 +29,18 @@ class Product extends Model
 
     protected $appends = ['foto_url'];
 
-    public function getFotoUrlAttribute()
+    public function getFotoUrlAttribute(): string
     {
         $firebaseStorage = app(FirebaseStorageService::class);
         return $firebaseStorage->getFileUrl($this->photo);
     }
 
-    public function provider()
+    public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class, 'id_provider');
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'id_category');
     }

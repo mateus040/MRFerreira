@@ -306,6 +306,7 @@ export default function CreateProvider() {
             <input
               type="file"
               id="logo"
+              accept="image/*"
               className={`w-full p-2 rounded-lg border ${
                 errors.logo ? "border-red-500" : "border-gray-300"
               }`}

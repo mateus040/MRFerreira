@@ -12,15 +12,15 @@ import api from "../../../services/api-client";
 import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface ProductField {
-  nome: string;
-  descricao: string;
-  comprimento: string | null;
-  altura: string | null;
-  profundidade: string | null;
-  peso: string | null;
-  linha: string;
-  materiais: string;
-  foto: FileList;
+  name: string;
+  description: string;
+  length: string | null;
+  height: string | null;
+  depth: string | null;
+  weight: string | null;
+  line: string;
+  materials: string;
+  photo: FileList;
   id_provider: string;
   id_category: string;
 }
@@ -50,10 +50,10 @@ export default function CreateProducts() {
   const [providers, setProviders] = useState<ProviderModel[]>([]);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
 
-  const [comprimentoUnit, setComprimentoUnit] = useState<string>("");
-  const [alturaUnit, setAlturaUnit] = useState<string>("");
-  const [profundidadeUnit, setProfundidadeUnit] = useState<string>("");
-  const [pesoUnit, setPesoUnit] = useState<string>("");
+  const [lengthUnit, setLengthUnit] = useState<string>("");
+  const [heightUnit, setHeightUnit] = useState<string>("");
+  const [depthUnit, setDepthUnit] = useState<string>("");
+  const [weightUnit, setWeightUnit] = useState<string>("");
 
   const {
     register,
@@ -69,10 +69,10 @@ export default function CreateProducts() {
     api
       .get<ListServiceResult<ProviderModel>>("/providers")
       .then(({ data }) => {
-        setProviders(data.results);
+        setProviders(data.data);
       })
       .catch((error) => {
-        toast.error("Erro ao buscar empresas: ", error);
+        toast.error("Erro ao buscar fornecedores: ", error);
       })
       .finally(() => setLoadingProviders(false));
   };
@@ -83,7 +83,7 @@ export default function CreateProducts() {
     api
       .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
-        setCategories(data.results);
+        setCategories(data.data);
       })
       .catch((error) => {
         toast.error("Erro ao buscar categorias: ", error);
@@ -95,23 +95,25 @@ export default function CreateProducts() {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("nome", data.nome);
-    formData.append("descricao", data.descricao);
-    formData.append("comprimento", data.comprimento || "");
-    formData.append("altura", data.altura || "");
-    formData.append("profundidade", data.profundidade || "");
-    formData.append("peso", data.peso || "");
-    formData.append("linha", data.linha);
-    formData.append("materiais", data.materiais);
-    if (data.foto.length > 0) {
-      formData.append("foto", data.foto[0]);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("length", data.length || "");
+    formData.append("height", data.height || "");
+    formData.append("depth", data.depth || "");
+    formData.append("weight", data.weight || "");
+    formData.append("line", data.line);
+    formData.append("materials", data.materials);
+
+    if (data.photo.length > 0) {
+      formData.append("photo", data.photo[0]);
     }
+
     formData.append("id_provider", data.id_provider);
     formData.append("id_category", data.id_category);
 
     toast
       .promise(
-        api.post<ServiceResult>("/products/add", formData, {
+        api.post<ServiceResult>("/products", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -130,47 +132,47 @@ export default function CreateProducts() {
       });
   };
 
-  const comprimentoValue = watch("comprimento");
-  const alturaValue = watch("altura");
-  const profundidadeValue = watch("profundidade");
-  const pesoValue = watch("peso");
+  const lengthValue = watch("length");
+  const heightValue = watch("height");
+  const depthValue = watch("depth");
+  const weightValue = watch("weight");
 
-  const handleComprimentoSelectChange = (
+  const handleLengthSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setComprimentoUnit(selectedValue);
+    setLengthUnit(selectedValue);
     setValue(
-      "comprimento",
-      `${comprimentoValue?.split(" ")[0]} ${selectedValue}`
+      "length",
+      `${lengthValue?.split(" ")[0]} ${selectedValue}`
     );
   };
 
-  const handleAlturaSelectChange = (
+  const handleHeightSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setAlturaUnit(selectedValue);
-    setValue("altura", `${alturaValue?.split(" ")[0]} ${selectedValue}`);
+    setHeightUnit(selectedValue);
+    setValue("height", `${heightValue?.split(" ")[0]} ${selectedValue}`);
   };
 
-  const handleProfundidadeSelectChange = (
+  const handleDepthSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setProfundidadeUnit(selectedValue);
+    setDepthUnit(selectedValue);
     setValue(
-      "profundidade",
-      `${profundidadeValue?.split(" ")[0]} ${selectedValue}`
+      "depth",
+      `${depthValue?.split(" ")[0]} ${selectedValue}`
     );
   };
 
-  const handlePesoSelectChange = (
+  const handleWeightSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setPesoUnit(selectedValue);
-    setValue("peso", `${pesoValue?.split(" ")[0]} ${selectedValue}`);
+    setWeightUnit(selectedValue);
+    setValue("weight", `${weightValue?.split(" ")[0]} ${selectedValue}`);
   };
 
   useEffect(() => {
@@ -193,15 +195,15 @@ export default function CreateProducts() {
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
-              id="nome"
-              {...register("nome", { required: "O nome é obrigatório" })}
+              id="name"
+              {...register("name", { required: "O nome é obrigatório" })}
               placeholder="Informe o nome do produto"
               className={`w-full p-2 rounded-lg border ${
-                errors.nome ? "border-red-500" : "border-gray-300"
+                errors.name ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {errors.nome && (
-              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
@@ -221,7 +223,7 @@ export default function CreateProducts() {
               </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.nome}
+                  {category.name}
                 </option>
               ))}
             </select>
@@ -248,7 +250,7 @@ export default function CreateProducts() {
               </option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>
-                  {provider.nome}
+                  {provider.name}
                 </option>
               ))}
             </select>
@@ -261,26 +263,26 @@ export default function CreateProducts() {
           <div className="col-span-12">
             <label className="block mb-2 font-medium">Descrição*</label>
             <textarea
-              id="descricao"
-              {...register("descricao", {
+              id="description"
+              {...register("description", {
                 required: "A descrição é obrigatória",
               })}
               placeholder="Informe a descrição"
               className={`w-full p-2 rounded-lg border ${
-                errors.descricao ? "border-red-500" : "border-gray-300"
+                errors.description ? "border-red-500" : "border-gray-300"
               }`}
               rows={5}
             />
-            {errors.descricao && (
-              <p className="text-red-500 text-sm">{errors.descricao.message}</p>
+            {errors.description && (
+              <p className="text-red-500 text-sm">{errors.description.message}</p>
             )}
           </div>
           <div className="col-span-12">
             <label className="block mb-2 font-medium">Materiais</label>
             <input
               type="text"
-              id="materiais"
-              {...register("materiais")}
+              id="materials"
+              {...register("materials")}
               placeholder="Informe os materiais do produto"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
@@ -289,8 +291,8 @@ export default function CreateProducts() {
             <label className="block mb-2 font-medium">Linha</label>
             <input
               type="text"
-              id="linha"
-              {...register("linha")}
+              id="line"
+              {...register("line")}
               placeholder="Informe a linha"
               className="w-full p-2 rounded-lg border border-gray-300"
             />
@@ -300,15 +302,15 @@ export default function CreateProducts() {
             <div className="flex">
               <input
                 type="text"
-                id="comprimento"
-                {...register("comprimento")}
+                id="length"
+                {...register("length")}
                 placeholder="Informe o comprimento"
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
-                onChange={handleComprimentoSelectChange}
+                onChange={handleLengthSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={comprimentoUnit}
+                value={lengthUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -323,15 +325,15 @@ export default function CreateProducts() {
             <div className="flex">
               <input
                 type="text"
-                id="altura"
-                {...register("altura")}
+                id="height"
+                {...register("height")}
                 placeholder="Informe a altura"
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
-                onChange={handleAlturaSelectChange}
+                onChange={handleHeightSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={alturaUnit}
+                value={heightUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -346,15 +348,15 @@ export default function CreateProducts() {
             <div className="flex">
               <input
                 type="text"
-                id="profundidade"
-                {...register("profundidade")}
+                id="depth"
+                {...register("depth")}
                 placeholder="Informe a profundidade"
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
-                onChange={handleProfundidadeSelectChange}
+                onChange={handleDepthSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={profundidadeUnit}
+                value={depthUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -369,15 +371,15 @@ export default function CreateProducts() {
             <div className="flex">
               <input
                 type="text"
-                id="peso"
-                {...register("peso")}
+                id="weight"
+                {...register("weight")}
                 placeholder="Informe o peso"
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
               />
               <select
-                onChange={handlePesoSelectChange}
+                onChange={handleWeightSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={pesoUnit}
+                value={weightUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mg">mg</option>
@@ -390,14 +392,15 @@ export default function CreateProducts() {
             <label className="block mb-2 font-medium">Foto*</label>
             <input
               type="file"
-              id="foto"
-              {...register("foto", { required: "A foto é obrigatória" })}
+              id="photo"
+              accept="image/*"
+              {...register("photo", { required: "A foto é obrigatória" })}
               className={`w-full p-2 rounded-lg border ${
-                errors.foto ? "border-red-500" : "border-gray-300"
+                errors.photo ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {errors.foto && (
-              <p className="text-red-500 text-sm">{errors.foto.message}</p>
+            {errors.photo && (
+              <p className="text-red-500 text-sm">{errors.photo.message}</p>
             )}
           </div>
         </div>

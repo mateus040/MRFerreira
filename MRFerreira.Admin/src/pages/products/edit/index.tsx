@@ -13,15 +13,15 @@ import api from "../../../services/api-client";
 import { getApiErrorMessage } from "../../../services/api-error-handler";
 
 interface ProductField {
-  nome: string;
-  descricao: string;
-  comprimento: string | null;
-  altura: string | null;
-  profundidade: string | null;
-  peso: string | null;
-  linha: string;
-  materiais: string;
-  foto: File | string;
+  name: string;
+  description: string;
+  length: string | null;
+  height: string | null;
+  depth: string | null;
+  weight: string | null;
+  line: string;
+  materials: string;
+  photo: FileList;
   id_provider: string;
   id_category: string;
 }
@@ -52,10 +52,10 @@ export default function EditProduct() {
   const [providers, setProviders] = useState<ProviderModel[]>([]);
   const [categories, setCategories] = useState<CategoryModel[]>([]);
 
-  const [comprimentoUnit, setComprimentoUnit] = useState<string>("");
-  const [alturaUnit, setAlturaUnit] = useState<string>("");
-  const [profundidadeUnit, setProfundidadeUnit] = useState<string>("");
-  const [pesoUnit, setPesoUnit] = useState<string>("");
+  const [lengthUnit, setLengthUnit] = useState<string>("");
+  const [heightUnit, setHeightUnit] = useState<string>("");
+  const [depthUnit, setDepthUnit] = useState<string>("");
+  const [weightUnit, setWeightUnit] = useState<string>("");
 
   const fetchProduct = async (): Promise<void> => {
     setLoadingProducts(true);
@@ -63,15 +63,15 @@ export default function EditProduct() {
     api
       .get<ServiceResult<ProductModel>>(`/products/${productId}`)
       .then(({ data }) => {
-        const product = data.results as ProductModel;
-        setValue("nome", product.nome);
-        setValue("descricao", product.descricao);
-        setValue("comprimento", product.comprimento.toString());
-        setValue("altura", product.altura.toString());
-        setValue("profundidade", product.profundidade.toString());
-        setValue("peso", product.peso.toString());
-        setValue("linha", product.linha);
-        setValue("materiais", product.materiais);
+        const product = data.data as ProductModel;
+        setValue("name", product.name);
+        setValue("description", product.description);
+        setValue("length", product.length.toString());
+        setValue("height", product.height.toString());
+        setValue("depth", product.depth.toString());
+        setValue("weight", product.weight.toString());
+        setValue("line", product.line);
+        setValue("materials", product.materials);
         setValue("id_provider", product.id_provider);
         setValue("id_category", product.id_category);
       })
@@ -89,7 +89,7 @@ export default function EditProduct() {
     api
       .get<ListServiceResult<ProviderModel>>("/providers")
       .then(({ data }) => {
-        setProviders(data.results);
+        setProviders(data.data);
       })
       .catch((error) => {
         toast.error("Erro ao buscar empresas: ", error);
@@ -103,7 +103,7 @@ export default function EditProduct() {
     api
       .get<ListServiceResult<CategoryModel>>("/categories")
       .then(({ data }) => {
-        setCategories(data.results);
+        setCategories(data.data);
       })
       .catch((error) => {
         toast.error("Erro ao buscar categorias: ", error);
@@ -116,24 +116,28 @@ export default function EditProduct() {
 
     const formData = new FormData();
     formData.append("_method", "PUT");
-    formData.append("nome", data.nome);
-    formData.append("descricao", data.descricao);
-    formData.append("comprimento", data.comprimento || "");
-    formData.append("altura", data.altura || "");
-    formData.append("profundidade", data.profundidade || "");
-    formData.append("peso", data.peso || "");
-    formData.append("linha", data.linha);
-    formData.append("materiais", data.materiais);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("length", data.length || "");
+    formData.append("height", data.height || "");
+    formData.append("depth", data.depth || "");
+    formData.append("weight", data.weight || "");
+    formData.append("line", data.line);
+    formData.append("materials", data.materials);
     formData.append("id_provider", data.id_provider);
     formData.append("id_category", data.id_category);
 
-    if (data.foto instanceof File) {
-      formData.append("foto", data.foto);
+    if (data.photo.length > 0) {
+      formData.append("photo", data.photo[0]);
     }
 
     toast
       .promise(
-        api.post<ServiceResult>(`/products/update/${productId}`, formData),
+        api.post<ServiceResult>(`/products/${productId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }),
         {
           loading: "Editando produto...",
           success: () => {
@@ -146,57 +150,51 @@ export default function EditProduct() {
       .finally(() => setLoading(false));
   };
 
-  const comprimentoValue = watch("comprimento");
-  const alturaValue = watch("altura");
-  const profundidadeValue = watch("profundidade");
-  const pesoValue = watch("peso");
+  const lengthValue = watch("length");
+  const heightValue = watch("height");
+  const depthValue = watch("depth");
+  const weightValue = watch("weight");
 
-  const handleComprimentoSelectChange = (
+  const handleLengthSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setComprimentoUnit(selectedValue);
-    setValue(
-      "comprimento",
-      `${comprimentoValue?.split(" ")[0]} ${selectedValue}`
-    );
+    setLengthUnit(selectedValue);
+    setValue("length", `${lengthValue?.split(" ")[0]} ${selectedValue}`);
   };
 
-  const handleAlturaSelectChange = (
+  const handleHeightSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setAlturaUnit(selectedValue);
-    setValue("altura", `${alturaValue?.split(" ")[0]} ${selectedValue}`);
+    setHeightUnit(selectedValue);
+    setValue("height", `${heightValue?.split(" ")[0]} ${selectedValue}`);
   };
 
-  const handleProfundidadeSelectChange = (
+  const handleDepthSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setProfundidadeUnit(selectedValue);
-    setValue(
-      "profundidade",
-      `${profundidadeValue?.split(" ")[0]} ${selectedValue}`
-    );
+    setDepthUnit(selectedValue);
+    setValue("depth", `${depthValue?.split(" ")[0]} ${selectedValue}`);
   };
 
-  const handlePesoSelectChange = (
+  const handleWeightSelectChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedValue = event.target.value;
-    setPesoUnit(selectedValue);
-    setValue("peso", `${pesoValue?.split(" ")[0]} ${selectedValue}`);
+    setWeightUnit(selectedValue);
+    setValue("weight", `${weightValue?.split(" ")[0]} ${selectedValue}`);
   };
-
-  useEffect(() => {
-    fetchProduct();
-  }, [productId]);
 
   useEffect(() => {
     fetchProviders();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [productId]);
 
   return (
     <MainLayout>
@@ -210,16 +208,16 @@ export default function EditProduct() {
             <label className="block mb-2 font-medium">Nome*</label>
             <input
               type="text"
-              id="nome"
+              id="name"
               placeholder={
                 loadingProducts ? "..." : "Informe o nome do produto"
               }
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("nome", { required: "O nome é obrigatório" })}
+              {...register("name", { required: "O nome é obrigatório" })}
               disabled={loadingProducts}
             />
-            {errors.nome && (
-              <p className="text-red-500 text-sm">{errors.nome.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-4">
@@ -237,7 +235,7 @@ export default function EditProduct() {
               </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.nome}
+                  {category.name}
                 </option>
               ))}
             </select>
@@ -262,7 +260,7 @@ export default function EditProduct() {
               </option>
               {providers.map((provider) => (
                 <option key={provider.id} value={provider.id}>
-                  {provider.nome}
+                  {provider.name}
                 </option>
               ))}
             </select>
@@ -278,24 +276,26 @@ export default function EditProduct() {
               id="descricao"
               placeholder={loadingProducts ? "..." : "Informe a descrição"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("descricao", {
+              {...register("description", {
                 required: "A descrição é obrigatória",
               })}
               disabled={loadingProducts}
               rows={5}
             />
-            {errors.descricao && (
-              <p className="text-red-500 text-sm">{errors.descricao.message}</p>
+            {errors.description && (
+              <p className="text-red-500 text-sm">
+                {errors.description.message}
+              </p>
             )}
           </div>
           <div className="col-span-12 xl:col-span-12">
             <label className="block mb-2 font-medium">Materiais</label>
             <input
               type="text"
-              id="materiais"
+              id="materials"
               placeholder={loadingProducts ? "..." : "Informe os materiais"}
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("materiais")}
+              {...register("materials")}
               disabled={loadingProducts}
             />
           </div>
@@ -303,12 +303,12 @@ export default function EditProduct() {
             <label className="block mb-2 font-medium">Linha</label>
             <input
               type="text"
-              id="linha"
+              id="line"
               placeholder={
                 loadingProducts ? "..." : "Informe a linha do produto"
               }
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("linha")}
+              {...register("line")}
               disabled={loadingProducts}
             />
           </div>
@@ -317,16 +317,16 @@ export default function EditProduct() {
             <div className="flex">
               <input
                 type="text"
-                id="comprimento"
+                id="length"
                 placeholder={loadingProducts ? "..." : "Informe o comprimento"}
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
-                {...register("comprimento")}
+                {...register("length")}
                 disabled={loadingProducts}
               />
               <select
-                onChange={handleComprimentoSelectChange}
+                onChange={handleLengthSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={comprimentoUnit}
+                value={lengthUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -341,16 +341,16 @@ export default function EditProduct() {
             <div className="flex">
               <input
                 type="text"
-                id="altura"
+                id="height"
                 placeholder={loadingProducts ? "..." : "Informe a altura"}
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
-                {...register("altura")}
+                {...register("height")}
                 disabled={loadingProducts}
               />
               <select
-                onChange={handleAlturaSelectChange}
+                onChange={handleHeightSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={alturaUnit}
+                value={heightUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -365,16 +365,16 @@ export default function EditProduct() {
             <div className="flex">
               <input
                 type="text"
-                id="profundidade"
+                id="depth"
                 placeholder={loadingProducts ? "..." : "Informe a profundidade"}
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
-                {...register("profundidade")}
+                {...register("depth")}
                 disabled={loadingProducts}
               />
               <select
-                onChange={handleProfundidadeSelectChange}
+                onChange={handleDepthSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={profundidadeUnit}
+                value={depthUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mm">mm</option>
@@ -389,16 +389,16 @@ export default function EditProduct() {
             <div className="flex">
               <input
                 type="text"
-                id="peso"
+                id="weight"
                 placeholder={loadingProducts ? "..." : "Informe o peso"}
                 className="flex-1 p-2 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none"
-                {...register("peso")}
+                {...register("weight")}
                 disabled={loadingProducts}
               />
               <select
-                onChange={handlePesoSelectChange}
+                onChange={handleWeightSelectChange}
                 className="hidden sm:block p-2 rounded-r-lg border border-gray-300"
-                value={pesoUnit}
+                value={weightUnit}
               >
                 <option value="">Selecione</option>
                 <option value="mg">mg</option>
@@ -411,16 +411,23 @@ export default function EditProduct() {
             <label className="block mb-2 font-medium">Foto*</label>
             <input
               type="file"
-              id="foto"
+              accept="image/*"
+              id="photo"
               className="w-full p-2 rounded-lg border border-gray-300"
-              {...register("foto")}
+              {...register("photo")}
+            />
+            {/* <input
+              type="file"
+              id="photo"
+              className="w-full p-2 rounded-lg border border-gray-300"
+              {...register("photo")}
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
-                  setValue("foto", e.target.files[0]);
+                  setValue("photo", e.target.files[0]);
                 }
               }}
               disabled={loadingProducts}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex justify-end mt-8">
