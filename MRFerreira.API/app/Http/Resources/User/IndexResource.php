@@ -18,6 +18,7 @@ class IndexResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'created_at' => $this->created_at->toDateTimeLocalString(),
         ];
     }
 }
