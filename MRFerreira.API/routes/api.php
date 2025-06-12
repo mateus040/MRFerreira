@@ -9,10 +9,10 @@ use App\Http\Controllers\{
     ContactController,
     Category\CategoryController,
     Provider\ProviderController,
+    User\UserController,
     Provider\ProductController as ProviderProductController,
     Category\ProductController as CategoryProductController
 };
-use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
