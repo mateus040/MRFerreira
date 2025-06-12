@@ -16,13 +16,14 @@ use Illuminate\Http\{
     JsonResponse,
     Response,
 };
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\{
+    AnonymousResourceCollection,
+    JsonResource,
+};
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class UserController extends Controller
 {
-    // TODO: criar testes, documentar
-
     public function index(): AnonymousResourceCollection
     {
         $users = User::all();
@@ -47,7 +48,7 @@ class UserController extends Controller
         ], HttpResponse::HTTP_CREATED);
     }
 
-    public function show(User $user): JsonResponse
+    public function show(User $user): JsonResource
     {
         return app(ShowResource::class, ['resource' => $user]);
     }
@@ -56,10 +57,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-        ]);
+        $user->update($validated);
 
         return response()->noContent();
     }

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Requests\User;
 
-use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\User\PatchRequest;
 use Generator;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\{
@@ -11,23 +11,23 @@ use PHPUnit\Framework\Attributes\{
 };
 use Tests\CustomTestCase;
 
-class LoginTest extends CustomTestCase
+class PatchTest extends CustomTestCase
 {
-    private LoginRequest $request;
+    private PatchRequest $request;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->request = new LoginRequest();
+        $this->request = new PatchRequest();
     }
 
     #[Test]
     public function checkIfValidatorNotFailWhenOnlyMandatoryDataSend(): void
     {
         $dataToPassValidation = [
+            'name' => fake()->name(),
             'email' => fake()->email(),
-            'password' => fake()->password(),
         ];
 
         $validator = Validator::make(
@@ -40,13 +40,11 @@ class LoginTest extends CustomTestCase
 
     public static function validValuesForSpecificFields(): Generator
     {
-        yield 'required' => [
+        yield 'min size' => [
             [
-                'email' => fake()->email(),
-                'password' => fake()->password(),
+                'password' => fake()->password(6),
             ],
             [
-                'email',
                 'password',
             ],
         ];
@@ -73,40 +71,21 @@ class LoginTest extends CustomTestCase
 
     public static function invalidValuesForSpecificFields(): Generator
     {
-        yield 'empty' => [
-            [
-                'email' => '',
-                'password' => '',
-            ],
-            [
-                'email',
-                'password',
-            ],
-        ];
-
         yield 'null' => [
             [
+                'name' => null,
                 'email' => null,
-                'password' => null,
             ],
             [
+                'name',
                 'email',
-                'password',
-            ],
-        ];
-
-        yield 'missing' => [
-            [],
-            [
-                'email',
-                'password',
             ],
         ];
     }
 
     #[Test]
     #[DataProvider('invalidValuesForSpecificFields')]
-    public function assertThatValidatorFailWhenTheFollowingRuleIsTested(
+    public function assertThatValidatorFailsWhenTheFollowingRuleIsTested(
         array $data,
         array $fieldsWithError,
     ): void {

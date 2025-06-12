@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     Provider\ProductController as ProviderProductController,
     Category\ProductController as CategoryProductController
 };
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,17 @@ Route::post('/admin/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/me', [AuthController::class, 'me']);
     Route::post('/admin/logout', [AuthController::class, 'logout']);
+
+    Route::prefix('/users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        
+        Route::prefix('/{user}')->group(function () {
+            Route::get('/', [UserController::class, 'show']);
+            Route::patch('/', [UserController::class, 'patch']);
+            Route::delete('/', [UserController::class, 'destroy']);
+        });
+    });
 
     Route::prefix('/categories')->group(function () {
         Route::post('/', [CategoryController::class, 'store']);

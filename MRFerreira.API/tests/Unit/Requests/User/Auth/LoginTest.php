@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Requests\User;
+namespace Tests\Unit\Requests\User\Auth;
 
-use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\Auth\LoginRequest;
 use Generator;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\{
@@ -11,22 +11,21 @@ use PHPUnit\Framework\Attributes\{
 };
 use Tests\CustomTestCase;
 
-class RegisterTest extends CustomTestCase
+class LoginTest extends CustomTestCase
 {
-    private RegisterRequest $request;
+    private LoginRequest $request;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->request = new RegisterRequest();
+        $this->request = new LoginRequest();
     }
 
     #[Test]
     public function checkIfValidatorNotFailWhenOnlyMandatoryDataSend(): void
     {
         $dataToPassValidation = [
-            'name' => fake()->name(),
             'email' => fake()->email(),
             'password' => fake()->password(),
         ];
@@ -41,23 +40,12 @@ class RegisterTest extends CustomTestCase
 
     public static function validValuesForSpecificFields(): Generator
     {
-        yield 'min size' => [
-            [
-                'password' => fake()->password(6),
-            ],
-            [
-                'password',
-            ],
-        ];
-
         yield 'required' => [
             [
-                'name' => fake()->name(),
                 'email' => fake()->email(),
                 'password' => fake()->password(),
             ],
             [
-                'name',
                 'email',
                 'password',
             ],
@@ -87,12 +75,10 @@ class RegisterTest extends CustomTestCase
     {
         yield 'empty' => [
             [
-                'name' => '',
                 'email' => '',
                 'password' => '',
             ],
             [
-                'name',
                 'email',
                 'password',
             ],
@@ -100,12 +86,10 @@ class RegisterTest extends CustomTestCase
 
         yield 'null' => [
             [
-                'name' => null,
                 'email' => null,
                 'password' => null,
             ],
             [
-                'name',
                 'email',
                 'password',
             ],
@@ -114,7 +98,6 @@ class RegisterTest extends CustomTestCase
         yield 'missing' => [
             [],
             [
-                'name',
                 'email',
                 'password',
             ],
@@ -123,7 +106,7 @@ class RegisterTest extends CustomTestCase
 
     #[Test]
     #[DataProvider('invalidValuesForSpecificFields')]
-    public function assertThatValidatorFailsWhenTheFollowingRuleIsTested(
+    public function assertThatValidatorFailWhenTheFollowingRuleIsTested(
         array $data,
         array $fieldsWithError,
     ): void {

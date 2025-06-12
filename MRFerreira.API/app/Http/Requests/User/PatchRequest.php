@@ -15,11 +15,11 @@ class PatchRequest extends FormRequest
     {
         return [
             'name' => [
-                'required',
+                'sometimes',
                 'string',
             ],
             'email' => [
-                'required',
+                'sometimes',
                 'string',
                 'email',
                 'unique:users,email',

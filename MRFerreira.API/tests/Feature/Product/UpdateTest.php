@@ -25,7 +25,7 @@ class UpdateTest extends CustomTestCase
 
         $category = Category::factory()->create();
         $provider = Provider::factory()->create();
-        Product::factory()->create();
+        $product = Product::factory()->create();
 
         $file = UploadedFile::fake()->image('photo.jpg');
 
@@ -44,7 +44,7 @@ class UpdateTest extends CustomTestCase
 
         $response = $this
             ->withoutMiddleware(Authenticate::class)
-            ->putJson(self::ENDPOINT . '/' . $provider->id, $body);
+            ->putJson(self::ENDPOINT . '/' . $product->id, $body);
 
         $response->assertNoContent();
     }
@@ -116,7 +116,7 @@ class UpdateTest extends CustomTestCase
     }
 
     #[Test]
-    public function checkIfTheCategoryHasBeenUpdatedInTheDatabase(): void
+    public function checkIfTheProductHasBeenUpdatedInTheDatabase(): void
     {
         Storage::fake('firebase');
 
